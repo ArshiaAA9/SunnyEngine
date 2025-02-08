@@ -1,93 +1,126 @@
 #include <iostream>
-#include <vector>
 #include <unistd.h>
-const float gravity = 9.8;
+#include <SDL2/SDL.h>
+#include "physics.h"
 
 
-// Struct for a 2D vector (for position, velocity, or acceleration)
-struct Vector2 {
-    float x, y;
-
-    Vector2() : x(0), y(0) {}
-    Vector2(float x, float y) : x(x), y(y) {}
-
-    // Addition operator for Vector2
-    Vector2 operator+(const Vector2& other) const {
-        return Vector2(x + other.x, y + other.y);
-    }
-
-    // Subtraction operator for Vector2
-    Vector2 operator-(const Vector2& other) const {
-        return Vector2(x - other.x, y - other.y);
-    }
-
-    // Multiplication by a scalar
-    Vector2 operator*(float scalar) const {
-        return Vector2(x * scalar, y * scalar);
-    }
-
-    // Division by a scalar
-    Vector2 operator/(float scalar) const {
-        return Vector2(x / scalar, y / scalar);
-    }
-};
+bool init();
+void kill();
+bool loop(Object& obj);
 
 
-struct Object {
-
-    Vector2 position;         // Position of the object
-    Vector2 velocity;         // Velocity of the object
-    Vector2 acceleration;     // Acceleration of the object
-    float mass;
-
-    Object() : position(0, 0), velocity(0, 0), acceleration(0, 0), mass(1) {}
-
-    Object(float x, float y, float mass) 
-        : position(x, y), velocity(0, 0), acceleration(0, 0), mass(mass) {}
-};
+// Pointers to our window and renderer
+SDL_Window* window;
+SDL_Renderer* renderer;
 
 
-void update(Object& obj, float deltaTime) {
-
-    // Update position: new position = initial position+(velocity×Δt)+21​×acceleration×(Δt)^2
-    obj.position = obj.position + (obj.velocity * deltaTime) + obj.acceleration * (deltaTime * deltaTime )/ 2;
-
-    // Update velocity: v = v + a * dt
-    obj.velocity = obj.velocity + obj.acceleration * deltaTime;
-
-}
+int main(int argc, char** args){
+//object creation 
+Object obj(0, 0, 1);
+applyGravity(obj);
 
 
-void applyGravity(Object& obj) {
-    obj.acceleration.y = -gravity; // Apply gravity to the y-component of acceleration
-}
+//----------SDL SETUP ------------
+
+    //initialisation 
+	if ( !init() ) return 1;
 
 
-int main(){
+	while ( loop(obj) ) {
+		// time before next frame 16 for 60fps
+		SDL_Delay(1000); 
+	}
 
-    Object obj(0, 0, 1.0f); // Create an object 
-    float deltaTime = 1.0f; // Simulate Fps
-
-    applyGravity(obj); // Apply gravity
-
-    for (int i = 0; i < 100; ++i) {
-        update(obj, deltaTime); // Update position and velocity
-
-        std::cout << "Position: (" << obj.position.x << ", " << obj.position.y << ")" 
-        << " velocity: (" << obj.velocity.x << ", " << obj.velocity.y << ")" 
-         << " acceleration: (" << obj.acceleration.x << ", " << obj.acceleration.y << ")\n";
-
-
-        sleep(1);
-    }
-
-
-
+	kill();
 
     return 0;
 }
 
 
+bool loop(Object& obj ) {
+
+	//declarations
+	static int mouseXPos, mouseYPos; //mouse x and y position
+	static const unsigned char* keys = SDL_GetKeyboardState( NULL ); //keyboard
+
+	SDL_Event event; 
+	SDL_Rect objRect;
 
 
 
+	//calculation for delta time
+	static Uint32 lastTime = SDL_GetTicks();
+    Uint32 currentTime = SDL_GetTicks();
+    float deltaTime = (currentTime - lastTime) / 1000.0f; // Convert ms to seconds
+    lastTime = currentTime;
+
+
+	//updating object and printing its value
+    updateObject(obj, deltaTime);
+	obj.printProperties();
+	std::cout << "time: " << currentTime/1000.0f << " ";
+
+
+	//clearing renderer after each frame so it doesn't ghost frames
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
+
+
+	//rectangle position same as object 
+	objRect.h = 10;
+	objRect.w = 10;
+	objRect.x = obj.position.x - objRect.w;
+	objRect.y = -obj.position.y - objRect.h; // we take -y cause else object would go upward
+
+
+	//drawing a the object rect
+	SDL_SetRenderDrawColor(renderer, 18, 88, 94, 255);
+	SDL_RenderFillRect(renderer, &objRect);
+
+
+	// Event loop
+	while ( SDL_PollEvent( &event ) != 0 ) {
+		switch ( event.type ) {
+			case SDL_QUIT:
+				return false;
+
+			//case for printing the mouse x and y position
+			case SDL_MOUSEBUTTONDOWN:
+				mouseXPos = event.button.x;
+				mouseYPos = event.button.y;
+				std::cout << "Mouse position (" << mouseXPos << "," << mouseYPos << ")" << std::endl;
+		}
+	}
+
+	// Update window
+	SDL_RenderPresent( renderer );
+    
+
+	return true;
+}
+
+
+bool init() {
+	// See last example for comments
+	SDL_Init(SDL_INIT_EVERYTHING);
+
+
+    //window and renderer creation
+	SDL_CreateWindowAndRenderer(1300, 860, 0, &window, &renderer);
+
+
+
+	SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
+	SDL_RenderClear( renderer );
+
+	
+	return true;
+}
+
+
+void kill() {
+	// Quit
+	SDL_DestroyRenderer( renderer );
+	SDL_DestroyWindow( window );
+	SDL_Quit();
+}

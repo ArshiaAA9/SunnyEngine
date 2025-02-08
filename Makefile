@@ -1,10 +1,10 @@
 all: clean build run
 
 build:
-	g++ main.cpp -o PhysicsEngine
+	g++ main.cpp -o binary `sdl2-config --cflags --libs`
 
 run:
-	./PhysicsEngine
+	./binary
 
 clean:
-	rm -f PhysicsEngine
+	rm -f binary
