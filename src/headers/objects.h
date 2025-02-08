@@ -65,7 +65,7 @@ struct rectObject : public Object {
 
 
 
-    //default constructor uses base Object class default constructor with heigh and width
+    // constructor with x, y, mass, heigh and width NO velocity No acceleration
     rectObject(float x, float y, float mass, float height, float width) 
         : Object(x, y, mass), height(height), width(width)  {
         
@@ -79,4 +79,30 @@ struct rectObject : public Object {
             
             checkValidDimensions(mass, height, width);
         }
+};
+
+
+struct triangleObject : public Object {
+
+
+
+
+};
+
+
+struct circleObject : public Object{
+    
+    float radius;
+
+    // constructor with x, y, mass and No velocity and acceleration
+    circleObject(float x, float y, float mass, float radius)
+        : Object(x, y, mass), radius(radius) {}
+
+    
+    // constructor with x, y, mass, radius, velocity, acceleration
+    circleObject(float px, float py, float mass, float radius, float vx, float vy, float ax, float ay)
+        : Object(px, py, vx, vy, ax, ay, mass), radius(radius) {}
+
+
+
 };

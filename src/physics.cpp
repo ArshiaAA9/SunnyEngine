@@ -3,6 +3,8 @@
 #include "headers/objects.h"
 #include "headers/physics.h"
 
+
+
 void updateObject(Object& obj, float deltaTime) {
 
     // Update position: new position = initial position+(velocity×Δt)+1/2​×acceleration×(Δt)^2
@@ -25,5 +27,5 @@ void applyForce(Object& obj, Vector2 force){
 
 
 void applyGravity(Object& obj) {
-    obj.acceleration.y -= GRAVITY; // Apply gravity to the y-component of acceleration
+    obj.acceleration = obj.acceleration + GRAVITY; // Apply gravity to the y-component of acceleration
 }

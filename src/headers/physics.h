@@ -4,7 +4,7 @@
 #include "vector2.h"
 #include "objects.h"
 
-const float GRAVITY = 9.81;
+const Vector2 GRAVITY(0, -9.81);
 
 void updateObject(Object& obj, float deltaTime);
 
