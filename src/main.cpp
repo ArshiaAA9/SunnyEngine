@@ -1,7 +1,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <SDL2/SDL.h>
-#include "physics.h"
+#include "headers/physics.h"
 
 
 bool init();
@@ -17,7 +17,7 @@ SDL_Renderer* renderer;
 int main(int argc, char** args){
 //object creation 
 Object obj(0, 0, 1);
-applyGravity(obj);
+// applyGravity(obj);
 
 
 //----------SDL SETUP ------------
@@ -60,17 +60,18 @@ bool loop(Object& obj ) {
 	obj.printProperties();
 	std::cout << "time: " << currentTime/1000.0f << " ";
 
-
 	//clearing renderer after each frame so it doesn't ghost frames
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 
 
-	//rectangle position same as object 
+
 	objRect.h = 10;
 	objRect.w = 10;
-	objRect.x = obj.position.x - objRect.w;
-	objRect.y = -obj.position.y - objRect.h; // we take -y cause else object would go upward
+
+	// we substract w and h divided by 2 to get the top left corner of the obj because thats how sdl2 renters the position
+	objRect.x = obj.position.x - objRect.w/2; 
+	objRect.y = -obj.position.y - objRect.h/2; // we take -y cause else object would go upward when the value decreases
 
 
 	//drawing a the object rect
