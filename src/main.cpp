@@ -16,7 +16,6 @@ SDL_Renderer* renderer;
 
 int main(int argc, char** args){
 //object creation 
-Object obj(0, 0, 1);
 // applyGravity(obj);
 
 

@@ -18,15 +18,26 @@ struct Vector2 {
         return Vector2(x + other.x, y + other.y);
     }
 
+
     // Subtraction operator for Vector2
     Vector2 operator-(const Vector2& other) const {
         return Vector2(x - other.x, y - other.y);
     }
 
+    // cases let vector(x, y) -vector = vector(-x, -y) 
+    Vector2 operator-(){
+        return Vector2(-x, -y);
+    }
+
+
     // Multiplication by a scalar
     Vector2 operator*(float scalar) const {
         return Vector2(x * scalar, y * scalar);
     }
+
+    // Friend function declaration
+    friend Vector2 operator*(float scalar, const Vector2& vector);
+
 
     // Division by a scalar
     Vector2 operator/(float scalar) const {
@@ -36,3 +47,4 @@ struct Vector2 {
         return Vector2(x / scalar, y / scalar);
     }
 };
+

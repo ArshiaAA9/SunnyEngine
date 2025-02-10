@@ -26,6 +26,6 @@ void applyForce(Object& obj, Vector2 force){
 
 
 
-void applyGravity(Object& obj) {
+void enableGravity(Object& obj) {
     obj.acceleration = obj.acceleration + GRAVITY; // Apply gravity to the y-component of acceleration
 }
