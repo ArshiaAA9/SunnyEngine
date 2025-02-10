@@ -8,9 +8,9 @@ const Vector2 GRAVITY(0, -9.81);
 
 void updateObject(Object& obj, float deltaTime);
 
-void enableGravity(Object& obj, Vector2 force);
+void applyForce(Object& obj, Vector2 force);
 
-void applyGravity(Object& obj);
+void enableGravity(Object& obj);
 
 
 
