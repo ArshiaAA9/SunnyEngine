@@ -12,5 +12,7 @@ void applyForce(Object& obj, Vector2 force);
 
 void enableGravity(Object& obj);
 
+void detectCollision(Object& obj);
+
 
 

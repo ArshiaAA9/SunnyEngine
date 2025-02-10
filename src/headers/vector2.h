@@ -36,7 +36,6 @@ struct Vector2 {
     }
 
     // Friend function declaration
-    friend Vector2 operator*(float scalar, const Vector2& vector);
 
 
     // Division by a scalar
@@ -46,5 +45,10 @@ struct Vector2 {
         }
         return Vector2(x / scalar, y / scalar);
     }
+
+
+    friend Vector2 operator*(float scalar, const Vector2& vector);
+    friend Vector2 operator/(float scalar, const Vector2& vector);
+
 };
 

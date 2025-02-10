@@ -29,3 +29,10 @@ void applyForce(Object& obj, Vector2 force){
 void enableGravity(Object& obj) {
     obj.acceleration = obj.acceleration + GRAVITY; // Apply gravity to the y-component of acceleration
 }
+
+
+void detectCollision(Object &obj){
+    for(auto instance : obj.instances){
+        obj.detectCollisionAndUpdateVelocity();
+    }
+}
