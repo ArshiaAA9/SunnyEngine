@@ -69,8 +69,8 @@ bool loop(Object& obj ) {
 	objRect.w = 10;
 
 	// we substract w and h divided by 2 to get the top left corner of the obj because thats how sdl2 renters the position
-	objRect.x = obj.position.x - objRect.w/2; 
-	objRect.y = -obj.position.y - objRect.h/2; // we take -y cause else object would go upward when the value decreases
+	objRect.x = obj.Position.x - objRect.w/2; 
+	objRect.y = -obj.Position.y - objRect.h/2; // we take -y cause else object would go upward when the value decreases
 
 
 	//drawing a the object rect
