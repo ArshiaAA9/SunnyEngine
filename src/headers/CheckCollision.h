@@ -1,10 +1,14 @@
 #include "Transform.h"
 #include "Colliders.h"
 
-CollisionPoints Test_Sphere_Sphere(
+CollisionPoints checkCircleCircle(
 	const Collider* a, const Transform* ta,
 	const Collider* b, const Transform* tb);
 
-CollisionPoints Test_Sphere_Plane(
+CollisionPoints checkCircleRect(
+	const Collider* a, const Transform* ta,
+	const Collider* b, const Transform* tb);
+
+CollisionPoints checkRectRect(
 	const Collider* a, const Transform* ta,
 	const Collider* b, const Transform* tb);

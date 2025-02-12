@@ -46,21 +46,17 @@ struct Object {
         Force += force;
     }
 
-    void updateVelocityAfterImpact(Object& cO){
-        //1 obj Velocity 2 collided object cO = collidedObject
-
-        Vector2 dV = Velocity - cO.Velocity;
-        Vector2 dPos = Position - cO.Position;
-        float massSum = Mass + cO.Mass;
-        float dotDVdPos = dotProduct(dV, dPos);
-        float distanceSquared = squaredLengthOf2Pos(Position, cO.Position);
-
-
-        float scale = (2.0f / massSum) * (dotDVdPos / distanceSquared);
-
-        Velocity = Velocity - (scale * cO.Mass) * dPos;         // Uses dPos
-        cO.Velocity = cO.Velocity + (scale * Mass) * dPos;    
-    }
+    // void updateVelocityAfterImpact(Object& cO){
+    //     //1 obj Velocity 2 collided object cO = collidedObject
+    //     Vector2 dV = Velocity - cO.Velocity;
+    //     Vector2 dPos = Position - cO.Position;
+    //     float massSum = Mass + cO.Mass;
+    //     float dotDVdPos = dotProduct(dV, dPos);
+    //     float distanceSquared = squaredLengthOf2Pos(Position, cO.Position);
+    //     float scale = (2.0f / massSum) * (dotDVdPos / distanceSquared);
+    //     Velocity = Velocity - (scale * cO.Mass) * dPos;         // Uses dPos
+    //     cO.Velocity = cO.Velocity + (scale * Mass) * dPos;    
+    // }
 
 
 
