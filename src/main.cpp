@@ -13,21 +13,25 @@ bool loop(Object& obj);
 SDL_Window* window;
 SDL_Renderer* renderer;
 
+PhysicsWorld world;
 
 int main(int argc, char** args){
-//object creation 
-// applyGravity(obj);
+world.setGravity(Vector2(1,0));
+rectObject rect(0, 0, 1, 1, 1);
+world.addObject(&rect); 
+rect.Velocity = Vector2(0, -10);
+rect.applyForce(Vector2(5, 0));
 
-
+std::cout << "force : " << rect.Force.x<< "," << rect.Force.y << "\n";
 //----------SDL SETUP ------------
 
     //initialisation 
 	if ( !init() ) return 1;
 
 
-	while ( loop(obj) ) {
+	while ( loop(rect) ) {
 		// time before next frame 16 for 60fps
-		SDL_Delay(1000); 
+		SDL_Delay(16); 
 	}
 
 	kill();
@@ -55,7 +59,6 @@ bool loop(Object& obj ) {
 
 
 	//updating object and printing its value
-    updateObject(obj, deltaTime);
 	obj.printProperties();
 	std::cout << "time: " << currentTime/1000.0f << " ";
 
@@ -71,6 +74,7 @@ bool loop(Object& obj ) {
 	// we substract w and h divided by 2 to get the top left corner of the obj because thats how sdl2 renters the position
 	objRect.x = obj.Position.x - objRect.w/2; 
 	objRect.y = -obj.Position.y - objRect.h/2; // we take -y cause else object would go upward when the value decreases
+
 
 
 	//drawing a the object rect
@@ -92,6 +96,7 @@ bool loop(Object& obj ) {
 		}
 	}
 
+    world.step(deltaTime);
 	// Update window
 	SDL_RenderPresent( renderer );
     

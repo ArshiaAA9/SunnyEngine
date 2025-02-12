@@ -4,26 +4,34 @@
 #include <vector>
 #include "vector2.h"
 #include "physics.h"
+#include "Colliders.h"
+#include "Transform.h"
 
 struct Object;
 struct rectObject;
 struct CircleObject;
 
+enum ObjectType {
+    Rect;
+    Circle;
+    Tri;
+}
 
 //physical objects
 struct Object {
     
+    ObjectType Type; // type of the object
 
     float Mass;
-    float frictionK;
-
-    Vector2 Position;         // Position of the object
-    Vector2 Velocity;         // Velocity of the object
+    Vector2 Velocity; 
     Vector2 Force;
+
+    Transform* Transform; // position and scale
+    Collider* Collider; 
 
 
     Object(float x, float y, float mass)
-        : Position(x, y)
+        : Transform.Position(x, y)
         , Mass(mass){
 
             checkValidValues(Mass); // validate values
@@ -54,12 +62,7 @@ struct Object {
         cO.Velocity = cO.Velocity + (scale * Mass) * dPos;    
     }
 
-    float squaredLengthOf2Pos(Vector2 pos1, Vector2 pos2){
-        //find squared length of 2 Position used in formulas to calculate distance
-        float dx = pos1.x - pos2.x;
-        float dy = pos1.y - pos2.y;
-        return dx * dx + dy * dy;
-    }
+
 
     void printProperties() const{
 
@@ -77,14 +80,7 @@ private:
         }
     }
 
-
-    static float dotProduct(Vector2 vec1, Vector2 vec2){
-        //sum of multiplication of both vectors components
-        return (vec1.x * vec2.x) + (vec1.y * vec2.y);
-    }
-
 };
-
 
 
 struct rectObject : public Object {
@@ -130,13 +126,6 @@ private:
     }
 };
 
-
-struct triangleObject : public Object {
-
-
-
-
-};
 
 
 struct CircleObject : public Object{
