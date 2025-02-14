@@ -1,8 +1,10 @@
 {
     "files.associations": {
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "numeric": "cpp"
     },
     "makefile.makefilePath": "/home/arshia/coding/physicsGame/Makefile",
     "makefile.makePath": "/home/arshia/coding/physicsGame/Makefile",
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.default.compilerPath": "/usr/bin/g++-13"
 }

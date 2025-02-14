@@ -1,5 +1,7 @@
-#include "vector2.h"
-#include "objects.h"
+#pragma once
+
+#include "Vector2.h"
+#include "Objects.h"
 
 struct CollisionPoints {
     Vector2 A; // Furthest point of A into B
@@ -11,7 +13,10 @@ struct CollisionPoints {
 
 
 struct Transform { // Describes an objects location
-    Vector2 Position;
-    float Scale;
 
-}
+    Vector2 position;
+    float Scale = 1;
+
+    Transform(float x, float y) : position(x, y) {}
+
+};

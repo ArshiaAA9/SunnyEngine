@@ -2,49 +2,39 @@
 
 #include <iostream>
 #include <vector>
-#include "vector2.h"
-#include "physics.h"
+#include "Vector2.h"
+#include "Physics.h"
 #include "Colliders.h"
 #include "Transform.h"
 
 struct Object;
-struct rectObject;
+struct RectObject;
 struct CircleObject;
 
-enum ObjectType {
-    Rect;
-    Circle;
-    Tri;
-}
 
 //physical objects
 struct Object {
     
-    ObjectType Type; // type of the object
 
-    float Mass;
-    Vector2 Velocity; 
-    Vector2 Force;
+    float mass;
+    Vector2 velocity; 
+    Vector2 force;
 
-    Transform* Transform; // position and scale
-    Collider* Collider; 
+    Transform transform; // position and scale
+    Collider collider; 
 
 
     Object(float x, float y, float mass)
-        : Transform.Position(x, y)
-        , Mass(mass){
+        : transform(x, y)
+        , mass(mass){
 
-            checkValidValues(Mass); // validate values
+            checkValidValues(mass); // validate values
         }
 
     ~Object() = default;
 
 
-    void applyForce(Vector2 force){
-
-
-        Force += force;
-    }
+    void applyForce(Vector2 force);
 
     // void updateVelocityAfterImpact(Object& cO){
     //     //1 obj Velocity 2 collided object cO = collidedObject
@@ -60,43 +50,34 @@ struct Object {
 
 
 
-    void printProperties() const{
-
-        std::cout << "Position: (" << this->Position.x << ", " << this->Position.y << ")" 
-        << " Velocity: (" << this->Velocity.x << ", " << this->Velocity.y << ")" 
-        << " Force: (" << this->Force.x << ", " << this->Force.y << ")\n";
-    } 
+    void printProperties() const;
 
 
 private:
 
-    void checkValidValues(float Mass){
-        if (Mass <= 0.0f){
-            throw std::invalid_argument("Mass must be positive value");
-        }
-    }
+    void checkValidValues(float mass);
 
 };
 
 
-struct rectObject : public Object {
+struct RectObject : public Object {
     
     int Height;
     int Width;
 
 
-    rectObject(float x, float y, float mass, float Height, float Width)
+    RectObject(float x, float y, float mass, float height, float width)
         : Object(x, y, mass)
         , Height()
         , Width(Width){
 
-            checkValidDimensions(Mass, Height, Width);
+            checkValidDimensions(mass, height, width);
         }
-    ~rectObject() = default;
+    ~RectObject() = default;
 
 
 private:
-    // void checkCollisionRectwithRect(rectObject& collidedRect){
+    // void checkCollisionRectwithRect(RectObject& collidedRect){
     //     float halfWidth1 = Width / 2, halfHeight1 = Height / 2;
     //     float halfWidth2 = collidedRect.Width / 2, halfHeight2 = collidedRect.Height / 2;
     //     float r1LeftX = Position.x - halfWidth1;
@@ -114,12 +95,7 @@ private:
     // }
  
 
-    void checkValidDimensions(float Mass, float Height, float Width) {
-        // Helper function to check validity. used in constructors to avoid division by 0,0 Mass and negative friction
-        if (Mass <= 0 || Height <= 0 || Width <= 0) {
-            throw std::invalid_argument("Mass, Height, and Width must be positive int.");
-        }
-    }
+    void checkValidDimensions(float mass, float height, float width);
 };
 
 
@@ -129,8 +105,8 @@ struct CircleObject : public Object{
     float radius;
 
 
-    CircleObject(float x, float y, float Mass, float radius) 
-        : Object(x, y, Mass)
+    CircleObject(float x, float y, float mass, float radius) 
+        : Object(x, y, mass)
         , radius(radius) {
     }
     ~CircleObject() = default;

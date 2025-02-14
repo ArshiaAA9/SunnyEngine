@@ -1,20 +1,21 @@
-#include "objects.h"
-#include "vector2.h"
+#pragma once
+
+#include "Objects.h"
+#include "Vector2.h"
 
 class ObjectHandler {
 private:
-    ObjectHandler(PhysicsWorld& world) : world(world) {}
 
     PhysicsWorld& world;
+    
+    ObjectHandler(PhysicsWorld& world) : world(world) {}
 
-    friend class init;
+    friend class Init;
+
 public:
 
     // Factory method to create a rectangle
-    Object* rectCreate(float x, float y, float mass, float width, float height) {
-        Object* object = new rectObject(x, y, mass, width, height);
-        world.addObject(object);
-        return object;
-    }
+    RectObject* rectCreate(float x, float y, float mass, float width, float height);
+    CircleObject* circleCreate(float x, float y, float mass, float radius);
 
 };
