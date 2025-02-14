@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Vector2.h"
-#include "Objects.h"
 
 struct CollisionPoints {
     Vector2 A; // Furthest point of A into B

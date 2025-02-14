@@ -68,8 +68,8 @@ struct RectObject : public Object {
 
     RectObject(float x, float y, float mass, float height, float width)
         : Object(x, y, mass)
-        , Height()
-        , Width(Width){
+        , Height(height)
+        , Width(width){
 
             checkValidDimensions(mass, height, width);
         }
