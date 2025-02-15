@@ -4,18 +4,26 @@
 #include "Objects.h"
 #include "Physics.h"
 
-//uniform grid partitioning 
+class PhysicsWorld;
+struct Object;
 
-
-// every grid will contain elements inside of it
 class GridPartition {
+public:
+
+
+    void setGridHeightWidth(float height, float width);
+
+    void updateCellDimensions(std::vector<Object*>& objects);
+
+    void updateCells(PhysicsWorld world);
+
 private:
     float colnum, rownum;
     float gridHeight, gridWidth;
-    float cellWidth = 1.0f, cellHeight = 1.0f;
+    float cellWidth = 1.0f;
+    float cellHeight = 1.0f;
     
     std::vector<std::vector<Object*>> m_cellObjects;
-public:
 
     GridPartition(float gridHeight, float gridWidth) : gridHeight(gridHeight), gridWidth(gridWidth) {
         rownum = gridHeight / cellHeight;
@@ -28,9 +36,5 @@ public:
         }
     }
 
-    void setGridHeightWidth(float height, float width);
-
-    void updateCellDimensions(std::vector<Object*>& objects);
-
-    void updateCells(PhysicsWorld world);
-}
+    friend class Init;
+};

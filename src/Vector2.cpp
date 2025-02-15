@@ -1,5 +1,4 @@
 #include "headers/Vector2.h"
-#include "Vector2.h"
 
 Vector2 Vector2::operator+(const Vector2 &other) const{
     // Addition operator for Vector2

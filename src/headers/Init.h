@@ -8,10 +8,11 @@ class Init {
 private:
 
 ObjectHandler m_handler;
+GridPartition m_grid;
 
 public:
 
-    Init(PhysicsWorld& world, GridPartition grid) : m_handler(world, grid) {}
+    Init(PhysicsWorld& world, float width, float height) : m_handler(world), m_grid(width, height) {}
 
     ObjectHandler& getObjectHandler(){
         return m_handler;

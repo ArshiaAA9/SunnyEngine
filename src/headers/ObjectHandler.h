@@ -8,9 +8,8 @@ class ObjectHandler {
 private:
 
     PhysicsWorld& world;
-    GridPartition& grid;
     
-    ObjectHandler(PhysicsWorld& world, GridPartition) : world(world), GridPartition(gird) {}
+    ObjectHandler(PhysicsWorld& world) : world(world) {}
 
     friend class Init;
 

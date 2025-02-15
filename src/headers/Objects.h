@@ -12,7 +12,6 @@ struct Object;
 struct RectObject;
 struct CircleObject;
 
-
 //physical objects
 struct Object {
     
@@ -77,7 +76,7 @@ struct RectObject : public Object {
         }
     ~RectObject() = default;
 
-
+    void getHeightWidth();
 private:
     // void checkCollisionRectwithRect(RectObject& collidedRect){
     //     float halfWidth1 = width / 2, halfHeight1 = height / 2;
@@ -113,7 +112,7 @@ struct CircleObject : public Object{
     }
     ~CircleObject() = default;
 
-    
+    void getHeightWidth();
     
 private:
 
