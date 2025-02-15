@@ -6,6 +6,7 @@
 #include "Physics.h"
 #include "Colliders.h"
 #include "Transform.h"
+#include "GridPartition.h"
 
 struct Object;
 struct RectObject;
@@ -52,6 +53,7 @@ struct Object {
 
     void printProperties() const;
 
+    virtual void getHeightWidth() = 0;
 
 private:
 
@@ -62,14 +64,14 @@ private:
 
 struct RectObject : public Object {
     
-    int Height;
-    int Width;
+    int height;
+    int width;
 
 
     RectObject(float x, float y, float mass, float height, float width)
         : Object(x, y, mass)
-        , Height(height)
-        , Width(width){
+        , height(height)
+        , width(width){
 
             checkValidDimensions(mass, height, width);
         }
@@ -78,8 +80,8 @@ struct RectObject : public Object {
 
 private:
     // void checkCollisionRectwithRect(RectObject& collidedRect){
-    //     float halfWidth1 = Width / 2, halfHeight1 = Height / 2;
-    //     float halfWidth2 = collidedRect.Width / 2, halfHeight2 = collidedRect.Height / 2;
+    //     float halfWidth1 = width / 2, halfHeight1 = height / 2;
+    //     float halfWidth2 = collidedRect.width / 2, halfHeight2 = collidedRect.height / 2;
     //     float r1LeftX = Position.x - halfWidth1;
     //     float r1RightX = Position.x + halfWidth1;
     //     float r1TopY = Position.y - halfHeight1;

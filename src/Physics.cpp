@@ -1,5 +1,6 @@
 #include "headers/Physics.h"
 #include "headers/Objects.h"
+#include "Physics.h"
 
 void PhysicsWorld::addObject(Object* object){ 
         m_objects.push_back(object);
@@ -13,6 +14,9 @@ void PhysicsWorld::removeObject(Object* object){
         m_objects.erase(itr);
 }
 
+std::vector<Object*> PhysicsWorld::getObjects(){
+    return m_objects;
+}
 
 void PhysicsWorld::step(float dt){
         //updates the simulation every dt

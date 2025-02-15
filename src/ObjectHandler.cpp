@@ -3,8 +3,8 @@
 RectObject* ObjectHandler::rectCreate(float x, float y, float mass, float width, float height) {
     RectObject* rectObject = new RectObject(x, y, mass, width, height);
     world.addObject(rectObject);
-    return rectObject;
-    
+    grid.updateCellDimensions(rectObject)
+    return rectObject;    
 }
 
 CircleObject* ObjectHandler::circleCreate(float x, float y, float mass, float radius){

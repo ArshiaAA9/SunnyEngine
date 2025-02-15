@@ -17,9 +17,9 @@ private:
 public:
 
     void addObject(Object* object);
-    
     void removeObject(Object* object);
 
+    std::vector<Object*> getObjects();
 
     void step(float dt);
 

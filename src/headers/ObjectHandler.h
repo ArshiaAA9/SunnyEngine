@@ -2,13 +2,15 @@
 
 #include "Objects.h"
 #include "Vector2.h"
+#include "GridPartition.h"
 
 class ObjectHandler {
 private:
 
     PhysicsWorld& world;
+    GridPartition& grid;
     
-    ObjectHandler(PhysicsWorld& world) : world(world) {}
+    ObjectHandler(PhysicsWorld& world, GridPartition) : world(world), GridPartition(gird) {}
 
     friend class Init;
 
