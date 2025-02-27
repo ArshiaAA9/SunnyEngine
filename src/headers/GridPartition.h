@@ -10,12 +10,10 @@ struct Object;
 class GridPartition {
 public:
 
-
-    void setGridHeightWidth(float height, float width);
-
     void updateCellDimensions(std::vector<Object*>& objects);
 
     void updateCells(PhysicsWorld world);
+    std::vector<std::vector<Object *>>& getCells();
 
 private:
     float colnum, rownum;

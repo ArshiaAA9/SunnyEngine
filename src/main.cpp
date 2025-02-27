@@ -11,16 +11,18 @@ int main(int argc, char** args){
     PhysicsWorld world;
 
     Init init(world, 1000, 500);
+
     ObjectHandler objectHandler = init.getObjectHandler();
+    CollisionDetection cD = init.getCollisionDetection();
 
     world.setGravity(Vector2(1,0));
 
-    RectObject* rect = objectHandler.rectCreate(0, 0, 1, 1, 1);
+    RectObject* rect1 = objectHandler.rectCreate(0, 0, 1, 1, 1);
+    RectObject* rect2 = objectHandler.rectCreate(1, -1, 1, 1, 1);
 
-    rect->velocity = Vector2(0, -10);
-    rect->applyForce(Vector2(5, 0));
+    std::cout << cD.AABB(*rect1, *rect2) << std::endl;
+    cD.clRectRect(*rect1, *rect2);
 
-    rect->printProperties();
     return 0;
 }
 

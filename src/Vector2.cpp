@@ -92,7 +92,7 @@ float Vector2::squaredMagnitude(){
 void Vector2::normalize(){
     float length = magnitude();
     if(length > 0){
-        (*this)*= ((float)1)/length;
+        *this /= length;
     }
 }
 

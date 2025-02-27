@@ -15,7 +15,6 @@ private:
 
 public:
 
-    // Factory method to create a rectangle
     RectObject* rectCreate(float x, float y, float mass, float width, float height);
     CircleObject* circleCreate(float x, float y, float mass, float radius);
 

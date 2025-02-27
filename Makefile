@@ -4,7 +4,7 @@ INCLUDES = src/headers/
 all: clean build run
 
 build:
-	g++ $(SOURCES) -I $(INCLUDES) -o bin/binary `sdl2-config --cflags --libs`
+	g++ $(SOURCES) -I $(INCLUDES) -o bin/binary `sdl2-config --cflags --libs` 
 
 run:
 	./bin/binary

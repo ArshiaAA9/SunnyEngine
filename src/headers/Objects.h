@@ -4,7 +4,6 @@
 #include <vector>
 #include "Vector2.h"
 #include "Physics.h"
-#include "Colliders.h"
 #include "Transform.h"
 #include "GridPartition.h"
 
@@ -12,24 +11,18 @@ struct Object;
 struct RectObject;
 struct CircleObject;
 
-//physical objects
+
 struct Object {
     
-
     float mass;
     Vector2 velocity; 
     Vector2 force;
 
     Transform transform; // position and scale
-    Collider collider; 
-
 
     Object(float x, float y, float mass)
         : transform(x, y)
-        , mass(mass){
-
-            checkValidValues(mass); // validate values
-        }
+        , mass(mass){ checkValidValues(mass); }
 
     ~Object() = default;
 
@@ -52,7 +45,7 @@ struct Object {
 
     void printProperties() const;
 
-    virtual void getHeightWidth() = 0;
+    virtual Vector2 getHeightWidth() = 0;
 
 private:
 
@@ -76,25 +69,8 @@ struct RectObject : public Object {
         }
     ~RectObject() = default;
 
-    void getHeightWidth();
+    Vector2 getHeightWidth() override;
 private:
-    // void checkCollisionRectwithRect(RectObject& collidedRect){
-    //     float halfWidth1 = width / 2, halfHeight1 = height / 2;
-    //     float halfWidth2 = collidedRect.width / 2, halfHeight2 = collidedRect.height / 2;
-    //     float r1LeftX = Position.x - halfWidth1;
-    //     float r1RightX = Position.x + halfWidth1;
-    //     float r1TopY = Position.y - halfHeight1;
-    //     float r1BottomY = Position.y + halfHeight1;
-    //     float r2LeftX = collidedRect.Position.x - halfWidth2;
-    //     float r2RightX = collidedRect.Position.x + halfWidth2;
-    //     float r2TopY = collidedRect.Position.y - halfHeight2;
-    //     float r2BottomY = collidedRect.Position.y + halfHeight2;
-    //     if((r1LeftX < r2RightX) && (r1RightX > r2LeftX)&&
-    //        (r1BottomY < r2TopY) && (r1TopY > r2BottomY)){
-    //         updateVelocityAfterImpact(collidedRect);
-    //     }
-    // }
- 
 
     void checkValidDimensions(float mass, float height, float width);
 };
@@ -112,7 +88,7 @@ struct CircleObject : public Object{
     }
     ~CircleObject() = default;
 
-    void getHeightWidth();
+    Vector2 getHeightWidth() override;
     
 private:
 
