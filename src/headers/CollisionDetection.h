@@ -21,10 +21,9 @@ public:
 
     void clRectRect(RectObject& r1, RectObject& r2);
 
-    void createCollisionPair(Object* obj1, Object* obj2, float depth);
 
 private:
-    CollisionPair* createCollisionPair(Object* obj1, Object* obj2, float depth);
+    void createCollisionPair(Object* obj1, Object* obj2, float depth);
     std::vector<CollisionPair*> m_collisions;
 
     CollisionDetection() = default;

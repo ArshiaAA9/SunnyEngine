@@ -21,7 +21,7 @@ int main(int argc, char** args){
     RectObject* rect2 = objectHandler.rectCreate(1, -1, 1, 1, 1);
 
     cD.clRectRect(*rect1, *rect2);
-    std::cout << rect1.co << "\n";
+    std::cout << "\n";
 
     return 0;
 }

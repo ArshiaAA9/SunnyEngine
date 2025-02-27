@@ -20,7 +20,7 @@ void Object::checkValidValues(float mass){
     }
 }
 
-Vector2 RectObject::getHeightWidth(){
+Vector2 RectObject::getDimensions(){
     return Vector2(height, width); 
 }
 
@@ -31,7 +31,7 @@ void RectObject::checkValidDimensions(float mass, float height, float width){
     }
 }
 
-Vector2 CircleObject::getHeightWidth(){
+Vector2 CircleObject::getDimensions(){
     return Vector2(radius * 2, radius * 2); 
 }
 

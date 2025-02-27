@@ -13,7 +13,7 @@ struct CircleObject;
 
 
 struct Object {
-    enum ObjectType { CIRCLE, RECT }
+    enum ObjectType { CIRCLE, RECT };
     
     float mass;
     Vector2 velocity; 
@@ -22,9 +22,10 @@ struct Object {
     ObjectType type;
     Transform transform; // position and scale
 
-    Object(float x, float y, float mass)
+    Object(float x, float y, float mass, ObjectType type)
         : transform(x, y)
-        , mass(mass){ checkValidValues(mass); }
+        , mass(mass)
+        , type(type){ checkValidValues(mass); }
 
     ~Object() = default;
 
@@ -47,7 +48,7 @@ struct Object {
 
     void printProperties() const;
 
-    virtual Vector2 getHeightWidth() = 0;
+    virtual Vector2 getDimensions() = 0;
 
 private:
 
@@ -63,15 +64,14 @@ struct RectObject : public Object {
 
 
     RectObject(float x, float y, float mass, float height, float width)
-        : Object(x, y, mass)
+        : Object(x, y, mass, RECT)
         , height(height)
         , width(width){
-        , type(RECT)
             checkValidDimensions(mass, height, width);
         }
     ~RectObject() = default;
 
-    Vector2 getHeightWidth() override;
+    Vector2 getDimensions() override;
 private:
 
     void checkValidDimensions(float mass, float height, float width);
@@ -85,13 +85,11 @@ struct CircleObject : public Object{
 
 
     CircleObject(float x, float y, float mass, float radius) 
-        : Object(x, y, mass)
-        , radius(radius)
-        , type(CIRCLE){
-    }
+        : Object(x, y, mass, CIRCLE)
+        , radius(radius) {}
     ~CircleObject() = default;
 
-    Vector2 getHeightWidth() override;
+    Vector2 getDimensions() override;
     
 private:
 

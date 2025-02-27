@@ -3,7 +3,7 @@
 void GridPartition::updateCellDimensions(std::vector<Object*>& objects){
     //used to update maxH and maxW 
     for(auto* obj : objects){
-        Vector2 heighWidth = obj->getHeightWidth();
+        Vector2 heighWidth = obj->getDimensions();
         if(heighWidth.x > cellWidth) cellWidth = heighWidth.x;
         if(heighWidth.y > cellHeight) cellHeight = heighWidth.y;
     }
