@@ -15,13 +15,13 @@ int main(int argc, char** args){
     ObjectHandler objectHandler = init.getObjectHandler();
     CollisionDetection cD = init.getCollisionDetection();
 
-    world.setGravity(Vector2(1,0));
+    // world.setGravity(Vector2(1,0));
 
     RectObject* rect1 = objectHandler.rectCreate(0, 0, 1, 1, 1);
     RectObject* rect2 = objectHandler.rectCreate(1, -1, 1, 1, 1);
 
-    std::cout << cD.AABB(*rect1, *rect2) << std::endl;
     cD.clRectRect(*rect1, *rect2);
+    std::cout << rect1.co << "\n";
 
     return 0;
 }

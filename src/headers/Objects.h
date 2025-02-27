@@ -13,11 +13,13 @@ struct CircleObject;
 
 
 struct Object {
+    enum ObjectType { CIRCLE, RECT }
     
     float mass;
     Vector2 velocity; 
     Vector2 force;
 
+    ObjectType type;
     Transform transform; // position and scale
 
     Object(float x, float y, float mass)
@@ -64,7 +66,7 @@ struct RectObject : public Object {
         : Object(x, y, mass)
         , height(height)
         , width(width){
-
+        , type(RECT)
             checkValidDimensions(mass, height, width);
         }
     ~RectObject() = default;
@@ -84,7 +86,8 @@ struct CircleObject : public Object{
 
     CircleObject(float x, float y, float mass, float radius) 
         : Object(x, y, mass)
-        , radius(radius) {
+        , radius(radius)
+        , type(CIRCLE){
     }
     ~CircleObject() = default;
 
