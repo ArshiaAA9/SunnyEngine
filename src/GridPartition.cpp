@@ -1,4 +1,4 @@
-#include "GridPartition.h"
+#include "headers/GridPartition.h"
 
 void GridPartition::updateCellDimensions(std::vector<Object*>& objects){
     //used to update maxH and maxW 
@@ -29,6 +29,15 @@ void GridPartition::updateCells(PhysicsWorld world){
     }
 }
 
-std::vector<std::vector<Object *>>& GridPartition::getCells(){
-    return m_cellObjects;
+int GridPartition::getRowCount(){
+    return rownum;
+}
+
+int GridPartition::getColCount(){
+    return colnum;
+}
+
+//broken
+Object *GridPartition::getObjectInCell(int col, int row){
+    return m_cellObjects[col][row];
 }

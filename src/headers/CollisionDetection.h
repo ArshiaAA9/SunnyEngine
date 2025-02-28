@@ -24,7 +24,7 @@ public:
 
 private:
     void createCollisionPair(Object* obj1, Object* obj2, float depth);
-    std::vector<CollisionPair*> m_collisions;
+    std::vector<CollisionPair*> m_collisionPairs;
 
     CollisionDetection() = default;
     friend class Init;

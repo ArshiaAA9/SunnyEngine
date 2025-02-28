@@ -1,12 +1,49 @@
 #include "headers/CollisionDetection.h"
 
-//ignore this its not complete
-void CollisionDetection::checkCollision(GridPartition grid){
-    std::vector<std::vector<Object *>>& cells = grid.getCells();
+void CollisionDetection::checkCollision(GridPartition& grid) {
+    int rows = grid.getRowCount();
+    int cols = grid.getColCount();
+
+    // Loop through each cell in the grid
+    for (int col = 0; col < cols; ++col) {
+        for (int row = 0; row < rows; ++row) {
+            // Get the list of objects in the current cell
+            auto& objectsInCell = grid.getObjectsInCell(col, row);
+
+            // Check collisions between objects in the same cell
+            for (size_t i = 0; i < objectsInCell.size(); ++i) {
+                for (size_t j = i + 1; j < objectsInCell.size(); ++j) {
+                    checkCollisionByType(*objectsInCell[i], *objectsInCell[j]);
+                }
+            }
+
+            // Check collisions with objects in adjacent cells
+            for (int dx = -1; dx <= 1; ++dx) {
+                for (int dy = -1; dy <= 1; ++dy) {
+                    if (dx == 0 && dy == 0) continue; // Skip the current cell
+
+                    int adjacentCol = col + dx;
+                    int adjacentRow = row + dy;
+
+                    // Ensure the adjacent cell is within the grid bounds
+                    if (adjacentCol >= 0 && adjacentCol < cols && adjacentRow >= 0 && adjacentRow < rows) {
+                        auto& adjacentObjects = grid.getObjectsInCell(adjacentCol, adjacentRow);
+
+                        // Check collisions between objects in the current cell and adjacent cell
+                        for (auto& obj1 : objectsInCell) {
+                            for (auto& obj2 : adjacentObjects) {
+                                checkCollisionByType(*obj1, *obj2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 //used inside checkCollision function
-void CollisionDetection::checkCollisionByType(Object& obj1, Object& obj2) {
+void CollisionDetection::checkCollisionByType(Object* obj1, Object* obj2) {
     if (obj1.type == Object::RECT && obj2.type == Object::RECT) { // Rect-Rect
         clRectRect(static_cast<RectObject&>(obj1), static_cast<RectObject&>(obj2));
     } else if (obj1.type == Object::CIRCLE && obj2.type == Object::CIRCLE) { // Circle-Circle
@@ -26,7 +63,7 @@ void CollisionDetection::clCircleCircle(CircleObject& c1, CircleObject& c2){
     float squaredDistance = c1.transform.position.squaredLengthOf2Pos(c2.transform.position);
 
     if(squaredDistance <= (c1.radius + c2.radius) * (c1.radius + c2.radius)){
-        float depth = std::abs(c1.radius - c2.radius) - std::sqrt(squaredDistance);  
+        float depth = (c1.radius - c2.radius) - std::sqrt(squaredDistance);  
         
         createCollisionPair(&c1, &c2, depth);
     }
@@ -60,23 +97,21 @@ bool CollisionDetection::aabb(RectObject& r1, RectObject& r2){
     Vector2 r1Pos = r1.transform.position;
     Vector2 r2Pos = r2.transform.position;
 
-    r1Left = r1Pos.x - r1.width / 2;
-    r1Right = r1Pos.x + r1.width / 2;
-    r1Top = r1Pos.y + r1.height / 2;
-    r1Bot = r1Pos.y - r1.height / 2;
+    float r1Left = r1Pos.x - r1.width / 2;
+    float r1Right = r1Pos.x + r1.width / 2;
+    float r1Top = r1Pos.y + r1.height / 2;
+    float r1Bot = r1Pos.y - r1.height / 2;
 
-    r2Left =  r2Pos.x - r2.width / 2;
-    r2Right = r2Pos.x + r2.width / 2;
-    r2Top = r2Pos.y + r2.height / 2;
-    r2Bot = r2Pos.y - r2.height / 2;
+    float r2Left =  r2Pos.x - r2.width / 2;
+    float r2Right = r2Pos.x + r2.width / 2;
+    float r2Top = r2Pos.y + r2.height / 2;
+    float r2Bot = r2Pos.y - r2.height / 2;
 
 
     return (r1Left  <= r2Right
     && r1Right >= r2Left
     && r1Bot <= r2Top
     && r1Top >= r2Bot);
-
-
 }
 
 void CollisionDetection::clRectRect(RectObject& r1, RectObject& r2){
@@ -105,6 +140,6 @@ void CollisionDetection::clRectRect(RectObject& r1, RectObject& r2){
 
 void CollisionDetection::createCollisionPair(Object* obj1, Object* obj2, float depth){
     collision = new CollisionPair(obj1, obj2, depth);
-    m_collisions.push_back(collision);
+    m_collisionPairs.push_back(collision);
 }
 

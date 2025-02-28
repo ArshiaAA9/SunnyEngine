@@ -13,7 +13,13 @@ public:
     void updateCellDimensions(std::vector<Object*>& objects);
 
     void updateCells(PhysicsWorld world);
-    std::vector<std::vector<Object *>>& getCells();
+
+    int getRowCount();
+
+    int getColCount();
+
+    Object* getObjectInCell(int col, int row);
+
 
 private:
     float colnum, rownum;
