@@ -18,7 +18,7 @@ public:
 
     int getColCount();
 
-    Object* getObjectInCell(int col, int row);
+    Object* getObjectsInCell(int col, int row);
 
 
 private:

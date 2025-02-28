@@ -9,7 +9,7 @@
 class CollisionDetection {
 public:
 
-    void checkCollision(GridPartition grid);
+    void checkCollision(GridPartition& grid);
 
     void checkCollisionByType(Object* obj1, Object* obj2);
 

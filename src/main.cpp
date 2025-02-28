@@ -9,7 +9,7 @@
 
 int main(int argc, char** args){
     PhysicsWorld world;
-
+    
     Init init(world, 1000, 500);
 
     ObjectHandler objectHandler = init.getObjectHandler();

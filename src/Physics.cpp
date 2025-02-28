@@ -1,6 +1,5 @@
 #include "headers/Physics.h"
 #include "headers/Objects.h"
-#include "Physics.h"
 
 void PhysicsWorld::addObject(Object* object){ 
         m_objects.push_back(object);

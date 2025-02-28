@@ -13,7 +13,7 @@ void CollisionDetection::checkCollision(GridPartition& grid) {
             // Check collisions between objects in the same cell
             for (size_t i = 0; i < objectsInCell.size(); ++i) {
                 for (size_t j = i + 1; j < objectsInCell.size(); ++j) {
-                    checkCollisionByType(*objectsInCell[i], *objectsInCell[j]);
+                    checkCollisionByType(objectsInCell[i], objectsInCell[j]);
                 }
             }
 
@@ -44,14 +44,14 @@ void CollisionDetection::checkCollision(GridPartition& grid) {
 
 //used inside checkCollision function
 void CollisionDetection::checkCollisionByType(Object* obj1, Object* obj2) {
-    if (obj1.type == Object::RECT && obj2.type == Object::RECT) { // Rect-Rect
+    if (obj1->type == Object::RECT && obj2->type == Object::RECT) { // Rect-Rect
         clRectRect(static_cast<RectObject&>(obj1), static_cast<RectObject&>(obj2));
-    } else if (obj1.type == Object::CIRCLE && obj2.type == Object::CIRCLE) { // Circle-Circle
+    } else if (obj1->type == Object::CIRCLE && obj2->type == Object::CIRCLE) { // Circle-Circle
         clCircleCircle(static_cast<CircleObject&>(obj1), static_cast<CircleObject&>(obj2));
-    } else if ((obj1.type == Object::RECT && obj2.type == Object::CIRCLE) || 
-               (obj1.type == Object::CIRCLE && obj2.type == Object::RECT)) { // Rect-Circle or Circle-Rect
+    } else if ((obj1->type == Object::RECT && obj2->type == Object::CIRCLE) || 
+               (obj1->type == Object::CIRCLE && obj2->type == Object::RECT)) { // Rect-Circle or Circle-Rect
         // Ensure the first object is always the circle
-        if (obj1.type == Object::CIRCLE) {
+        if (obj1->type == Object::CIRCLE) {
             clCircleRect(static_cast<CircleObject&>(obj1), static_cast<RectObject&>(obj2));
         } else {
             clCircleRect(static_cast<CircleObject&>(obj2), static_cast<RectObject&>(obj1));
@@ -139,7 +139,7 @@ void CollisionDetection::clRectRect(RectObject& r1, RectObject& r2){
 }
 
 void CollisionDetection::createCollisionPair(Object* obj1, Object* obj2, float depth){
-    collision = new CollisionPair(obj1, obj2, depth);
+    CollisionPair* collision = new CollisionPair(obj1, obj2, depth);
     m_collisionPairs.push_back(collision);
 }
 

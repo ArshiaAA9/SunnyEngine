@@ -38,6 +38,6 @@ int GridPartition::getColCount(){
 }
 
 //broken
-Object *GridPartition::getObjectInCell(int col, int row){
+Object *GridPartition::getObjectsInCell(int col, int row){
     return m_cellObjects[col][row];
 }
