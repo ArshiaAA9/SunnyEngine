@@ -3,18 +3,18 @@
 #include "headers/Physics.h"
 #include "headers/Vector2.h"
 
-void Solver::solveCollisionPairs(PhysicsWorld& world) {
-    std::vector<CollisionPair*>* ptrClPairs = world.getClPairs();
+void Solver::solveCollisionPairs(PhysicsWorld* world) {
+    std::vector<CollisionPair*>* ptrClPairs = world->cD.getClPairsptr();
     if (ptrClPairs) {
-        for (auto* pair : *ptrClPairs) {
-            if (pair) {
-                solve(pair, world);
+        for (auto* pPair : *ptrClPairs) {
+            if (pPair) {
+                solve(pPair);
             }
         }
     }
 }
 
-void Solver::solve(CollisionPair* pair, PhysicsWorld& world) {
+void Solver::solve(CollisionPair* pair) {
     float vrel = calculateRelativeVelocity(pair);
     if (vrel < 0) { // if negative mean objects are moving into eachother
         Vector2 j = calculateImpulse(pair, vrel);

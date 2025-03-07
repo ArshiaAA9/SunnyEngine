@@ -19,11 +19,11 @@ class PhysicsWorld {
 private:
     Solver m_solver;
     GridPartition m_grid;
-    CollisionDetection m_collisionDetection;
 
     Vector2 m_gravity = Vector2(0, -9.81);
 
 public:
+    CollisionDetection cD;
     ObjectHandler Handler;
 
     /**
@@ -31,8 +31,7 @@ public:
      *@param gridWidth simulations width
      *@return
      * */
-    PhysicsWorld(float gridHeight, float gridWidth)
-        : m_grid(gridHeight, gridWidth, this), m_collisionDetection(&m_grid), Handler(this) {}
+    PhysicsWorld(float gridHeight, float gridWidth) : m_grid(gridHeight, gridWidth, this), cD(&m_grid), Handler(this) {}
 
     void dynamicsUpdate(float dt);
     void step(float dt);
