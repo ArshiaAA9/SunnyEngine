@@ -11,19 +11,20 @@ class PhysicsWorld;
 
 class CollisionDetection {
 public:
-    CollisionDetection(GridPartition* grid) : m_grid(grid) {}
+    CollisionDetection(GridPartition* grid)
+        : m_grid(grid) {}
 
     void checkCollision();
 
     void checkCollisionByType(Object* obj1, Object* obj2);
 
-    void clCircleCircle(CircleObject& c1, CircleObject& c2);
+    void clCircleCircle(Object* obj1, Object* obj2);
 
-    void clCircleRect(CircleObject& c, RectObject& rect);
+    void clCircleRect(Object* obj1, Object* obj2);
 
-    bool aabb(RectObject& r1, RectObject& r2);
+    bool aabb(Object* obj1, Object* obj2);
 
-    void clRectRect(RectObject& r1, RectObject& r2);
+    void clRectRect(Object* obj1, Object* obj2);
 
     void addClPair(Object* obj1, Vector2 pointA, Object* obj2, Vector2 pointB, float depth);
     void deleteClPair(CollisionPair* pair);

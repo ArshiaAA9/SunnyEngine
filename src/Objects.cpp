@@ -38,6 +38,12 @@ void RectObject::checkValidDimensions(float mass, float height, float width) con
     }
 }
 
+// getType pure virtual function:
+ObjectType RectObject::getType() const { return this->type; }
+
+ObjectType CircleObject::getType() const { return this->type; }
+
+// getDimensions pure virtual function:
 /**@return Vector2(height, width)*/
 Vector2 RectObject::getDimensions() const { return Vector2(height, width); }
 

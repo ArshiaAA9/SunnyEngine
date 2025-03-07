@@ -10,8 +10,9 @@ struct Object;
 struct RectObject;
 struct CircleObject;
 
+enum ObjectType { CIRCLE, RECT };
+
 struct Object {
-    enum ObjectType { CIRCLE, RECT };
 
     float mass;
     Vector2 velocity;
@@ -31,6 +32,7 @@ struct Object {
     virtual ~Object() = default;
 
     virtual Vector2 getDimensions() const = 0;
+    virtual ObjectType getType() const = 0;
 
     virtual void printProperties() const;
 
@@ -52,9 +54,11 @@ struct RectObject : public Object {
         , width(width) {
         checkValidDimensions(mass, height, width);
     }
+
     ~RectObject() = default;
 
     Vector2 getDimensions() const override;
+    ObjectType getType() const override;
 
     void printProperties() const override;
 
@@ -69,9 +73,12 @@ struct CircleObject : public Object {
     CircleObject(float x, float y, float mass, float radius)
         : Object(x, y, mass, CIRCLE)
         , radius(radius) {}
+
     ~CircleObject() = default;
 
+    /**@return Vector2(radius, Circumference)*/
     Vector2 getDimensions() const override;
+    ObjectType getType() const override;
 
     void printProperties() const override;
 
