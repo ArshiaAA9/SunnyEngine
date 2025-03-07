@@ -1,33 +1,41 @@
 #pragma once
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include "Vector2.h"
+
+#include "CollisionDetection.h"
+#include "CollisionPair.h"
+#include "GridPartition.h"
+#include "ObjectHandler.h"
 #include "Objects.h"
+#include "Solver.h"
+#include "Vector2.h"
 
-struct Object;
-
+/*
+TODO: write interfaces inside all of the member classes specialy collision detection and update the
+functions that add pairs to the pair vectors*/
 class PhysicsWorld {
 private:
+    Solver m_solver;
+    GridPartition m_grid;
+    CollisionDetection m_collisionDetection;
 
-    std::vector<Object*> m_objects;
     Vector2 m_gravity = Vector2(0, -9.81);
 
 public:
+    ObjectHandler Handler;
 
-    void addObject(Object* object);
-    void removeObject(Object* object);
+    /**
+     *@param gridHeight simulations height
+     *@param gridWidth simulations width
+     *@return
+     * */
+    PhysicsWorld(float gridHeight, float gridWidth)
+        : m_grid(gridHeight, gridWidth, this), m_collisionDetection(&m_grid), Handler(this) {}
 
-    std::vector<Object*> getObjects();
-
+    void dynamicsUpdate(float dt);
     void step(float dt);
-
 
     void setGravity(Vector2 gravity);
 };
-
-
-
-
-

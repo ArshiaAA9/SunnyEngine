@@ -1,43 +1,38 @@
 #include "headers/GridPartition.h"
 
-void GridPartition::updateCellDimensions(std::vector<Object*>& objects){
-    //used to update maxH and maxW 
-    for(auto* obj : objects){
+#include "headers/Physics.h"
+
+void GridPartition::updateCellDimensions(std::vector<Object*>& objects) {
+    // used to update maxH and maxW
+    for (auto* obj : objects) {
         Vector2 heighWidth = obj->getDimensions();
-        if(heighWidth.x > cellWidth) cellWidth = heighWidth.x;
-        if(heighWidth.y > cellHeight) cellHeight = heighWidth.y;
+        if (heighWidth.x > cellWidth) cellWidth = heighWidth.x;
+        if (heighWidth.y > cellHeight) cellHeight = heighWidth.y;
     }
 }
 
-//TODO: NEED FIX
-void GridPartition::updateCells(PhysicsWorld world){
+// FIX: NEED FIX
+void GridPartition::updateCells() {
     // m_cellObjects[col][row]
-    for(auto& col : m_cellObjects) {
+    for (auto& col : m_cellObjects) {
         col.clear();
     }
 
-    //loops over all objects in world and adds them to a cell
-    for(Object* obj : world.getObjects()){
+    // loops over all object&s in world and adds them to a cell
+    for (Object* obj : m_world->Handler.getObjects()) {
         Vector2 objPos = obj->transform.position;
         int col = static_cast<int>(objPos.x / cellWidth);
         int row = static_cast<int>(objPos.y / cellHeight);
 
-        //checks for out of bound
+        // checks for out of bound
         if (col >= 0 && col < colnum && row >= 0 && row < rownum) {
             m_cellObjects[col][row] = obj;
         }
     }
 }
 
-int GridPartition::getRowCount(){
-    return rownum;
-}
+int GridPartition::getRowCount() { return rownum; }
 
-int GridPartition::getColCount(){
-    return colnum;
-}
+int GridPartition::getColCount() { return colnum; }
 
-//broken
-Object *GridPartition::getObjectsInCell(int col, int row){
-    return m_cellObjects[col][row];
-}
+Object* GridPartition::getObjectInCell(int col, int row) { return m_cellObjects[col][row]; }
