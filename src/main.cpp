@@ -3,13 +3,6 @@
 
 #include <iostream>
 
-#include "headers/ObjectHandler.h"
 #include "headers/Physics.h"
 
-int main(int argc, char** args) {
-    PhysicsWorld world;
-
-    world.
-
-        return 0;
-}
+int main(int argc, char** args) { return 0; }

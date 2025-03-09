@@ -18,20 +18,21 @@ functions that add pairs to the pair vectors*/
 class PhysicsWorld {
 private:
     Solver m_solver;
-    GridPartition m_grid;
-
     Vector2 m_gravity = Vector2(0, -9.81);
 
 public:
-    CollisionDetection cD;
-    ObjectHandler Handler;
+    CollisionDetection cD; // public cause owns collisionPairs
+    ObjectHandler Handler; // public cause handles Objects
 
     /**
      *@param gridHeight simulations height
      *@param gridWidth simulations width
      *@return
      * */
-    PhysicsWorld(float gridHeight, float gridWidth) : m_grid(gridHeight, gridWidth, this), cD(&m_grid), Handler(this) {}
+    PhysicsWorld(float gridHeight, float gridWidth)
+        : cD(gridHeight, gridWidth, *this)
+        , m_solver(*this)
+        , Handler(*this) {}
 
     void dynamicsUpdate(float dt);
     void step(float dt);

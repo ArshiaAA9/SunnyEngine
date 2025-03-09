@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include "CollisionPair.h"
@@ -11,10 +12,10 @@ class PhysicsWorld;
 
 class CollisionDetection {
 public:
-    CollisionDetection(GridPartition* grid)
-        : m_grid(grid) {}
+    CollisionDetection(float gridHeight, float gridWidth, PhysicsWorld& world)
+        : m_grid(gridHeight, gridWidth, world) {}
 
-    void checkCollision();
+    void checkCollisions();
 
     void checkCollisionByType(Object* obj1, Object* obj2);
 
@@ -30,9 +31,9 @@ public:
     void deleteClPair(CollisionPair* pair);
 
     // returns a pointer to collisionpair vector
-    std::vector<CollisionPair*>* getClPairsptr();
+    const std::vector<std::unique_ptr<CollisionPair>>& getClPairs() const;
 
 private:
-    std::vector<CollisionPair*> m_collisionPairs;
-    GridPartition* m_grid;
+    std::vector<std::unique_ptr<CollisionPair>> m_collisionPairs;
+    GridPartition m_grid;
 };

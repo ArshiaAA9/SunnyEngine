@@ -1,16 +1,70 @@
 #include "headers/CollisionDetection.h"
 
 #include <algorithm>
-#include <cmath>
+#include <memory>
 
+#include "headers/CollisionPair.h"
 #include "headers/GridPartition.h"
 #include "headers/Objects.h"
 #include "headers/Vector2.h"
 
-// FIX: fix this abomination
-void CollisionDetection::checkCollision() {
-    int rows = m_grid->getRowCount();
-    int cols = m_grid->getColCount();
+/**@brief Performs collision detection using a spatial grid partitioning system.
+ * @brief Iterates through all grid cells, checks collisions between objects within the same cell,
+ * @brief and between objects in neighboring cells to handle boundary/cross-cell collisions.*/
+void CollisionDetection::checkCollisions() {
+    // Get grid dimensions
+    int rowCount = m_grid.getRowCount();
+    int colCount = m_grid.getColCount();
+
+    // Iterate through all cells in the grid
+    for (int col = 0; col < colCount; col++) {
+        for (int row = 0; row < rowCount; row++) {
+
+            // Get reference to objects in current cell
+            auto& objectsInCell = m_grid.getObjectInCell(col, row);
+
+            // Skip empty cells to optimize processing
+            if (objectsInCell.empty()) continue;
+
+            // Check collisions between all unique pairs in current cell
+            // Uses i/j nested loops to avoid duplicate checks (A-B vs B-A)
+            for (size_t i = 0; i < objectsInCell.size(); i++) {
+                for (size_t j = i + 1; j < objectsInCell.size(); j++) {
+                    Object* obj1 = (objectsInCell)[i].get();
+                    Object* obj2 = (objectsInCell)[j].get();
+                    checkCollisionByType(obj1, obj2);
+                }
+            }
+
+            // Check collisions with objects in neighboring cells
+            // Iterates through 8 surrounding cells (Moore neighborhood)
+            for (int dcol = -1; dcol <= 1; dcol++) {
+                for (int drow = -1; drow <= 1; drow++) {
+                    // Skip current cell itself
+                    if (dcol == 0 && drow == 0) continue;
+
+                    // Calculate neighbor cell coordinates
+                    int neighborCol = col + dcol;
+                    int neighborRow = row + drow;
+
+                    // Validate neighbor cell boundaries
+                    if (neighborCol >= 0 && neighborCol < colCount && neighborRow >= 0 && neighborRow < rowCount) {
+
+                        // Get reference to neighbor cell objects
+                        auto& pNeighborObjectsInCell = m_grid.getObjectInCell(neighborCol, neighborRow);
+
+                        // Check all object pairs between current and neighbor cell
+                        for (auto& obj1 : objectsInCell) {
+                            for (auto& obj2 : pNeighborObjectsInCell) {
+                                checkCollisionByType(
+                                    obj1.get(), obj2.get()); // .get() to get pointers to object from unique_ptr
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 // used inside checkCollision function
@@ -42,7 +96,7 @@ void CollisionDetection::clCircleCircle(Object* c1, Object* c2) {
     float c2r = c2->getDimensions().x;
     // a collision is found
     if (squaredDistance <= (c1r + c2r) * (c1r + c2r)) {
-        float depth = (c1r - c2r) - std::sqrt(squaredDistance);
+        float depth = (c1r + c2r) - std::sqrt(squaredDistance); // Correct formula
 
         // calculating pointA pointB:
         Vector2 direction = c2->transform.position - c1->transform.position; // finding direction from c1 to c2
@@ -117,8 +171,8 @@ void CollisionDetection::clRectRect(Object* r1, Object* r2) {
         float r1halfWidth = r1->getDimensions().x / 2.0f;
         float r1halfHeight = r1->getDimensions().y / 2.0f;
 
-        float r2halfWidth = r1->getDimensions().x / 2.0f;
-        float r2halfHeight = r1->getDimensions().y / 2.0f;
+        float r2halfWidth = r2->getDimensions().x / 2.0f;
+        float r2halfHeight = r2->getDimensions().y / 2.0f;
 
         float r1Left = r1->transform.position.x - r1halfWidth;
         float r1Right = r1->transform.position.x + r1halfWidth;
@@ -136,7 +190,7 @@ void CollisionDetection::clRectRect(Object* r1, Object* r2) {
 
         Vector2 pointA, pointB;
         float penDepth;
-        // the collision is primarly on smaller overlap
+        // the collision is primarily on smaller overlap
         if (overlapX < overlapY) { // if X axis collision:
             if (r1pos.x > r2pos.x) {
                 pointA = Vector2(r1Left, r1pos.y);
@@ -163,8 +217,8 @@ void CollisionDetection::clRectRect(Object* r1, Object* r2) {
 // interfaces:
 // adds collisions pairs to the m_collisionPair member
 void CollisionDetection::addClPair(Object* obj1, Vector2 pointA, Object* obj2, Vector2 pointB, float depth) {
-    CollisionPair* collision = new CollisionPair(obj1, pointA, obj2, pointB, depth);
-    m_collisionPairs.push_back(collision);
+    std::unique_ptr<CollisionPair> collisionPair = std::make_unique<CollisionPair>(obj1, pointA, obj2, pointB, depth);
+    m_collisionPairs.push_back(collisionPair);
 }
 
 // deletes a pair from m_collisionPair member
@@ -173,9 +227,7 @@ void CollisionDetection::deleteClPair(CollisionPair* pair) {
     auto itr = std::find(m_collisionPairs.begin(), m_collisionPairs.end(), pair);
     if (itr == m_collisionPairs.end()) return;
     m_collisionPairs.erase(itr);
-    delete pair;
-    pair = nullptr;
 }
 
-/**@return a pointer to m_collisionPairs*/
-std::vector<CollisionPair*>* CollisionDetection::getClPairsptr() { return &m_collisionPairs; }
+/**@return a constant reference to m_collisionPairs*/
+const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const { return m_collisionPairs; }
