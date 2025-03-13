@@ -30,7 +30,7 @@ void GridPartition::updateCells() {
 
         // checks for out of bound
         if (col >= 0 && col < colnum && row >= 0 && row < rownum) {
-            m_cellObjects[col][row].push_back(obj);
+            m_cellObjects[col][row].push_back(obj.get());
         }
     }
 }
@@ -39,6 +39,4 @@ int GridPartition::getRowCount() const { return rownum; }
 
 int GridPartition::getColCount() const { return colnum; }
 
-const std::vector<std::unique_ptr<Object>>& GridPartition::getObjectInCell(int col, int row) const {
-    return m_cellObjects[col][row];
-}
+const std::vector<Object*>& GridPartition::getObjectInCell(int col, int row) const { return m_cellObjects[col][row]; }

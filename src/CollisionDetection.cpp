@@ -30,14 +30,14 @@ void CollisionDetection::checkCollisions() {
             // Uses i/j nested loops to avoid duplicate checks (A-B vs B-A)
             for (size_t i = 0; i < objectsInCell.size(); i++) {
                 for (size_t j = i + 1; j < objectsInCell.size(); j++) {
-                    Object* obj1 = (objectsInCell)[i].get();
-                    Object* obj2 = (objectsInCell)[j].get();
+                    Object* obj1 = objectsInCell[i];
+                    Object* obj2 = objectsInCell[j];
                     checkCollisionByType(obj1, obj2);
                 }
             }
 
             // Check collisions with objects in neighboring cells
-            // Iterates through 8 surrounding cells (Moore neighborhood)
+            // Iterates through 8 surrounding cells
             for (int dcol = -1; dcol <= 1; dcol++) {
                 for (int drow = -1; drow <= 1; drow++) {
                     // Skip current cell itself
@@ -56,8 +56,7 @@ void CollisionDetection::checkCollisions() {
                         // Check all object pairs between current and neighbor cell
                         for (auto& obj1 : objectsInCell) {
                             for (auto& obj2 : pNeighborObjectsInCell) {
-                                checkCollisionByType(
-                                    obj1.get(), obj2.get()); // .get() to get pointers to object from unique_ptr
+                                checkCollisionByType(obj1, obj2); // .get() to get pointers to object from unique_ptr
                             }
                         }
                     }
@@ -218,13 +217,15 @@ void CollisionDetection::clRectRect(Object* r1, Object* r2) {
 // adds collisions pairs to the m_collisionPair member
 void CollisionDetection::addClPair(Object* obj1, Vector2 pointA, Object* obj2, Vector2 pointB, float depth) {
     std::unique_ptr<CollisionPair> collisionPair = std::make_unique<CollisionPair>(obj1, pointA, obj2, pointB, depth);
-    m_collisionPairs.push_back(collisionPair);
+    m_collisionPairs.push_back(std::move(collisionPair));
 }
 
 // deletes a pair from m_collisionPair member
 void CollisionDetection::deleteClPair(CollisionPair* pair) {
     if (!pair) return;
-    auto itr = std::find(m_collisionPairs.begin(), m_collisionPairs.end(), pair);
+    auto itr = std::find_if(
+        m_collisionPairs.begin(), m_collisionPairs.end(),
+        [pair](const std::unique_ptr<CollisionPair>& ptr) { return ptr.get() == pair; });
     if (itr == m_collisionPairs.end()) return;
     m_collisionPairs.erase(itr);
 }

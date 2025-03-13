@@ -3,11 +3,14 @@
 #include <algorithm>
 #include <memory>
 
-void ObjectHandler::addObject(std::unique_ptr<Object> object) { m_objects.push_back(object); }
+void ObjectHandler::addObject(std::unique_ptr<Object>&& object) { m_objects.push_back(std::move(object)); }
 
 void ObjectHandler::deleteObject(Object* object) {
     if (!object) return;
-    auto itr = std::find(m_objects.begin(), m_objects.end(), object);
+    // using a lambda to get unique_ptr's raw pointer to compare it to object
+    auto itr = std::find_if(m_objects.begin(), m_objects.end(), [object](const std::unique_ptr<Object>& ptr) {
+        return ptr.get() == object;
+    });
     if (itr == m_objects.end()) return;
     m_objects.erase(itr);
 }
@@ -16,7 +19,8 @@ void ObjectHandler::deleteObject(Object* object) {
 const std::vector<std::unique_ptr<Object>>& ObjectHandler::getObjects() const { return m_objects; }
 
 /**
- * @brief Creates a rectangular object and adds it to the world.
+ * @brief Creates a rectangular object and adds it to the worl  // getting unique_ptr's raw pointer to compare it to
+ * objectd.
  *
  * This function creates a new `RectObject` with the specified position, mass, width, and height.
  * The newly created object is then added to the world managed by the `ObjectHandler`.

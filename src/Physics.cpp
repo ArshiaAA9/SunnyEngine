@@ -1,7 +1,7 @@
 #include "headers/Physics.h"
 
 void PhysicsWorld::dynamicsUpdate(float dt) {
-    for (Object* obj : *Handler.getObjects()) {
+    for (auto& obj : Handler.getObjects()) {
         obj->force += m_gravity * obj->mass; // apply a force
         obj->velocity += obj->force / obj->mass * dt;
         obj->transform.position += obj->velocity * dt;

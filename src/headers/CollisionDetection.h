@@ -17,6 +17,13 @@ public:
 
     void checkCollisions();
 
+    // returns a pointer to collisionpair vector
+    const std::vector<std::unique_ptr<CollisionPair>>& getClPairs() const;
+
+private:
+    std::vector<std::unique_ptr<CollisionPair>> m_collisionPairs;
+    GridPartition m_grid;
+
     void checkCollisionByType(Object* obj1, Object* obj2);
 
     void clCircleCircle(Object* obj1, Object* obj2);
@@ -29,11 +36,4 @@ public:
 
     void addClPair(Object* obj1, Vector2 pointA, Object* obj2, Vector2 pointB, float depth);
     void deleteClPair(CollisionPair* pair);
-
-    // returns a pointer to collisionpair vector
-    const std::vector<std::unique_ptr<CollisionPair>>& getClPairs() const;
-
-private:
-    std::vector<std::unique_ptr<CollisionPair>> m_collisionPairs;
-    GridPartition m_grid;
 };
