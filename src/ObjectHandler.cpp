@@ -19,8 +19,8 @@ void ObjectHandler::deleteObject(Object* object) {
 const std::vector<std::unique_ptr<Object>>& ObjectHandler::getObjects() const { return m_objects; }
 
 /**
- * @brief Creates a rectangular object and adds it to the worl  // getting unique_ptr's raw pointer to compare it to
- * objectd.
+ * @brief Creates a rectObject and adds it to the world
+ * @brief returning a pointer raw pointer so user can interact with it
  *
  * This function creates a new `RectObject` with the specified position, mass, width, and height.
  * The newly created object is then added to the world managed by the `ObjectHandler`.
@@ -30,7 +30,7 @@ const std::vector<std::unique_ptr<Object>>& ObjectHandler::getObjects() const { 
  * @param mass The mass of the object.
  * @param width The width of the rectangle.
  * @param height The height of the rectangle.
- * @return A Reference to the newly created `RectObject`.
+ * @return A pointer to the newly created `RectObject`.
  *
  */
 Object* ObjectHandler::createRectObj(float x, float y, float mass, float width, float height) {
@@ -52,8 +52,6 @@ Object* ObjectHandler::createRectObj(float x, float y, float mass, float width, 
  * @param radius The radius of the circle.
  * @return A pointer to the newly created `CircleObject`.
  *
- * @note The caller is responsible for managing the lifetime of the returned object.
- *       Ensure proper cleanup to avoid memory leaks.
  */
 Object* ObjectHandler::createCircleObj(float x, float y, float mass, float radius) {
     std::unique_ptr<Object> circleObject = std::make_unique<CircleObject>(x, y, mass, radius);

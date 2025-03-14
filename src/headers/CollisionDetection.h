@@ -15,14 +15,19 @@ public:
     CollisionDetection(float gridHeight, float gridWidth, PhysicsWorld& world)
         : m_grid(gridHeight, gridWidth, world) {}
 
+    // collision detection inerface:
     void checkCollisions();
 
     // returns a pointer to collisionpair vector
     const std::vector<std::unique_ptr<CollisionPair>>& getClPairs() const;
 
+    void addClPair(Object* obj1, Vector2 pointA, Object* obj2, Vector2 pointB, float depth);
+    void deleteClPair(CollisionPair* pair);
+
+    GridPartition m_grid;
+
 private:
     std::vector<std::unique_ptr<CollisionPair>> m_collisionPairs;
-    GridPartition m_grid;
 
     void checkCollisionByType(Object* obj1, Object* obj2);
 
@@ -33,7 +38,4 @@ private:
     bool aabb(Object* obj1, Object* obj2);
 
     void clRectRect(Object* obj1, Object* obj2);
-
-    void addClPair(Object* obj1, Vector2 pointA, Object* obj2, Vector2 pointB, float depth);
-    void deleteClPair(CollisionPair* pair);
 };

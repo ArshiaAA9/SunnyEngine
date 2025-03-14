@@ -1,13 +1,18 @@
 #include "headers/Solver.h"
 
+#include <iostream>
+
 #include "headers/Physics.h"
 #include "headers/Vector2.h"
 
 void Solver::solveCollisionPairs() {
-    const auto& clPairs = m_world.cD.getClPairs();
+    auto& clPairs = m_world.cD.getClPairs();
     for (auto& pair : clPairs) {
         if (pair) {
-            solve(pair.get()); // .get() to get the pointer
+            CollisionPair* pPair = pair.get();
+            // std::cout << "pair: " << pPair << '\n';
+            solve(pPair);
+            m_world.cD.deleteClPair(pPair);
         }
     }
 }

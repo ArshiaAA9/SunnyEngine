@@ -20,6 +20,8 @@ private:
     Solver m_solver;
     Vector2 m_gravity = Vector2(0, -9.81);
 
+    void dynamicsUpdate(float dt);
+
 public:
     CollisionDetection cD; // public cause owns collisionPairs
     ObjectHandler Handler; // public cause handles Objects
@@ -34,7 +36,6 @@ public:
         , m_solver(*this)
         , Handler(*this) {}
 
-    void dynamicsUpdate(float dt);
     void step(float dt);
 
     void setGravity(Vector2 gravity);

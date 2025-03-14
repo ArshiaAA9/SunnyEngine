@@ -25,8 +25,10 @@ struct Object {
     Object(float x, float y, float mass, ObjectType type)
         : transform(x, y)
         , mass(mass)
-        , type(type) {
-        checkValidValues(mass);
+        , type(type)
+        , velocity(0, 0)
+        , force(0, 0) {
+        checkValidValues();
     }
 
     virtual ~Object() = default;
@@ -39,7 +41,7 @@ struct Object {
     void applyForce(Vector2 force);
 
 private:
-    void checkValidValues(float mass) const;
+    void checkValidValues() const;
 };
 
 struct RectObject : public Object {
@@ -52,7 +54,7 @@ struct RectObject : public Object {
         : Object(x, y, mass, RECT)
         , height(height)
         , width(width) {
-        checkValidDimensions(mass, height, width);
+        checkValidDimensions();
     }
 
     ~RectObject() = default;
@@ -63,7 +65,7 @@ struct RectObject : public Object {
     void printProperties() const override;
 
 private:
-    void checkValidDimensions(float mass, float height, float width) const;
+    void checkValidDimensions() const;
 };
 
 struct CircleObject : public Object {
@@ -83,5 +85,5 @@ struct CircleObject : public Object {
     void printProperties() const override;
 
 private:
-    void checkValidDimensions(float mass, float radius) const;
+    void checkValidDimensions() const;
 };

@@ -10,7 +10,7 @@ struct Object;
 
 class GridPartition {
 public:
-    GridPartition(float gridHeight, float gridWidth, PhysicsWorld& world)
+    GridPartition(int gridHeight, int gridWidth, PhysicsWorld& world)
         : gridHeight(gridHeight)
         , gridWidth(gridWidth)
         , m_world(world) {
@@ -20,7 +20,7 @@ public:
         // initialize the vector
         m_cellObjects.resize(static_cast<size_t>(colnum));
         for (auto& col : m_cellObjects) {
-            col.resize(static_cast<size_t>(colnum));
+            col.resize(static_cast<size_t>(rownum));
         }
     }
 
@@ -32,13 +32,15 @@ public:
 
     int getColCount() const;
 
+    void logAllObjects();
+
     // NOTE: check for dangling pointer before use also run it first thing in frame
     const std::vector<Object*>& getObjectInCell(int col, int row) const;
 
 private:
     PhysicsWorld& m_world;
 
-    float colnum, rownum;
+    int colnum, rownum;
     float gridHeight, gridWidth;
     float cellWidth = 1.0f;
     float cellHeight = 1.0f;

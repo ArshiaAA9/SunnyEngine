@@ -1,6 +1,7 @@
 #include "headers/CollisionDetection.h"
 
 #include <algorithm>
+#include <iostream>
 #include <memory>
 
 #include "headers/CollisionPair.h"
@@ -32,7 +33,9 @@ void CollisionDetection::checkCollisions() {
                 for (size_t j = i + 1; j < objectsInCell.size(); j++) {
                     Object* obj1 = objectsInCell[i];
                     Object* obj2 = objectsInCell[j];
-                    checkCollisionByType(obj1, obj2);
+                    std::cout << " Object1&: " << obj1 << " Object2&: " << obj2 << '\n';
+                    m_grid.logAllObjects();
+                    if (obj1 && obj2) checkCollisionByType(obj1, obj2);
                 }
             }
 
@@ -40,7 +43,7 @@ void CollisionDetection::checkCollisions() {
             // Iterates through 8 surrounding cells
             for (int dcol = -1; dcol <= 1; dcol++) {
                 for (int drow = -1; drow <= 1; drow++) {
-                    // Skip current cell itself
+                    // Skip current cell
                     if (dcol == 0 && drow == 0) continue;
 
                     // Calculate neighbor cell coordinates
@@ -69,7 +72,6 @@ void CollisionDetection::checkCollisions() {
 // used inside checkCollision function
 void CollisionDetection::checkCollisionByType(Object* obj1, Object* obj2) {
     if (obj1->getType() == RECT && obj2->getType() == RECT) { // Rect-Rect
-
         clRectRect(obj1, obj2);
 
     } else if (obj1->getType() == CIRCLE && obj2->getType() == CIRCLE) { // Circle-Circle
