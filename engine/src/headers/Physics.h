@@ -12,13 +12,10 @@
 #include "Solver.h"
 #include "Vector2.h"
 
-/*
-TODO: write interfaces inside all of the member classes specialy collision detection and update the
-functions that add pairs to the pair vectors*/
 class PhysicsWorld {
 private:
     Solver m_solver;
-    Vector2 m_gravity = Vector2(0, -9.81);
+    Vector2 m_gravity = Vector2(0, -10); // -0.81
 
     void dynamicsUpdate(float dt);
 
@@ -39,4 +36,6 @@ public:
     void step(float dt);
 
     void setGravity(Vector2 gravity);
+    // used for sdl2
+    void invertGravity();
 };

@@ -23,3 +23,5 @@ void PhysicsWorld::dynamicsUpdate(float dt) {
 }
 
 void PhysicsWorld::setGravity(Vector2 gravity) { m_gravity = gravity; }
+
+void PhysicsWorld::invertGravity() { m_gravity.invert(); }

@@ -50,15 +50,18 @@ void CollisionDetection::checkCollisions() {
                     int neighborRow = row + drow;
 
                     // Validate neighbor cell boundaries
-                    if (neighborCol >= 0 && neighborCol < colCount && neighborRow >= 0 && neighborRow < rowCount) {
+                    if (neighborCol >= 0 && neighborCol < colCount && neighborRow >= 0 &&
+                        neighborRow < rowCount) {
 
                         // Get reference to neighbor cell objects
-                        auto& pNeighborObjectsInCell = m_grid.getObjectInCell(neighborCol, neighborRow);
+                        auto& pNeighborObjectsInCell =
+                            m_grid.getObjectInCell(neighborCol, neighborRow);
 
                         // Check all object pairs between current and neighbor cell
                         for (auto& obj1 : objectsInCell) {
                             for (auto& obj2 : pNeighborObjectsInCell) {
-                                checkCollisionByType(obj1, obj2); // .get() to get pointers to object from unique_ptr
+                                checkCollisionByType(
+                                    obj1, obj2); // .get() to get pointers to object from unique_ptr
                             }
                         }
                     }
@@ -99,8 +102,9 @@ void CollisionDetection::clCircleCircle(Object* c1, Object* c2) {
         float depth = (c1r + c2r) - std::sqrt(squaredDistance); // Correct formula
 
         // calculating pointA pointB:
-        Vector2 direction = c2->transform.position - c1->transform.position; // finding direction from c1 to c2
-        direction.normalize();                                               // normalizing the vector
+        Vector2 direction =
+            c2->transform.position - c1->transform.position; // finding direction from c1 to c2
+        direction.normalize();                               // normalizing the vector
 
         Vector2 pointA = c1->transform.position - direction * c1r;
         Vector2 pointB = c2->transform.position - direction * c2r;
@@ -216,8 +220,10 @@ void CollisionDetection::clRectRect(Object* r1, Object* r2) {
 
 // interfaces:
 // adds collisions pairs to the m_collisionPair member
-void CollisionDetection::addClPair(Object* obj1, Vector2 pointA, Object* obj2, Vector2 pointB, float depth) {
-    std::unique_ptr<CollisionPair> collisionPair = std::make_unique<CollisionPair>(obj1, pointA, obj2, pointB, depth);
+void CollisionDetection::addClPair(
+    Object* obj1, Vector2 pointA, Object* obj2, Vector2 pointB, float depth) {
+    std::unique_ptr<CollisionPair> collisionPair =
+        std::make_unique<CollisionPair>(obj1, pointA, obj2, pointB, depth);
     m_collisionPairs.push_back(std::move(collisionPair));
 }
 
@@ -232,4 +238,6 @@ void CollisionDetection::deleteClPair(CollisionPair* pair) {
 }
 
 /**@return a constant reference to m_collisionPairs*/
-const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const { return m_collisionPairs; }
+const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const {
+    return m_collisionPairs;
+}

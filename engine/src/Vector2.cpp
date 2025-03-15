@@ -1,5 +1,7 @@
 #include "headers/Vector2.h"
 
+#include <cmath>
+
 Vector2 Vector2::operator+(const Vector2& other) const {
     // Addition operator for Vector2
     return Vector2(x + other.x, y + other.y);

@@ -1,5 +1,7 @@
 #include "headers/Solver.h"
 
+#include <iostream>
+
 #include "headers/Physics.h"
 #include "headers/Vector2.h"
 
@@ -8,7 +10,6 @@ void Solver::solveCollisionPairs() {
     for (auto& pair : clPairs) {
         if (pair) {
             CollisionPair* pPair = pair.get();
-            // std::cout << "pair: " << pPair << '\n';
             solve(pPair);
             m_world.cD.deleteClPair(pPair);
         }
@@ -21,6 +22,17 @@ void Solver::solve(CollisionPair* pair) {
         Vector2 j = calculateImpulse(pair, vrel);
         applyImpulse(pair, j);
     }
+    // position correction for when 2 objects have same velocity and coliding
+    float massA = pair->objectA->mass;
+    float massB = pair->objectB->mass;
+    float totalMass = massA + massB;
+
+    Vector2 correctionA = pair->normal * (pair->depth * (pair->objectB->mass / totalMass));
+    Vector2 correctionB = pair->normal * (pair->depth * (pair->objectA->mass / totalMass));
+
+    // Position correction
+    pair->objectA->transform.position += correctionA;
+    pair->objectB->transform.position -= correctionB;
 }
 
 float Solver::calculateRelativeVelocity(CollisionPair* pair) {
@@ -28,6 +40,9 @@ float Solver::calculateRelativeVelocity(CollisionPair* pair) {
     Vector2 v2 = pair->objectB->velocity;
     Vector2 normal = pair->normal;
     Vector2 vrel = v1 - v2;
+    std::cout << " v1:" << v1.x << ',' << v1.y << " v2: " << v2.x << ',' << v2.y << '\n';
+    std::cout << " vrel:" << vrel.x << ',' << vrel.y << '\n';
+    std::cout << " vrel.normal: " << vrel.dotProduct(normal) << '\n';
     return vrel.dotProduct(normal);
 }
 
@@ -43,12 +58,11 @@ Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
 }
 
 void Solver::applyImpulse(CollisionPair* pair, Vector2 impulse) {
-    Vector2 force = impulse; // if calculation not: matching divide by dt
+    Vector2 force = impulse;
     Object* obj1 = pair->objectA;
     Object* obj2 = pair->objectB;
+    std::cout << " impulse: " << impulse.x << ',' << impulse.y << '\n';
 
-    obj1->applyForce(force);
-
-    force.invert(); // inverted cause the impulse is against object 2
-    obj2->applyForce(force);
+    obj1->velocity += impulse / obj1->mass;
+    obj2->velocity -= impulse / obj2->mass;
 }

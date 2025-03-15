@@ -1,5 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Iapp/headers -Iengine/headers
+LDFLAGS = `sdl2-config --cflags --libs`
 
 SRC_APP = $(wildcard app/src/*.cpp)
 SRC_ENGINE = $(wildcard engine/src/*.cpp)
@@ -7,13 +8,13 @@ OBJ = $(patsubst %.cpp, build/%.o, $(SRC_APP) $(SRC_ENGINE))
 
 TARGET = bin/physicsGame
 
-all: build run
+all: clean build run
 
 build: $(TARGET)
 
 $(TARGET): $(OBJ)
 	mkdir -p bin
-	$(CXX) $(OBJ) -o $(TARGET) `sdl2-config --cflags --libs`
+	$(CXX) $(OBJ) -o $(TARGET) $(LDFLAGS)
 
 build/%.o: %.cpp
 	mkdir -p $(dir $@)
@@ -24,3 +25,5 @@ run:
 
 clean:
 	rm -rf build bin/physicsGame
+
+.PHONY: all build run clean
