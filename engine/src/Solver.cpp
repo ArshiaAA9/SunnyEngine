@@ -1,7 +1,5 @@
 #include "headers/Solver.h"
 
-#include <iostream>
-
 #include "headers/Physics.h"
 #include "headers/Vector2.h"
 

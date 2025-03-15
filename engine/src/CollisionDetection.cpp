@@ -33,8 +33,7 @@ void CollisionDetection::checkCollisions() {
                 for (size_t j = i + 1; j < objectsInCell.size(); j++) {
                     Object* obj1 = objectsInCell[i];
                     Object* obj2 = objectsInCell[j];
-                    std::cout << " Object1&: " << obj1 << " Object2&: " << obj2 << '\n';
-                    m_grid.logAllObjects();
+                    // std::cout << " Object1&: " << obj1 << " Object2&: " << obj2 << '\n';
                     if (obj1 && obj2) checkCollisionByType(obj1, obj2);
                 }
             }

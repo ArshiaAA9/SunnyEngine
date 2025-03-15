@@ -1,13 +1,26 @@
-SOURCES = $(wildcard src/*.cpp)
-INCLUDES = src/headers/
+CXX = g++
+CXXFLAGS = -std=c++17 -Iapp/headers -Iengine/headers
 
-all: clean build run
+SRC_APP = $(wildcard app/src/*.cpp)
+SRC_ENGINE = $(wildcard engine/src/*.cpp)
+OBJ = $(patsubst %.cpp, build/%.o, $(SRC_APP) $(SRC_ENGINE))
 
-build:
-	g++ $(SOURCES) -I $(INCLUDES) -o bin/binary `sdl2-config --cflags --libs` 
+TARGET = bin/physicsGame
+
+all: build run
+
+build: $(TARGET)
+
+$(TARGET): $(OBJ)
+	mkdir -p bin
+	$(CXX) $(OBJ) -o $(TARGET) `sdl2-config --cflags --libs`
+
+build/%.o: %.cpp
+	mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 run:
-	./bin/binary
+	./$(TARGET)
 
 clean:
-	rm -f bin/binary
+	rm -rf build bin/physicsGame
