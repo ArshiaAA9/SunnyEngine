@@ -24,9 +24,9 @@ struct CollisionPair {
         , hasCollision(hasCol) {
         normal = pointB - pointA;
         normal.normalize(); // calculates a normal vector from objectB to objectA
-        std::cout << " normal: " << normal.x << ',' << normal.y << " pointA:" << pointA.x << ','
-                  << pointA.y << " pointB " << pointB.x << ',' << pointB.y << " depth: " << depth
-                  << '\n';
+        // std::cout << " normal: " << normal.x << ',' << normal.y << " pointA:" << pointA.x << ','
+        //          << pointA.y << " pointB " << pointB.x << ',' << pointB.y << " depth: " << depth
+        //          << '\n';
     }
 
     ~CollisionPair() = default;

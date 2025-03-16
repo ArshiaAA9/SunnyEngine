@@ -8,9 +8,9 @@
 
 class Sdl {
 public:
-    Sdl(int windowWidth, int windowHeight)
+    Sdl(Game& game, int windowWidth, int windowHeight)
         : renderer(windowWidth, windowHeight)
-        , event() {}
+        , event(*this, game) {}
 
     // creating and destroying windows and renderers
     void kill();

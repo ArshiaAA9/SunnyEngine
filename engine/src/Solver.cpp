@@ -40,9 +40,6 @@ float Solver::calculateRelativeVelocity(CollisionPair* pair) {
     Vector2 v2 = pair->objectB->velocity;
     Vector2 normal = pair->normal;
     Vector2 vrel = v1 - v2;
-    std::cout << " v1:" << v1.x << ',' << v1.y << " v2: " << v2.x << ',' << v2.y << '\n';
-    std::cout << " vrel:" << vrel.x << ',' << vrel.y << '\n';
-    std::cout << " vrel.normal: " << vrel.dotProduct(normal) << '\n';
     return vrel.dotProduct(normal);
 }
 
