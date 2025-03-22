@@ -1,7 +1,7 @@
 #pragma once
 
+#include <algorithm>
 #include <iostream>
-#include <vector>
 
 #include "Transform.h"
 #include "Vector2.h"
@@ -19,7 +19,7 @@ struct Object {
     Vector2 force;
 
     ObjectType type;
-    Transform transform; // position and scale
+    Transform transform;
 
     // constructor:
     Object(float x, float y, float mass, ObjectType type)
@@ -31,14 +31,16 @@ struct Object {
         checkValidValues();
     }
 
-    virtual ~Object() = default;
+    virtual ~Object() { std::cout << " object " << this << " destroyed!\n"; }
 
     virtual Vector2 getDimensions() const = 0;
     virtual ObjectType getType() const = 0;
 
     virtual void printProperties() const;
 
+    // dynamics:
     void applyForce(Vector2 force);
+    void setVelocity(Vector2 velocity);
 
 private:
     void checkValidValues() const;
@@ -48,6 +50,8 @@ struct RectObject : public Object {
 
     int height;
     int width;
+
+    // object specifics:
 
     // constructor:
     RectObject(float x, float y, float mass, float height, float width)

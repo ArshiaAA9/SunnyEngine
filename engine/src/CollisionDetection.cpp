@@ -7,6 +7,7 @@
 #include "headers/CollisionPair.h"
 #include "headers/GridPartition.h"
 #include "headers/Objects.h"
+#include "headers/Types.h"
 #include "headers/Vector2.h"
 
 /**@brief Performs collision detection using a spatial grid partitioning system.
@@ -31,8 +32,8 @@ void CollisionDetection::checkCollisions() {
             // Uses i/j nested loops to avoid duplicate checks (A-B vs B-A)
             for (size_t i = 0; i < objectsInCell.size(); i++) {
                 for (size_t j = i + 1; j < objectsInCell.size(); j++) {
-                    Object* obj1 = objectsInCell[i];
-                    Object* obj2 = objectsInCell[j];
+                    ObjectPtr obj1 = objectsInCell[i];
+                    ObjectPtr obj2 = objectsInCell[j];
                     // std::cout << " Object1&: " << obj1 << " Object2&: " << obj2 << '\n';
                     if (obj1 && obj2) checkCollisionByType(obj1, obj2);
                 }
@@ -50,18 +51,15 @@ void CollisionDetection::checkCollisions() {
                     int neighborRow = row + drow;
 
                     // Validate neighbor cell boundaries
-                    if (neighborCol >= 0 && neighborCol < colCount && neighborRow >= 0 &&
-                        neighborRow < rowCount) {
+                    if (neighborCol >= 0 && neighborCol < colCount && neighborRow >= 0 && neighborRow < rowCount) {
 
                         // Get reference to neighbor cell objects
-                        auto& pNeighborObjectsInCell =
-                            m_grid.getObjectInCell(neighborCol, neighborRow);
+                        auto& pNeighborObjectsInCell = m_grid.getObjectInCell(neighborCol, neighborRow);
 
                         // Check all object pairs between current and neighbor cell
                         for (auto& obj1 : objectsInCell) {
                             for (auto& obj2 : pNeighborObjectsInCell) {
-                                checkCollisionByType(
-                                    obj1, obj2); // .get() to get pointers to object from unique_ptr
+                                checkCollisionByType(obj1, obj2); // .get() to get pointers to object from unique_ptr
                             }
                         }
                     }
@@ -72,7 +70,7 @@ void CollisionDetection::checkCollisions() {
 }
 
 // used inside checkCollision function
-void CollisionDetection::checkCollisionByType(Object* obj1, Object* obj2) {
+void CollisionDetection::checkCollisionByType(ObjectPtr obj1, ObjectPtr obj2) {
     if (obj1->getType() == RECT && obj2->getType() == RECT) { // Rect-Rect
         clRectRect(obj1, obj2);
 
@@ -93,18 +91,16 @@ void CollisionDetection::checkCollisionByType(Object* obj1, Object* obj2) {
     }
 }
 
-void CollisionDetection::clCircleCircle(Object* c1, Object* c2) {
-    float squaredDistance = c1->transform.position.squaredLengthOf2Pos(c2->transform.position);
+void CollisionDetection::clCircleCircle(ObjectPtr c1, ObjectPtr c2) {
+    float distance = c1->transform.position.lengthOf2Pos(c2->transform.position);
     float c1r = c1->getDimensions().x;
     float c2r = c2->getDimensions().x;
     // a collision is found
-    if (squaredDistance <= (c1r + c2r) * (c1r + c2r)) {
-        float depth = (c1r + c2r) - std::sqrt(squaredDistance); // Correct formula
-
+    if (distance <= (c1r + c2r)) {
+        float depth = (c1r + c2r) - distance;
         // calculating pointA pointB:
-        Vector2 direction =
-            c2->transform.position - c1->transform.position; // finding direction from c1 to c2
-        direction.normalize();                               // normalizing the vector
+        Vector2 direction = c1->transform.position - c2->transform.position; // finding direction from c1 to c2
+        direction.normalize();                                               // normalizing the vector
 
         Vector2 pointA = c1->transform.position - direction * c1r;
         Vector2 pointB = c2->transform.position - direction * c2r;
@@ -113,7 +109,7 @@ void CollisionDetection::clCircleCircle(Object* c1, Object* c2) {
 }
 
 // Circle vs. Rectangle Collision Detection
-void CollisionDetection::clCircleRect(Object* c, Object* rect) {
+void CollisionDetection::clCircleRect(ObjectPtr c, ObjectPtr rect) {
     Vector2 cPos = c->transform.position;
     Vector2 rectPos = rect->transform.position;
     float r = c->getDimensions().x;
@@ -144,7 +140,7 @@ void CollisionDetection::clCircleRect(Object* c, Object* rect) {
     }
 }
 
-bool CollisionDetection::aabb(Object* r1, Object* r2) {
+bool CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
     Vector2 r1Pos = r1->transform.position;
     Vector2 r2Pos = r2->transform.position;
 
@@ -167,7 +163,7 @@ bool CollisionDetection::aabb(Object* r1, Object* r2) {
     return (r1Left <= r2Right && r1Right >= r2Left && r1Bot <= r2Top && r1Top >= r2Bot);
 }
 
-void CollisionDetection::clRectRect(Object* r1, Object* r2) {
+void CollisionDetection::clRectRect(ObjectPtr r1, ObjectPtr r2) {
     if (aabb(r1, r2)) {
         Vector2 r1pos = r1->transform.position;
         Vector2 r2pos = r2->transform.position;
@@ -220,10 +216,8 @@ void CollisionDetection::clRectRect(Object* r1, Object* r2) {
 
 // interfaces:
 // adds collisions pairs to the m_collisionPair member
-void CollisionDetection::addClPair(
-    Object* obj1, Vector2 pointA, Object* obj2, Vector2 pointB, float depth) {
-    std::unique_ptr<CollisionPair> collisionPair =
-        std::make_unique<CollisionPair>(obj1, pointA, obj2, pointB, depth);
+void CollisionDetection::addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth) {
+    std::unique_ptr<CollisionPair> collisionPair = std::make_unique<CollisionPair>(obj1, pointA, obj2, pointB, depth);
     m_collisionPairs.push_back(std::move(collisionPair));
 }
 
@@ -238,6 +232,4 @@ void CollisionDetection::deleteClPair(CollisionPair* pair) {
 }
 
 /**@return a constant reference to m_collisionPairs*/
-const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const {
-    return m_collisionPairs;
-}
+const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const { return m_collisionPairs; }

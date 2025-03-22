@@ -10,8 +10,12 @@ public:
     int start();
 
     // used in Events class to create object dynamicly
-    const Object*
-    createRect(float x, float y, float mass, float width, float height, SDL_Color color);
+    ObjectPtr createRect(float x, float y, float mass, float width, float height, SDL_Color color);
+    // event functions
+    void deleteAllObjects();
+    // used in Events to move objects
+    void moveObject(ObjectPtr object, Vector2 amount);
+    void stopObject(ObjectPtr object);
 
 private:
     void loopCount();

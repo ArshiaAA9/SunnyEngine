@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "headers/Physics.h"
+#include "headers/Types.h"
 #include "headers/Vector2.h"
 
 void Solver::solveCollisionPairs() {
@@ -48,16 +49,15 @@ Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
     float m2 = pair->objectB->mass;
     Vector2 normal = pair->normal;
 
-    float impulse = -2 * vrel;
-    impulse /= 1 / m1 + 1 / m2;
+    float impulse = -2.0f * vrel;
+    impulse /= 1.0f / m1 + 1.0f / m2;
 
     return normal * impulse;
 }
 
 void Solver::applyImpulse(CollisionPair* pair, Vector2 impulse) {
-    Vector2 force = impulse;
-    Object* obj1 = pair->objectA;
-    Object* obj2 = pair->objectB;
+    ObjectPtr obj1 = pair->objectA;
+    ObjectPtr obj2 = pair->objectB;
     std::cout << " impulse: " << impulse.x << ',' << impulse.y << '\n';
 
     obj1->velocity += impulse / obj1->mass;

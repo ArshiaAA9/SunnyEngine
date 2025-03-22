@@ -3,8 +3,8 @@
 #include <memory>
 
 #include "Objects.h"
+#include "Types.h"
 #include "Vector2.h"
-
 class PhysicsWorld;
 
 class ObjectHandler {
@@ -13,17 +13,19 @@ public:
         : m_world(world) {}
 
     // returns object vector
-    const std::vector<std::unique_ptr<Object>>& getObjects() const;
+    const std::vector<ObjectPtr>& getObjects() const;
 
     // methods for creating objects
-    Object* createRectObj(float x, float y, float mass, float width, float height);
-    Object* createCircleObj(float x, float y, float mass, float radius);
+    ObjectPtr createRectObj(float x, float y, float mass, float width, float height);
+    ObjectPtr createCircleObj(float x, float y, float mass, float radius);
+
+    // use this to delete an object
+    void deleteObject(ObjectPtr object);
 
 private:
     PhysicsWorld& m_world;
-    std::vector<std::unique_ptr<Object>> m_objects;
+    std::vector<ObjectPtr> m_objects;
 
-    // methods responsible for adding and deleting Objects
-    void addObject(std::unique_ptr<Object>&& object);
-    void deleteObject(Object* object);
+    // method for adding objects used inside createObject functions
+    void addObject(ObjectPtr object);
 };

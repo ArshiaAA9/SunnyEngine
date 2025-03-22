@@ -5,7 +5,7 @@
 
 #include "CollisionPair.h"
 #include "GridPartition.h"
-#include "Objects.h"
+#include "Types.h"
 
 class GridPartition;
 class PhysicsWorld;
@@ -21,7 +21,7 @@ public:
     // returns a pointer to collisionpair vector
     const std::vector<std::unique_ptr<CollisionPair>>& getClPairs() const;
 
-    void addClPair(Object* obj1, Vector2 pointA, Object* obj2, Vector2 pointB, float depth);
+    void addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth);
     void deleteClPair(CollisionPair* pair);
 
     GridPartition m_grid;
@@ -29,13 +29,14 @@ public:
 private:
     std::vector<std::unique_ptr<CollisionPair>> m_collisionPairs;
 
-    void checkCollisionByType(Object* obj1, Object* obj2);
+    void checkCollisionByType(ObjectPtr obj1, ObjectPtr obj2);
 
-    void clCircleCircle(Object* obj1, Object* obj2);
+    void clCircleCircle(ObjectPtr c1, ObjectPtr c2);
 
-    void clCircleRect(Object* obj1, Object* obj2);
+    void clCircleRect(ObjectPtr obj1, ObjectPtr obj2);
 
-    bool aabb(Object* obj1, Object* obj2);
+    bool aabb(ObjectPtr obj1, ObjectPtr obj2);
+    bool sat(ObjectPtr obj1, ObjectPtr obj2);
 
-    void clRectRect(Object* obj1, Object* obj2);
+    void clRectRect(ObjectPtr obj1, ObjectPtr obj2);
 };

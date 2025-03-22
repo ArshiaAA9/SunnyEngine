@@ -5,11 +5,15 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_video.h>
 
+#include <cmath>
 #include <iostream>
 
 #include "headers/Game.h"
+#include "headers/Renderer.h"
 
-bool Events::loop() {
+#define PI 3.14159265358979323846
+
+bool Events::loop(ObjectPtr obj) {
     while (SDL_PollEvent(&m_sdlEvent) != 0) {
         switch (m_sdlEvent.type) {
         case SDL_QUIT:
@@ -17,7 +21,7 @@ bool Events::loop() {
             break;
         case SDL_KEYDOWN:
             // keyevents
-            keydownEvents();
+            keydownEvents(obj);
             break;
         case SDL_MOUSEBUTTONUP:
             mouseButtonUpEvents();
@@ -27,13 +31,32 @@ bool Events::loop() {
     return true;
 }
 
-void Events::keydownEvents() {
+// interfaces:
+SDL_Event& Events::getEventVar() { return m_sdlEvent; }
+
+void Events::keydownEvents(ObjectPtr obj) {
     switch (m_sdlEvent.key.keysym.sym) {
     case SDLK_w:
-        std::cout << "w was pressed";
+        m_game.moveObject(obj, Vector2(0, 1000));
+        std::cout << "w pressed ";
         break;
-    case SDLK_e:
-        std::cout << "e was pressed ";
+    case SDLK_d:
+        m_game.moveObject(obj, Vector2(1000, 0));
+        std::cout << "d pressed ";
+        break;
+    case SDLK_a:
+        m_game.moveObject(obj, Vector2(-1000, 0));
+        std::cout << "a pressed ";
+        break;
+    case SDLK_s:
+        m_game.moveObject(obj, Vector2(0, -1000));
+        std::cout << "s pressed ";
+        break;
+    case SDLK_SPACE:
+        m_game.stopObject(obj);
+        std::cout << "space pressed ";
+        break;
+    case SDLK_r:
         break;
     }
 }
@@ -41,25 +64,19 @@ void Events::keydownEvents() {
 void Events::mouseButtonUpEvents() {
     int mx = m_sdlEvent.button.x;
     int my = m_sdlEvent.button.y;
+    SDL_Color color = {0, 0, 255, 1};
     switch (m_sdlEvent.button.button) {
     case SDL_BUTTON_LEFT:
-
-        createRectOnMousePos(mx, my, 10, 50, 50);
-        std::cout << " left button pressed ";
+        createRectOnMousePos(mx, my, 10, 50, 50, color);
         break;
     case SDL_BUTTON_RIGHT:
         createRectOnMousePos(mx, my, 2, 10, 10);
-        std::cout << " mouse cord: " << mx << ',' << my << '\n';
         break;
     }
 }
 
-void Events::createRectOnMousePos(int mx, int my, float m, float width, float height) {
+void Events::createRectOnMousePos(int mx, int my, float m, float width, float height, SDL_Color color) {
     // doing this cause createRect does same thing to reverse the y axis
     my = m_sdl.renderer.getWindowHeight() - my;
-    SDL_Color color = {255, 0, 0, 1};
     m_game.createRect(mx, my, m, width, height, color);
 }
-
-// interfaces:
-SDL_Event& Events::getEventVar() { return m_sdlEvent; }

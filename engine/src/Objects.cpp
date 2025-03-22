@@ -3,6 +3,8 @@
 // Objects Base Functions:
 void Object::applyForce(Vector2 force) { this->force += force; }
 
+void Object::setVelocity(Vector2 velocity) { this->velocity = velocity; }
+
 // printProperties() virtual function:
 void Object::printProperties() const {
     std::cout << "Position: (" << this->transform.position.x << ", " << this->transform.position.y << ")"

@@ -15,7 +15,7 @@
 class PhysicsWorld {
 private:
     Solver m_solver;
-    Vector2 m_gravity = Vector2(0, -10); // -0.81
+    Vector2 m_gravity = Vector2(0, -0.81); // -0.81
 
     void dynamicsUpdate(float dt);
 

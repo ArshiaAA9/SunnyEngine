@@ -4,6 +4,7 @@
 
 #include "headers/Objects.h"
 #include "headers/Physics.h"
+#include "headers/Types.h"
 
 // use it to update biggest grid cell size
 void GridPartition::updateCellDimensions() {
@@ -45,8 +46,7 @@ void GridPartition::updateCells() {
         // checks for out of bound
         if (col >= 0 && col < colnum && row >= 0 && row < rownum) {
             // std::cout << "col " << col << " row: " << row << '\n';
-            // dont use move cause it stores raw pointer
-            m_cellObjects[col][row].push_back(obj.get());
+            m_cellObjects[col][row].push_back(obj);
             // logAllObjects();
         }
     }
@@ -71,4 +71,4 @@ void GridPartition::logAllObjects() {
     std::cout << " Count: " << count << '\n';
 }
 
-const std::vector<Object*>& GridPartition::getObjectInCell(int col, int row) const { return m_cellObjects[col][row]; }
+const std::vector<ObjectPtr>& GridPartition::getObjectInCell(int col, int row) const { return m_cellObjects[col][row]; }

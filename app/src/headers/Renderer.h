@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <iostream>
 #include <unordered_map>
@@ -24,25 +25,38 @@ public:
 
     // interfaces:
     // adds pairs to a map {const object*: SDL_Color}
-    void addRenderPair(const Object*, SDL_Color color);
+    void addRenderPair(ObjectPtr, SDL_Color color);
+    // removes a pair from the map
+    void deleteRenderPair(ObjectPtr);
+    // returns a contsant reference to renderMap
+    const std::unordered_map<ObjectPtr, SDL_Color>& getRenderMap(); // stores objects with a corresponding color
 
     SDL_Window* getWindow() const;
     SDL_Renderer* getRenderer() const;
     int getWindowWidth() const;
     int getWindowHeight() const;
+    TTF_Font* getFont() const;
 
 private:
     // clears screen to white
     void clearScreen();
 
     // used to draw filled rects
-    void drawColoredRect(const Object* object, SDL_Color color);
+    void drawColoredRect(const ObjectPtr object, SDL_Color color);
 
-    // initializes everything and creates window and renderer
+    // used to show the living objects count in the simulation
+    void renderObjectCount(int count);
+
+    // initializes everything and member vars
     bool initWindowAndRenderer();
 
-    std::unordered_map<const Object*, SDL_Color> m_renderMap;
-    int m_windowWidth, m_windowHeight;
-    SDL_Renderer* m_renderer;
-    SDL_Window* m_window;
+    std::unordered_map<ObjectPtr, SDL_Color> m_renderMap; // stores objects with a corresponding color
+
+    int m_windowWidth, m_windowHeight; // window width, height
+    SDL_Window* m_window;              // window
+    SDL_Renderer* m_renderer;          // renderer
+    TTF_Font* m_font;                  // font
+    SDL_Surface* m_text;               // font surface
+    SDL_Color m_textColor;             // text color
+    SDL_Texture* m_textTexture;        // text texture
 };

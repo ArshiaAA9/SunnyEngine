@@ -2,6 +2,8 @@
 
 #include <SDL2/SDL_events.h>
 
+#include "../../../engine/src/headers/Types.h"
+
 class Game;
 class PhysicsWorld;
 class Sdl;
@@ -13,17 +15,18 @@ public:
         , m_game(game) {}
 
     // main event loop with PollEvent()
-    bool loop();
+    bool loop(ObjectPtr obj);
 
     SDL_Event& getEventVar();
 
 private:
     // these functions are used in loop inside the switch cases
-    void keydownEvents();
+    void keydownEvents(ObjectPtr obj);
     void mouseButtonUpEvents();
 
     // game related functions:
-    void createRectOnMousePos(int mx, int my, float m, float width, float height);
+    void createRectOnMousePos(int mx, int my, float m, float width, float height, SDL_Color color = {255, 0, 0, 1});
+    void deleteAllObjects();
 
     Game& m_game;
     SDL_Event m_sdlEvent;

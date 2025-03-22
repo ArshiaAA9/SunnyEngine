@@ -3,20 +3,22 @@
 #include <algorithm>
 #include <memory>
 
-void ObjectHandler::addObject(std::unique_ptr<Object>&& object) { m_objects.push_back(std::move(object)); }
+#include "headers/Types.h"
 
-void ObjectHandler::deleteObject(Object* object) {
+void ObjectHandler::addObject(ObjectPtr object) {
+    // ObjectPtr is a shared pointer
+    m_objects.push_back(std::move(object));
+}
+
+void ObjectHandler::deleteObject(ObjectPtr object) {
     if (!object) return;
-    // using a lambda to get unique_ptr's raw pointer to compare it to object
-    auto itr = std::find_if(m_objects.begin(), m_objects.end(), [object](const std::unique_ptr<Object>& ptr) {
-        return ptr.get() == object;
-    });
+    auto itr = std::find(m_objects.begin(), m_objects.end(), object);
     if (itr == m_objects.end()) return;
     m_objects.erase(itr);
 }
 
 /**@return returns pointer all objects in the world**/
-const std::vector<std::unique_ptr<Object>>& ObjectHandler::getObjects() const { return m_objects; }
+const std::vector<ObjectPtr>& ObjectHandler::getObjects() const { return m_objects; }
 
 /**
  * @brief Creates a rectObject and adds it to the world
@@ -33,11 +35,11 @@ const std::vector<std::unique_ptr<Object>>& ObjectHandler::getObjects() const { 
  * @return A pointer to the newly created `RectObject`.
  *
  */
-Object* ObjectHandler::createRectObj(float x, float y, float mass, float width, float height) {
-    std::unique_ptr<Object> rectObject = std::make_unique<RectObject>(x, y, mass, width, height);
-    Object* ptr = rectObject.get();
-    addObject(std::move(rectObject));
-    return ptr;
+ObjectPtr ObjectHandler::createRectObj(float x, float y, float mass, float width, float height) {
+    // ObjectPtr = std::shared_ptr<Object>
+    ObjectPtr rectObject = std::make_shared<RectObject>(x, y, mass, width, height);
+    addObject(rectObject);
+    return rectObject;
 }
 
 /**
@@ -53,9 +55,8 @@ Object* ObjectHandler::createRectObj(float x, float y, float mass, float width, 
  * @return A pointer to the newly created `CircleObject`.
  *
  */
-Object* ObjectHandler::createCircleObj(float x, float y, float mass, float radius) {
-    std::unique_ptr<Object> circleObject = std::make_unique<CircleObject>(x, y, mass, radius);
-    Object* ptr = circleObject.get();
-    addObject(std::move(circleObject));
-    return ptr;
+ObjectPtr ObjectHandler::createCircleObj(float x, float y, float mass, float radius) {
+    std::shared_ptr<Object> circleObject = std::make_shared<CircleObject>(x, y, mass, radius);
+    addObject(circleObject);
+    return circleObject;
 }
