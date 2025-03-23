@@ -5,7 +5,14 @@ namespace SE {
 // Objects Base Functions:
 void Object::applyForce(Vector2 force) { this->force += force; }
 
+void Object::move(Vector2 amount) {
+    this->transform.position += amount;
+    this->transform.hasTransformed = false;
+}
+
 void Object::setVelocity(Vector2 velocity) { this->velocity = velocity; }
+
+void Object::addVelocity(Vector2 velocity) { this->velocity += velocity; }
 
 // printProperties() virtual function:
 void Object::printProperties() const {
@@ -15,8 +22,12 @@ void Object::printProperties() const {
 }
 
 void RectObject::printProperties() const {
-    Object::printProperties();
-    std::cout << " Dimensions: " << this->width << "," << this->height << "\n";
+    std::cout << " topleft: " << this->transform.vertices[0].x << ',' << this->transform.vertices[0].y;
+    std::cout << " botleft: " << this->transform.vertices[1].x << ',' << this->transform.vertices[1].y;
+    std::cout << " botRight: " << this->transform.vertices[2].x << ',' << this->transform.vertices[2].y;
+    std::cout << " topRight: " << this->transform.vertices[3].x << ',' << this->transform.vertices[3].y << '\n';
+    // Object::printProperties();
+    // std::cout << " Dimensions: " << this->width << "," << this->height << "\n";
 }
 
 void CircleObject::printProperties() const {

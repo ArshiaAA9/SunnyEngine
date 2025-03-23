@@ -7,7 +7,6 @@
 #include "Vector2.h"
 
 namespace SE {
-
 enum ObjectType { CIRCLE, RECT };
 
 struct Object {
@@ -21,7 +20,7 @@ struct Object {
 
     // constructor:
     Object(float x, float y, float mass, ObjectType type)
-        : transform(x, y)
+        : transform(x, y, *this)
         , mass(mass)
         , type(type)
         , velocity(0, 0)
@@ -29,7 +28,7 @@ struct Object {
         checkValidValues();
     }
 
-    virtual ~Object() { std::cout << " object " << this << " destroyed!\n"; }
+    virtual ~Object() = default;
 
     virtual Vector2 getDimensions() const = 0;
     virtual ObjectType getType() const = 0;
@@ -38,7 +37,9 @@ struct Object {
 
     // dynamics:
     void applyForce(Vector2 force);
+    void move(Vector2 amount);
     void setVelocity(Vector2 velocity);
+    void addVelocity(Vector2 veloctiy);
 
 private:
     void checkValidValues() const;
@@ -48,8 +49,6 @@ struct RectObject : public Object {
 
     int height;
     int width;
-
-    // object specifics:
 
     // constructor:
     RectObject(float x, float y, float mass, float height, float width)

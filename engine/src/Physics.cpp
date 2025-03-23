@@ -1,5 +1,7 @@
 #include "headers/Physics.h"
 
+#include <iostream>
+
 namespace SE {
 
 // public:
@@ -17,9 +19,10 @@ void PhysicsWorld::step(float dt) {
 // privates:
 void PhysicsWorld::dynamicsUpdate(float dt) {
     for (auto& obj : Handler.getObjects()) {
-        obj->force += m_gravity * obj->mass; // apply a force
-        obj->velocity += obj->force / obj->mass * dt;
-        obj->transform.position += obj->velocity * dt;
+        obj->applyForce(m_gravity * obj->mass);
+        obj->addVelocity(obj->force / obj->mass * dt);
+        obj->move(obj->velocity * dt);
+        obj->transform.transform();
         obj->force = Vector2(0, 0); // reset net force at the end
     }
 }

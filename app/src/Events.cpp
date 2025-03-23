@@ -60,11 +60,13 @@ void Events::keydownEvents() {
             std::cout << "space pressed ";
             break;
         case SDLK_R:
+            m_game.deleteAllObjects();
             m_game.moveObjectTo(mainObj, Vector2(500, 250));
             m_game.stopObject(mainObj);
             break;
         case SDLK_F:
-            m_game.deleteAllObjects();
+            std::cout << "----------------------------------------------------------------------------";
+            m_game.rotateObject(mainObj, M_PI / 4);
             break;
     }
 }

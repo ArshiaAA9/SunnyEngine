@@ -23,6 +23,7 @@ int Game::start() {
 
     // main loop
     while (m_sdl.event.loop()) {
+        loopCount();
         m_world.cD.m_grid.updateCellDimensions(); // FIX:THIS IS WHY THE RIGHT HALF DOESNT WORK
         m_world.step(dt);
         m_sdl.renderer.update(m_world);
@@ -40,6 +41,8 @@ void Game::loopCount() {
 void Game::setMainObject(ObjectPtr object) { m_mainObject = object; }
 
 ObjectPtr Game::getMainObject() { return m_mainObject; }
+
+void Game::rotateObject(ObjectPtr object, float amount) { object->transform.angle = amount; }
 
 void Game::moveObject(ObjectPtr object, Vector2 amount) {
     object->applyForce(amount);
