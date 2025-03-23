@@ -19,6 +19,7 @@ public:
     ObjectPtr getMainObject();
 
     // event functions:
+    void rotateObject(ObjectPtr object, float amount);
     void moveObject(ObjectPtr object, Vector2 amount);
     void moveObjectTo(ObjectPtr object, Vector2 position);
     void stopObject(ObjectPtr object);
