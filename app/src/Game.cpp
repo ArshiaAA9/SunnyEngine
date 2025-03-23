@@ -17,10 +17,9 @@ int Game::start() {
     rect1 = createRect(100, 250, 1, 100, 100, color);
     rect2 = createRect(200.5, 250, 1, 100, 100, color);
 
-    m_world.cD.m_grid.updateCellDimensions(); // FIX:THIS IS WHY THE RIGHT HALF DOESNT WORK
-
     // main loop
     while (m_sdl.event.loop(rect1)) {
+        m_world.cD.m_grid.updateCellDimensions(); // FIX:THIS IS WHY THE RIGHT HALF DOESNT WORK
         m_world.step(dt);
         m_sdl.renderer.update(m_world);
         SDL_Delay(delay);
@@ -40,6 +39,8 @@ void Game::moveObject(ObjectPtr object, Vector2 amount) {
     object->applyForce(amount);
     std::cout << amount.x << ',' << amount.y << '\n';
 }
+
+void Game::moveObjectTo(ObjectPtr object, Vector2 position) { object->transform.moveTo(position); }
 
 void Game::stopObject(ObjectPtr object) { object->setVelocity(Vector2(0, 0)); }
 

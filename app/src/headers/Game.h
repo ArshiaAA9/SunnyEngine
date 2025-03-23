@@ -15,6 +15,7 @@ public:
     void deleteAllObjects();
     // used in Events to move objects
     void moveObject(ObjectPtr object, Vector2 amount);
+    void moveObjectTo(ObjectPtr object, Vector2 position);
     void stopObject(ObjectPtr object);
 
 private:

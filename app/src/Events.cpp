@@ -11,8 +11,6 @@
 #include "headers/Game.h"
 #include "headers/Renderer.h"
 
-#define PI 3.14159265358979323846
-
 bool Events::loop(ObjectPtr obj) {
     while (SDL_PollEvent(&m_sdlEvent) != 0) {
         switch (m_sdlEvent.type) {
@@ -57,6 +55,7 @@ void Events::keydownEvents(ObjectPtr obj) {
         std::cout << "space pressed ";
         break;
     case SDLK_r:
+        m_game.moveObjectTo(obj, Vector2(500, 250));
         break;
     }
 }
