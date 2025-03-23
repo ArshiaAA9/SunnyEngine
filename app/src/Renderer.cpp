@@ -1,7 +1,7 @@
 #include "headers/Renderer.h"
 
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_ttf.h>
+#include <SDL3/SDL_render.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 #include <iostream>
 #include <string>
@@ -60,7 +60,7 @@ void Renderer::drawColoredRect(const ObjectPtr object, SDL_Color color) {
     float width = object->getDimensions().x;
     float height = object->getDimensions().y;
     Vector2 pos = object->transform.position;
-    SDL_Rect rect;
+    SDL_FRect rect;
     rect.x = pos.x - width / 2;
     rect.y = m_windowHeight - pos.y - height / 2;
     rect.w = width;
@@ -69,34 +69,26 @@ void Renderer::drawColoredRect(const ObjectPtr object, SDL_Color color) {
 }
 
 bool Renderer::initWindowAndRenderer() {
-    // initializing everything
-    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-        std::cerr << "Error initializing SDL " << SDL_GetError() << std::endl;
-        return false;
-    }
-
     // initailizing SDL_ttf
-    if (TTF_Init() < 0) {
-        std::cerr << "Error initializing TTF" << TTF_GetError() << std::endl;
+    if (TTF_Init()) {
+        std::cerr << "Error initializing TTF" << SDL_GetError() << std::endl;
     }
 
     // create font
     m_font = TTF_OpenFont("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24);
     if (!m_font) {
-        std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
+        std::cerr << "Failed to load font: " << SDL_GetError() << std::endl;
     }
 
     // create window
-    m_window = SDL_CreateWindow(
-        "Physics Simulation", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight,
-        SDL_WINDOW_SHOWN);
+    m_window = SDL_CreateWindow("Physics Simulation", m_windowWidth, m_windowHeight, 0);
     if (!m_window) {
         std::cerr << "Error creating window: " << SDL_GetError() << std::endl;
         return false;
     }
 
     // create renderer
-    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
+    m_renderer = SDL_CreateRenderer(m_window, nullptr);
     if (!m_renderer) {
         std::cerr << "Error creating renderer: " << SDL_GetError() << std::endl;
         return false;
@@ -111,15 +103,16 @@ bool Renderer::initWindowAndRenderer() {
 
 void Renderer::renderObjectCount(int count) {
     // renders a count for all rendered objects
+    std::string countText = std::to_string(count);
     // text surface
-    m_text = TTF_RenderText_Solid(m_font, std::to_string(count).c_str(), m_textColor);
+    m_text = TTF_RenderText_Solid(m_font, countText.c_str(), countText.length(), m_textColor);
     if (!m_text) {
-        std::cerr << "Failed to render text: " << TTF_GetError() << std::endl;
+        std::cerr << "Failed to render text: " << SDL_GetError() << std::endl;
     }
 
     // text texture
     m_textTexture = SDL_CreateTextureFromSurface(m_renderer, m_text);
-    SDL_Rect dest = {10, 10, m_text->w, m_text->h};
+    SDL_FRect dest = {10, 10, static_cast<float>(m_text->w), static_cast<float>(m_text->h)};
 
-    SDL_RenderCopy(m_renderer, m_textTexture, nullptr, &dest);
+    SDL_RenderTexture(m_renderer, m_textTexture, nullptr, &dest);
 }
