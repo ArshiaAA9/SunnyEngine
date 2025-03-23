@@ -1,6 +1,14 @@
-binary
-todo.txt
+# Ignore specific files
 todo.txt
 src/test.cpp
-build/
+
+# Ignore all .o object files (anywhere)
+*.o
+
+# Ignore entire directories (bin/ and build/)
 bin/
+build/
+test/
+
+# Optional: Ignore the compiled binary (if not in bin/)
+physicsGame
