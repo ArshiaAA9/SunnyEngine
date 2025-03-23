@@ -21,7 +21,6 @@ void CollisionDetection::checkCollisions() {
     // Iterate through all cells in the grid
     for (int col = 0; col < colCount; col++) {
         for (int row = 0; row < rowCount; row++) {
-
             // Get reference to objects in current cell
             auto& objectsInCell = m_grid.getObjectInCell(col, row);
 

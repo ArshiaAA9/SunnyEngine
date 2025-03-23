@@ -31,11 +31,7 @@ void GridPartition::updateCellDimensions() {
 // main grid method
 void GridPartition::updateCells() {
     // m_cellObjects[col][row][objects]
-    for (auto& col : m_cellObjects) {
-        for (auto& row : col) {
-            row.clear(); // Clear all objects vectors
-        }
-    }
+    deleteAllObject();
 
     // loops over all object&s in world and adds them to a cell
     for (auto& obj : m_world.Handler.getObjects()) {
@@ -56,7 +52,15 @@ int GridPartition::getRowCount() const { return rownum; }
 
 int GridPartition::getColCount() const { return colnum; }
 
-// private methods:
+void GridPartition::deleteAllObject() {
+    // m_cellObjects[col][row][objects]
+    for (auto& col : m_cellObjects) {
+        for (auto& row : col) {
+            row.clear(); // Clear all objects vectors
+        }
+    }
+}
+
 void GridPartition::logAllObjects() {
     int count = 0;
     // m_cellObjects[col][row][objects]
@@ -71,4 +75,5 @@ void GridPartition::logAllObjects() {
     std::cout << " Count: " << count << '\n';
 }
 
+// private methods:
 const std::vector<ObjectPtr>& GridPartition::getObjectInCell(int col, int row) const { return m_cellObjects[col][row]; }

@@ -17,8 +17,10 @@ int Game::start() {
     rect1 = createRect(100, 250, 1, 100, 100, color);
     rect2 = createRect(200.5, 250, 1, 100, 100, color);
 
+    setMainObject(rect1);
+
     // main loop
-    while (m_sdl.event.loop(rect1)) {
+    while (m_sdl.event.loop()) {
         m_world.cD.m_grid.updateCellDimensions(); // FIX:THIS IS WHY THE RIGHT HALF DOESNT WORK
         m_world.step(dt);
         m_sdl.renderer.update(m_world);
@@ -35,6 +37,10 @@ void Game::loopCount() {
     count++;
 }
 
+void Game::setMainObject(ObjectPtr object) { m_mainObject = object; }
+
+ObjectPtr Game::getMainObject() { return m_mainObject; }
+
 void Game::moveObject(ObjectPtr object, Vector2 amount) {
     object->applyForce(amount);
     std::cout << amount.x << ',' << amount.y << '\n';
@@ -50,18 +56,22 @@ ObjectPtr Game::createRect(float x, float y, float mass, float width, float heig
     return pObject;
 }
 
-// FIX:: MEMORY LEAK
+// FIX:: throws segfault error
 void Game::deleteAllObjects() {
-    // Delete objects and remove them from the render map
-    for (auto& [obj, color] : m_sdl.renderer.getRenderMap()) {
+    auto renderMap = m_sdl.renderer.getRenderMap(); // copy all objects
+    std::vector<ObjectPtr> tempVector;              // NOTE: can play with this for performance
+    for (const auto& [obj, color] : renderMap) {
+        if (obj == m_mainObject) continue;
+        tempVector.push_back(obj); // add them to temporarly vector
+    }
+
+    // Delete each object and remove from render map
+    for (ObjectPtr obj : tempVector) {
         try {
-            m_world.Handler.deleteObject(obj);    // delete object from world
-            m_sdl.renderer.deleteRenderPair(obj); // Remove from renderMap
+            m_world.Handler.deleteObject(obj);    // Delete from the world
+            m_sdl.renderer.deleteRenderPair(obj); // Remove from render map
         } catch (const std::exception& e) {
             std::cerr << "Error deleting object " << obj << ": " << e.what() << "\n";
-        } catch (...) {
-            std::cerr << "Unknown error deleting object " << obj << "\n";
         }
-        std::cout << "something";
     }
 }

@@ -33,6 +33,8 @@ public:
 
     int getColCount() const;
 
+    void deleteAllObject();
+
     void logAllObjects();
 
     // NOTE: check for dangling pointer before use also run it first thing in frame

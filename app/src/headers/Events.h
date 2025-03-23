@@ -15,13 +15,13 @@ public:
         , m_game(game) {}
 
     // main event loop with PollEvent()
-    bool loop(ObjectPtr obj);
+    bool loop();
 
     SDL_Event& getEventVar();
 
 private:
     // these functions are used in loop inside the switch cases
-    void keydownEvents(ObjectPtr obj);
+    void keydownEvents();
     void mouseButtonUpEvents();
 
     // game related functions:

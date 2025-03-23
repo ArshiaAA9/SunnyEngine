@@ -11,19 +11,19 @@
 #include "headers/Game.h"
 #include "headers/Renderer.h"
 
-bool Events::loop(ObjectPtr obj) {
+bool Events::loop() {
     while (SDL_PollEvent(&m_sdlEvent) != 0) {
         switch (m_sdlEvent.type) {
-        case SDL_QUIT:
-            return false;
-            break;
-        case SDL_KEYDOWN:
-            // keyevents
-            keydownEvents(obj);
-            break;
-        case SDL_MOUSEBUTTONUP:
-            mouseButtonUpEvents();
-            break;
+            case SDL_QUIT:
+                return false;
+                break;
+            case SDL_KEYDOWN:
+                // keyevents
+                keydownEvents();
+                break;
+            case SDL_MOUSEBUTTONUP:
+                mouseButtonUpEvents();
+                break;
         }
     }
     return true;
@@ -32,31 +32,40 @@ bool Events::loop(ObjectPtr obj) {
 // interfaces:
 SDL_Event& Events::getEventVar() { return m_sdlEvent; }
 
-void Events::keydownEvents(ObjectPtr obj) {
+void Events::keydownEvents() {
+    ObjectPtr mainObj = m_game.getMainObject(); // Get main object once
+    if (!mainObj) {
+        std::cout << " mainObject hasnt been set ";
+        return; // Early exit if no main object
+    }
     switch (m_sdlEvent.key.keysym.sym) {
-    case SDLK_w:
-        m_game.moveObject(obj, Vector2(0, 1000));
-        std::cout << "w pressed ";
-        break;
-    case SDLK_d:
-        m_game.moveObject(obj, Vector2(1000, 0));
-        std::cout << "d pressed ";
-        break;
-    case SDLK_a:
-        m_game.moveObject(obj, Vector2(-1000, 0));
-        std::cout << "a pressed ";
-        break;
-    case SDLK_s:
-        m_game.moveObject(obj, Vector2(0, -1000));
-        std::cout << "s pressed ";
-        break;
-    case SDLK_SPACE:
-        m_game.stopObject(obj);
-        std::cout << "space pressed ";
-        break;
-    case SDLK_r:
-        m_game.moveObjectTo(obj, Vector2(500, 250));
-        break;
+        case SDLK_w:
+            m_game.moveObject(mainObj, Vector2(0, 1000));
+            std::cout << "w pressed ";
+            break;
+        case SDLK_d:
+            m_game.moveObject(mainObj, Vector2(1000, 0));
+            std::cout << "d pressed ";
+            break;
+        case SDLK_a:
+            m_game.moveObject(mainObj, Vector2(-1000, 0));
+            std::cout << "a pressed ";
+            break;
+        case SDLK_s:
+            m_game.moveObject(mainObj, Vector2(0, -1000));
+            std::cout << "s pressed ";
+            break;
+        case SDLK_SPACE:
+            m_game.stopObject(mainObj);
+            std::cout << "space pressed ";
+            break;
+        case SDLK_r:
+            m_game.moveObjectTo(mainObj, Vector2(500, 250));
+            m_game.stopObject(mainObj);
+            break;
+        case SDLK_f:
+            m_game.deleteAllObjects();
+            break;
     }
 }
 
@@ -65,12 +74,12 @@ void Events::mouseButtonUpEvents() {
     int my = m_sdlEvent.button.y;
     SDL_Color color = {0, 0, 255, 1};
     switch (m_sdlEvent.button.button) {
-    case SDL_BUTTON_LEFT:
-        createRectOnMousePos(mx, my, 10, 50, 50, color);
-        break;
-    case SDL_BUTTON_RIGHT:
-        createRectOnMousePos(mx, my, 2, 10, 10);
-        break;
+        case SDL_BUTTON_LEFT:
+            createRectOnMousePos(mx, my, 10, 50, 50, color);
+            break;
+        case SDL_BUTTON_RIGHT:
+            createRectOnMousePos(mx, my, 2, 10, 10);
+            break;
     }
 }
 
