@@ -5,6 +5,8 @@
 #include "headers/Events.h"
 #include "headers/Sdl.h"
 
+using namespace SE;
+
 // TODO: ADD ROTATION
 //  simulation itself
 int Game::start() {
@@ -26,8 +28,6 @@ int Game::start() {
         m_sdl.renderer.update(m_world);
         SDL_Delay(delay);
     }
-    // clean up
-    m_sdl.kill();
     return 0;
 }
 

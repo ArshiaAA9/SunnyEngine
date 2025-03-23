@@ -6,6 +6,7 @@
 #include "Objects.h"
 #include "Types.h"
 
+namespace SE {
 class PhysicsWorld;
 struct Object;
 
@@ -51,3 +52,4 @@ private:
     // sucks but makes most sense first vector represent col 2nd row 3rd the cell with objects inside of it
     std::vector<std::vector<std::vector<ObjectPtr>>> m_cellObjects;
 };
+} // namespace SE

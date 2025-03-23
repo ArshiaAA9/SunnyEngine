@@ -1,5 +1,7 @@
 #include "headers/Objects.h"
 
+namespace SE {
+
 // Objects Base Functions:
 void Object::applyForce(Vector2 force) { this->force += force; }
 
@@ -55,3 +57,4 @@ Vector2 RectObject::getDimensions() const { return Vector2(height, width); }
 
 /**@return Vector2(radius, diameter)*/
 Vector2 CircleObject::getDimensions() const { return Vector2(radius, radius * 2); }
+} // namespace SE

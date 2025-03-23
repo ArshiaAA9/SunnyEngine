@@ -5,6 +5,8 @@
 #include "Objects.h"
 #include "Types.h"
 #include "Vector2.h"
+
+namespace SE {
 class PhysicsWorld;
 
 class ObjectHandler {
@@ -29,3 +31,4 @@ private:
     // method for adding objects used inside createObject functions
     void addObject(ObjectPtr object);
 };
+} // namespace SE

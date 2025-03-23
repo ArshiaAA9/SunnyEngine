@@ -4,6 +4,7 @@
 #include "Types.h"
 #include "Vector2.h"
 
+namespace SE {
 struct Object;
 
 struct CollisionPair {
@@ -31,3 +32,4 @@ struct CollisionPair {
 
     ~CollisionPair() = default;
 };
+} // namespace SE

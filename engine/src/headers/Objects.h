@@ -6,9 +6,7 @@
 #include "Transform.h"
 #include "Vector2.h"
 
-struct Object;
-struct RectObject;
-struct CircleObject;
+namespace SE {
 
 enum ObjectType { CIRCLE, RECT };
 
@@ -91,3 +89,4 @@ struct CircleObject : public Object {
 private:
     void checkValidDimensions() const;
 };
+} // namespace SE

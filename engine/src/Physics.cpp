@@ -1,5 +1,7 @@
 #include "headers/Physics.h"
 
+namespace SE {
+
 // public:
 void PhysicsWorld::step(float dt) {
     // updates objects inside each cell at start of each frame
@@ -25,3 +27,4 @@ void PhysicsWorld::dynamicsUpdate(float dt) {
 void PhysicsWorld::setGravity(Vector2 gravity) { m_gravity = gravity; }
 
 void PhysicsWorld::invertGravity() { m_gravity.invert(); }
+} // namespace SE

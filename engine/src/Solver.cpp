@@ -6,6 +6,7 @@
 #include "headers/Types.h"
 #include "headers/Vector2.h"
 
+namespace SE {
 void Solver::solveCollisionPairs() {
     auto& clPairs = m_world.cD.getClPairs();
     for (auto& pair : clPairs) {
@@ -63,3 +64,4 @@ void Solver::applyImpulse(CollisionPair* pair, Vector2 impulse) {
     obj1->velocity += impulse / obj1->mass;
     obj2->velocity -= impulse / obj2->mass;
 }
+} // namespace SE

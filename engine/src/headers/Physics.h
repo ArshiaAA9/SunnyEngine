@@ -12,15 +12,11 @@
 #include "Solver.h"
 #include "Vector2.h"
 
+namespace SE {
+
 class PhysicsWorld {
-private:
-    Solver m_solver;
-    Vector2 m_gravity = Vector2(0, -0.81); // -0.81
-
-    void dynamicsUpdate(float dt);
-
 public:
-    CollisionDetection cD; // public cause owns collisionPairs
+    CollisionDetection cD; // interface for
     ObjectHandler Handler; // public cause handles Objects
 
     /**
@@ -36,6 +32,12 @@ public:
     void step(float dt);
 
     void setGravity(Vector2 gravity);
-    // used for sdl2
     void invertGravity();
+
+private:
+    Solver m_solver;
+    Vector2 m_gravity = Vector2(0, -0.81); // -0.81
+
+    void dynamicsUpdate(float dt);
 };
+} // namespace SE

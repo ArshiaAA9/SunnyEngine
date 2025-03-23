@@ -10,4 +10,4 @@ bin/
 build/
 
 # Optional: Ignore the compiled binary (if not in bin/)
-physicsGame
+bin/physicsGame
