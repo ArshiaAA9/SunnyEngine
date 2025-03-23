@@ -1,9 +1,9 @@
 #include "headers/Events.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_error.h>
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_video.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_error.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_video.h>
 
 #include <cmath>
 #include <iostream>
@@ -12,16 +12,16 @@
 #include "headers/Renderer.h"
 
 bool Events::loop() {
-    while (SDL_PollEvent(&m_sdlEvent) != 0) {
+    while (SDL_PollEvent(&m_sdlEvent)) {
         switch (m_sdlEvent.type) {
-            case SDL_QUIT:
+            case SDL_EVENT_QUIT:
                 return false;
                 break;
-            case SDL_KEYDOWN:
+            case SDL_EVENT_KEY_DOWN:
                 // keyevents
                 keydownEvents();
                 break;
-            case SDL_MOUSEBUTTONUP:
+            case SDL_EVENT_MOUSE_BUTTON_DOWN:
                 mouseButtonUpEvents();
                 break;
         }
@@ -38,20 +38,20 @@ void Events::keydownEvents() {
         std::cout << " mainObject hasnt been set ";
         return; // Early exit if no main object
     }
-    switch (m_sdlEvent.key.keysym.sym) {
-        case SDLK_w:
+    switch (m_sdlEvent.key.key) {
+        case SDLK_W:
             m_game.moveObject(mainObj, Vector2(0, 1000));
             std::cout << "w pressed ";
             break;
-        case SDLK_d:
+        case SDLK_D:
             m_game.moveObject(mainObj, Vector2(1000, 0));
             std::cout << "d pressed ";
             break;
-        case SDLK_a:
+        case SDLK_A:
             m_game.moveObject(mainObj, Vector2(-1000, 0));
             std::cout << "a pressed ";
             break;
-        case SDLK_s:
+        case SDLK_S:
             m_game.moveObject(mainObj, Vector2(0, -1000));
             std::cout << "s pressed ";
             break;
@@ -59,19 +59,19 @@ void Events::keydownEvents() {
             m_game.stopObject(mainObj);
             std::cout << "space pressed ";
             break;
-        case SDLK_r:
+        case SDLK_R:
             m_game.moveObjectTo(mainObj, Vector2(500, 250));
             m_game.stopObject(mainObj);
             break;
-        case SDLK_f:
+        case SDLK_F:
             m_game.deleteAllObjects();
             break;
     }
 }
 
 void Events::mouseButtonUpEvents() {
-    int mx = m_sdlEvent.button.x;
-    int my = m_sdlEvent.button.y;
+    float mx = m_sdlEvent.button.x;
+    float my = m_sdlEvent.button.y;
     SDL_Color color = {0, 0, 255, 1};
     switch (m_sdlEvent.button.button) {
         case SDL_BUTTON_LEFT:
@@ -83,7 +83,7 @@ void Events::mouseButtonUpEvents() {
     }
 }
 
-void Events::createRectOnMousePos(int mx, int my, float m, float width, float height, SDL_Color color) {
+void Events::createRectOnMousePos(float mx, float my, float m, float width, float height, SDL_Color color) {
     // doing this cause createRect does same thing to reverse the y axis
     my = m_sdl.renderer.getWindowHeight() - my;
     m_game.createRect(mx, my, m, width, height, color);

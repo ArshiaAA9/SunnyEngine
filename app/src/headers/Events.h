@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL_events.h>
+#include <SDL3/SDL_events.h>
 
 #include "../../../engine/src/headers/Types.h"
 
@@ -25,7 +25,7 @@ private:
     void mouseButtonUpEvents();
 
     // game related functions:
-    void createRectOnMousePos(int mx, int my, float m, float width, float height, SDL_Color color = {255, 0, 0, 1});
+    void createRectOnMousePos(float mx, float my, float m, float width, float height, SDL_Color color = {255, 0, 0, 1});
     void deleteAllObjects();
 
     Game& m_game;
