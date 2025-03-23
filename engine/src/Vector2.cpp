@@ -1,5 +1,6 @@
 #include "headers/Vector2.h"
 
+namespace SE {
 Vector2 Vector2::operator+(const Vector2& other) const {
     // Addition operator for Vector2
     return Vector2(x + other.x, y + other.y);
@@ -109,3 +110,4 @@ void Vector2::checkScalar(float scalar) {
         throw std::invalid_argument("scalar must be non-zero.");
     }
 }
+} // namespace SE

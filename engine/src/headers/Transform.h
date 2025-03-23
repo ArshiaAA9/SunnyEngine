@@ -4,6 +4,8 @@
 
 #include "Vector2.h"
 
+namespace SE {
+
 struct Transform { // Describes an objects location
 
     Vector2 position;
@@ -13,3 +15,4 @@ struct Transform { // Describes an objects location
 
     void moveTo(Vector2 position) { this->position = position; }
 };
+} // namespace SE

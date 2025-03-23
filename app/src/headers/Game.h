@@ -1,5 +1,8 @@
 #pragma once
+#include "../../../engine/src/headers/Physics.h"
 #include "Sdl.h"
+
+using namespace SE;
 
 class Game {
 public:

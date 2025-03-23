@@ -5,6 +5,7 @@
 
 #include "Events.h"
 #include "Renderer.h"
+using namespace SE;
 
 class Sdl {
 public:

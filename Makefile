@@ -1,6 +1,6 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Iapp/headers -Iengine/headers
-LDFLAGS = `sdl3-config --cflags --libs` -lSDL3_ttf
+CXXFLAGS = -std=c++17 -Iapp/headers -Iengine/headers `pkg-config --cflags sdl3 sdl3-ttf`
+LDFLAGS = `pkg-config --libs sdl3 sdl3-ttf`
 
 SRC_APP = $(wildcard app/src/*.cpp)
 SRC_ENGINE = $(wildcard engine/src/*.cpp)

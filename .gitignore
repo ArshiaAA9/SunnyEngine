@@ -8,7 +8,6 @@ src/test.cpp
 # Ignore entire directories (bin/ and build/)
 bin/
 build/
-test/
 
 # Optional: Ignore the compiled binary (if not in bin/)
-physicsGame
+bin/physicsGame

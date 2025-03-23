@@ -5,6 +5,8 @@
 
 #include "headers/Types.h"
 
+namespace SE {
+
 void ObjectHandler::addObject(ObjectPtr object) {
     // ObjectPtr is a shared pointer
     m_objects.push_back(std::move(object));
@@ -60,3 +62,4 @@ ObjectPtr ObjectHandler::createCircleObj(float x, float y, float mass, float rad
     addObject(circleObject);
     return circleObject;
 }
+} // namespace SE

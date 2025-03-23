@@ -2,6 +2,7 @@
 #include "CollisionPair.h"
 #include "Vector2.h"
 
+namespace SE {
 class PhysicsWorld;
 
 class Solver {
@@ -18,3 +19,4 @@ private:
     void applyImpulse(CollisionPair* pair, Vector2 impulse);   // applies force to the object pair
     void solve(CollisionPair* pair);
 };
+} // namespace SE

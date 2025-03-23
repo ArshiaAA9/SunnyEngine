@@ -2,9 +2,10 @@
 
 #include <iostream>
 
-#include "headers/Objects.h"
 #include "headers/Physics.h"
 #include "headers/Types.h"
+
+namespace SE {
 
 // use it to update biggest grid cell size
 void GridPartition::updateCellDimensions() {
@@ -77,3 +78,4 @@ void GridPartition::logAllObjects() {
 
 // private methods:
 const std::vector<ObjectPtr>& GridPartition::getObjectInCell(int col, int row) const { return m_cellObjects[col][row]; }
+} // namespace SE

@@ -10,6 +10,8 @@
 #include "headers/Types.h"
 #include "headers/Vector2.h"
 
+namespace SE {
+
 /**@brief Performs collision detection using a spatial grid partitioning system.
  * @brief Iterates through all grid cells, checks collisions between objects within the same cell,
  * @brief and between objects in neighboring cells to handle boundary/cross-cell collisions.*/
@@ -232,3 +234,4 @@ void CollisionDetection::deleteClPair(CollisionPair* pair) {
 
 /**@return a constant reference to m_collisionPairs*/
 const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const { return m_collisionPairs; }
+} // namespace SE

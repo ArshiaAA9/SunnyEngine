@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+namespace SE {
+
 // Struct for a 2D vector (for position, velocity, or acceleration)
 struct Vector2 {
 
@@ -65,3 +67,4 @@ struct Vector2 {
 private:
     void checkScalar(float scalar);
 };
+} // namespace SE

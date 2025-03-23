@@ -7,6 +7,7 @@
 #include "GridPartition.h"
 #include "Types.h"
 
+namespace SE {
 class GridPartition;
 class PhysicsWorld;
 
@@ -40,3 +41,4 @@ private:
 
     void clRectRect(ObjectPtr obj1, ObjectPtr obj2);
 };
+} // namespace SE

@@ -7,9 +7,13 @@
 #include <iostream>
 #include <unordered_map>
 
-#include "../../../engine/src/headers/Physics.h"
+#include "../../../engine/src/headers/Types.h"
 
-class Sdl;
+namespace SE {
+class PhysicsWorld;
+}
+
+using namespace SE;
 
 class Renderer {
 public:

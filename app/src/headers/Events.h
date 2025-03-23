@@ -5,7 +5,6 @@
 #include "../../../engine/src/headers/Types.h"
 
 class Game;
-class PhysicsWorld;
 class Sdl;
 
 class Events {
