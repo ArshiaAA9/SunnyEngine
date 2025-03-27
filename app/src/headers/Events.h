@@ -24,7 +24,8 @@ private:
     void mouseButtonUpEvents();
 
     // game related functions:
-    void createRectOnMousePos(float mx, float my, float m, float width, float height, SDL_Color color = {255, 0, 0, 1});
+    void
+    createRectOnMousePos(float mx, float my, float m, float width, float height, SDL_FColor color = {255, 0, 0, 1});
     void deleteAllObjects();
 
     Game& m_game;

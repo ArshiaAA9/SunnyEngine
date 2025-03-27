@@ -11,9 +11,10 @@ public:
         , m_sdl(*this, windowWidth, windowHeight) {}
 
     int start();
+    int test();
 
     // used in Events class to create object dynamicly
-    ObjectPtr createRect(float x, float y, float mass, float width, float height, SDL_Color color);
+    ObjectPtr createRect(float x, float y, float mass, float width, float height, SDL_FColor color);
 
     void setMainObject(ObjectPtr object);
     ObjectPtr getMainObject();

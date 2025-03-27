@@ -17,9 +17,7 @@ public:
     float sinValue;
     float cosValue;
 
-    Transform(float x, float y, Object& object)
-        : position(x, y)
-        , ownerObject(object) {}
+    Transform(float x, float y, Object& object, float angle = 0);
 
     void moveTo(Vector2 position);
 
@@ -28,6 +26,7 @@ public:
 private:
     void calculateRectVertices();
     void rotate(float amount);
+    Vector2 rotate(Vector2 vector);
 
     Object& ownerObject;
     float cachedAngle = 0;

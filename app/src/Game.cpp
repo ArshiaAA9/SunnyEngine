@@ -15,13 +15,34 @@ int Game::start() {
     float delay = 1000.0f / 60.0f;
     ObjectPtr rect1;
     ObjectPtr rect2;
-    SDL_Color color = {0, 255, 0, 255};
+    SDL_FColor color = {0, 255, 0, 255};
     rect1 = createRect(100, 250, 1, 100, 100, color);
     rect2 = createRect(200.5, 250, 1, 100, 100, color);
 
     setMainObject(rect1);
 
     // main loop
+    while (m_sdl.event.loop()) {
+        loopCount();
+        m_world.cD.m_grid.updateCellDimensions(); // FIX:THIS IS WHY THE RIGHT HALF DOESNT WORK
+        m_world.step(dt);
+        m_sdl.renderer.update(m_world);
+        SDL_Delay(delay);
+    }
+    return 0;
+}
+
+int Game::test() {
+    m_world.setGravity(Vector2(0, -0));
+    float dt = 1.0f / 60.0f;
+    float delay = 1000.0f / 60.0f;
+    ObjectPtr rect1;
+
+    SDL_FColor color = {0, 255, 0, 255};
+    rect1 = createRect(100, 250, 1, 100, 100, color);
+
+    setMainObject(rect1);
+
     while (m_sdl.event.loop()) {
         loopCount();
         m_world.cD.m_grid.updateCellDimensions(); // FIX:THIS IS WHY THE RIGHT HALF DOESNT WORK
@@ -53,7 +74,7 @@ void Game::moveObjectTo(ObjectPtr object, Vector2 position) { object->transform.
 
 void Game::stopObject(ObjectPtr object) { object->setVelocity(Vector2(0, 0)); }
 
-ObjectPtr Game::createRect(float x, float y, float mass, float width, float height, SDL_Color color) {
+ObjectPtr Game::createRect(float x, float y, float mass, float width, float height, SDL_FColor color) {
     ObjectPtr pObject = m_world.Handler.createRectObj(x, y, mass, width, height);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;

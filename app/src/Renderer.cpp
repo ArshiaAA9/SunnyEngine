@@ -1,8 +1,10 @@
 #include "headers/Renderer.h"
 
+#include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
+#include <array>
 #include <iostream>
 #include <string>
 
@@ -15,7 +17,7 @@ void Renderer::update(PhysicsWorld& world) {
 
     // TODO: change this to use shape specific functions
     for (const auto& [obj, color] : m_renderMap) {
-        drawColoredRect(obj, color);
+        drawColoredRect2(obj, color);
         objectCount++;
     }
     renderObjectCount(objectCount);
@@ -24,7 +26,7 @@ void Renderer::update(PhysicsWorld& world) {
     SDL_RenderPresent(m_renderer);
 }
 
-void Renderer::addRenderPair(ObjectPtr obj, SDL_Color color) {
+void Renderer::addRenderPair(ObjectPtr obj, SDL_FColor color) {
     m_renderMap.insert({obj, color});
 } // add a key value pari
 
@@ -40,7 +42,7 @@ int Renderer::getWindowHeight() const { return m_windowHeight; } // return windo
 
 TTF_Font* Renderer::getFont() const { return m_font; } // return font pointer
 
-const std::unordered_map<ObjectPtr, SDL_Color>& Renderer::getRenderMap() {
+const std::unordered_map<ObjectPtr, SDL_FColor>& Renderer::getRenderMap() {
     // return a const renference to render map
     return m_renderMap;
 }
@@ -53,7 +55,7 @@ void Renderer::clearScreen() {
     SDL_RenderClear(m_renderer);
 }
 
-void Renderer::drawColoredRect(const ObjectPtr object, SDL_Color color) {
+void Renderer::drawColoredRect(const ObjectPtr object, SDL_FColor color) {
     // draws a rectangle using a object pointer and a SDL_Color
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     // sdl_rect takes position as topleft point of rect
@@ -66,6 +68,18 @@ void Renderer::drawColoredRect(const ObjectPtr object, SDL_Color color) {
     rect.w = width;
     rect.h = height;
     SDL_RenderFillRect(m_renderer, &rect);
+}
+
+void Renderer::drawColoredRect2(const ObjectPtr object, SDL_FColor color) {
+    std::array<SDL_Vertex, 4> vertices;
+    for (size_t i = 0; i < 4; i++) {
+        SDL_FPoint position = {object->transform.transformedVertices[i].x, object->transform.transformedVertices[i].y};
+        SDL_FPoint textCord = {0.0f, 0.0f};
+        SDL_Vertex vertex = {position, color, textCord};
+        vertices[i] = vertex;
+    }
+    const int indices[] = {0, 1, 2, 2, 3, 0};
+    SDL_RenderGeometry(m_renderer, nullptr, vertices.data(), 4, indices, 6);
 }
 
 bool Renderer::initWindowAndRenderer() {

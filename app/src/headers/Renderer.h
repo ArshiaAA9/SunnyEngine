@@ -29,11 +29,11 @@ public:
 
     // interfaces:
     // adds pairs to a map {const object*: SDL_Color}
-    void addRenderPair(ObjectPtr, SDL_Color color);
+    void addRenderPair(ObjectPtr, SDL_FColor color);
     // removes a pair from the map
     void deleteRenderPair(ObjectPtr);
     // returns a contsant reference to renderMap
-    const std::unordered_map<ObjectPtr, SDL_Color>& getRenderMap(); // stores objects with a corresponding color
+    const std::unordered_map<ObjectPtr, SDL_FColor>& getRenderMap(); // stores objects with a corresponding color
 
     SDL_Window* getWindow() const;
     SDL_Renderer* getRenderer() const;
@@ -46,7 +46,8 @@ private:
     void clearScreen();
 
     // used to draw filled rects
-    void drawColoredRect(const ObjectPtr object, SDL_Color color);
+    void drawColoredRect(const ObjectPtr object, SDL_FColor color);
+    void drawColoredRect2(const ObjectPtr object, SDL_FColor color);
 
     // used to show the living objects count in the simulation
     void renderObjectCount(int count);
@@ -54,7 +55,7 @@ private:
     // initializes everything and member vars
     bool initWindowAndRenderer();
 
-    std::unordered_map<ObjectPtr, SDL_Color> m_renderMap; // stores objects with a corresponding color
+    std::unordered_map<ObjectPtr, SDL_FColor> m_renderMap; // stores objects with a corresponding color
 
     int m_windowWidth, m_windowHeight; // window width, height
     SDL_Window* m_window;              // window
