@@ -1,7 +1,8 @@
 # Ignore specific files
 todo.txt
-src/test.cpp
-
+test/test.cpp
+test/test
+test/Makefile
 # Ignore all .o object files (anywhere)
 *.o
 

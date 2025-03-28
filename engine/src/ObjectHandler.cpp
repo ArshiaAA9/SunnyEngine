@@ -1,6 +1,7 @@
 #include "headers/ObjectHandler.h"
 
 #include <algorithm>
+#include <iostream>
 #include <memory>
 
 #include "headers/Types.h"
@@ -37,9 +38,9 @@ const std::vector<ObjectPtr>& ObjectHandler::getObjects() const { return m_objec
  * @return A pointer to the newly created `RectObject`.
  *
  */
-ObjectPtr ObjectHandler::createRectObj(float x, float y, float mass, float width, float height) {
+ObjectPtr ObjectHandler::createRectObj(float x, float y, float mass, float width, float height, float angle) {
     // ObjectPtr = std::shared_ptr<Object>
-    ObjectPtr rectObject = std::make_shared<RectObject>(x, y, mass, width, height);
+    ObjectPtr rectObject = std::make_shared<RectObject>(x, y, mass, width, height, angle);
     addObject(rectObject);
     return rectObject;
 }
@@ -57,8 +58,8 @@ ObjectPtr ObjectHandler::createRectObj(float x, float y, float mass, float width
  * @return A pointer to the newly created `CircleObject`.
  *
  */
-ObjectPtr ObjectHandler::createCircleObj(float x, float y, float mass, float radius) {
-    std::shared_ptr<Object> circleObject = std::make_shared<CircleObject>(x, y, mass, radius);
+ObjectPtr ObjectHandler::createCircleObj(float x, float y, float mass, float radius, float angle) {
+    std::shared_ptr<Object> circleObject = std::make_shared<CircleObject>(x, y, mass, radius, angle);
     addObject(circleObject);
     return circleObject;
 }

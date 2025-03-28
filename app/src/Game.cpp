@@ -1,5 +1,7 @@
 #include "headers/Game.h"
 
+#include <algorithm>
+#include <cmath>
 #include <iostream>
 
 #include "headers/Events.h"
@@ -16,8 +18,8 @@ int Game::start() {
     ObjectPtr rect1;
     ObjectPtr rect2;
     SDL_FColor color = {0, 255, 0, 255};
-    rect1 = createRect(100, 250, 1, 100, 100, color);
-    rect2 = createRect(200.5, 250, 1, 100, 100, color);
+    rect1 = createRect(100, 250, 1, 100, 100, color, 0);
+    rect2 = createRect(200.5, 250, 1, 100, 100, color, 0);
 
     setMainObject(rect1);
 
@@ -33,20 +35,12 @@ int Game::start() {
 }
 
 int Game::test() {
-    m_world.setGravity(Vector2(0, -0));
-    float dt = 1.0f / 60.0f;
+    // m_world.setGravity(Vector2(0, -0));
+    // float dt = 1.0f / 60.0f;
     float delay = 1000.0f / 60.0f;
-    ObjectPtr rect1;
-
-    SDL_FColor color = {0, 255, 0, 255};
-    rect1 = createRect(100, 250, 1, 100, 100, color);
-
-    setMainObject(rect1);
 
     while (m_sdl.event.loop()) {
         loopCount();
-        m_world.cD.m_grid.updateCellDimensions(); // FIX:THIS IS WHY THE RIGHT HALF DOESNT WORK
-        m_world.step(dt);
         m_sdl.renderer.update(m_world);
         SDL_Delay(delay);
     }
@@ -63,8 +57,6 @@ void Game::setMainObject(ObjectPtr object) { m_mainObject = object; }
 
 ObjectPtr Game::getMainObject() { return m_mainObject; }
 
-void Game::rotateObject(ObjectPtr object, float amount) { object->transform.angle = amount; }
-
 void Game::moveObject(ObjectPtr object, Vector2 amount) {
     object->applyForce(amount);
     std::cout << amount.x << ',' << amount.y << '\n';
@@ -74,8 +66,9 @@ void Game::moveObjectTo(ObjectPtr object, Vector2 position) { object->transform.
 
 void Game::stopObject(ObjectPtr object) { object->setVelocity(Vector2(0, 0)); }
 
-ObjectPtr Game::createRect(float x, float y, float mass, float width, float height, SDL_FColor color) {
-    ObjectPtr pObject = m_world.Handler.createRectObj(x, y, mass, width, height);
+ObjectPtr Game::createRect(float x, float y, float mass, float width, float height, SDL_FColor color, float angle) {
+    std::cout << "this is called\n";
+    ObjectPtr pObject = m_world.Handler.createRectObj(x, y, mass, width, height, angle);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;
 }

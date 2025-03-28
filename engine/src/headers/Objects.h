@@ -19,8 +19,8 @@ struct Object {
     Transform transform;
 
     // constructor:
-    Object(float x, float y, float mass, ObjectType type)
-        : transform(x, y, *this)
+    Object(float x, float y, float mass, ObjectType type, float angle)
+        : transform(x, y, *this, angle)
         , mass(mass)
         , type(type)
         , velocity(0, 0)
@@ -51,11 +51,17 @@ struct RectObject : public Object {
     int width;
 
     // constructor:
-    RectObject(float x, float y, float mass, float height, float width)
-        : Object(x, y, mass, RECT)
+    RectObject(float x, float y, float mass, float height, float width, float angle)
+        : Object(x, y, mass, RECT, angle)
         , height(height)
         , width(width) {
         checkValidDimensions();
+        this->transform.vertices = {
+            Vector2(-width / 2, this->transform.position.y + height / 2),
+            Vector2(-width / 2, this->transform.position.y - height / 2),
+            Vector2(width / 2, this->transform.position.y - height / 2),
+            Vector2(width / 2, this->transform.position.y + height / 2)};
+        this->transform.transformedVertices.resize(this->transform.vertices.size());
     }
 
     ~RectObject() = default;
@@ -73,8 +79,8 @@ struct CircleObject : public Object {
     float radius;
 
     // constructor:
-    CircleObject(float x, float y, float mass, float radius)
-        : Object(x, y, mass, CIRCLE)
+    CircleObject(float x, float y, float mass, float radius, float angle = 0)
+        : Object(x, y, mass, CIRCLE, angle)
         , radius(radius) {}
 
     ~CircleObject() = default;

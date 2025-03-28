@@ -14,7 +14,7 @@ public:
     int test();
 
     // used in Events class to create object dynamicly
-    ObjectPtr createRect(float x, float y, float mass, float width, float height, SDL_FColor color);
+    ObjectPtr createRect(float x, float y, float mass, float width, float height, SDL_FColor color, float angle = 0);
 
     void setMainObject(ObjectPtr object);
     ObjectPtr getMainObject();

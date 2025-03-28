@@ -72,8 +72,9 @@ void Renderer::drawColoredRect(const ObjectPtr object, SDL_FColor color) {
 
 void Renderer::drawColoredRect2(const ObjectPtr object, SDL_FColor color) {
     std::array<SDL_Vertex, 4> vertices;
-    for (size_t i = 0; i < 4; i++) {
-        SDL_FPoint position = {object->transform.transformedVertices[i].x, object->transform.transformedVertices[i].y};
+    for (int i = 0; i < 4; i++) {
+        float py = m_windowHeight - object->transform.transformedVertices[i].y; // flip cause of sdl3
+        SDL_FPoint position = {object->transform.transformedVertices[i].x, py};
         SDL_FPoint textCord = {0.0f, 0.0f};
         SDL_Vertex vertex = {position, color, textCord};
         vertices[i] = vertex;
@@ -84,7 +85,7 @@ void Renderer::drawColoredRect2(const ObjectPtr object, SDL_FColor color) {
 
 bool Renderer::initWindowAndRenderer() {
     // initailizing SDL_ttf
-    if (TTF_Init()) {
+    if (!TTF_Init()) {
         std::cerr << "Error initializing TTF" << SDL_GetError() << std::endl;
     }
 

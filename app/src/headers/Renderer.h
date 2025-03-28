@@ -25,6 +25,8 @@ public:
         if (!initWindowAndRenderer()) std::cerr << "Failed to initalize everything";
     }
 
+    // NOTE: TEST FUNCTION
+    void testFunction();
     void update(PhysicsWorld& world);
 
     // interfaces:

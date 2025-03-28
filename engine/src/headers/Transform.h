@@ -17,7 +17,13 @@ public:
     float sinValue;
     float cosValue;
 
-    Transform(float x, float y, Object& object, float angle = 0);
+    // constructor:
+    Transform(float x, float y, Object& object, float angle)
+        : position(x, y)
+        , ownerObject(object) {
+        sinValue = std::sin(angle);
+        cosValue = std::cos(angle);
+    }
 
     void moveTo(Vector2 position);
 

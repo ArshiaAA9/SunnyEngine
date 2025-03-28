@@ -18,8 +18,8 @@ public:
     const std::vector<ObjectPtr>& getObjects() const;
 
     // methods for creating objects
-    ObjectPtr createRectObj(float x, float y, float mass, float width, float height);
-    ObjectPtr createCircleObj(float x, float y, float mass, float radius);
+    ObjectPtr createRectObj(float x, float y, float mass, float width, float height, float angle);
+    ObjectPtr createCircleObj(float x, float y, float mass, float radius, float angle);
 
     // use this to delete an object
     void deleteObject(ObjectPtr object);

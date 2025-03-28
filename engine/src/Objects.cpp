@@ -22,10 +22,11 @@ void Object::printProperties() const {
 }
 
 void RectObject::printProperties() const {
-    std::cout << " topleft: " << this->transform.vertices[0].x << ',' << this->transform.vertices[0].y;
-    std::cout << " botleft: " << this->transform.vertices[1].x << ',' << this->transform.vertices[1].y;
-    std::cout << " botRight: " << this->transform.vertices[2].x << ',' << this->transform.vertices[2].y;
-    std::cout << " topRight: " << this->transform.vertices[3].x << ',' << this->transform.vertices[3].y << '\n';
+    std::cout << " topleft: " << this->transform.transformedVertices[0].x << ',' << this->transform.vertices[0].y;
+    std::cout << " botleft: " << this->transform.transformedVertices[1].x << ',' << this->transform.vertices[1].y;
+    std::cout << " botRight: " << this->transform.transformedVertices[2].x << ',' << this->transform.vertices[2].y;
+    std::cout << " topRight: " << this->transform.transformedVertices[3].x << ',' << this->transform.vertices[3].y
+              << '\n';
     // Object::printProperties();
     // std::cout << " Dimensions: " << this->width << "," << this->height << "\n";
 }

@@ -66,7 +66,6 @@ void Events::keydownEvents() {
             break;
         case SDLK_F:
             std::cout << "----------------------------------------------------------------------------";
-            m_game.rotateObject(mainObj, M_PI / 4);
             break;
     }
 }
@@ -88,5 +87,5 @@ void Events::mouseButtonUpEvents() {
 void Events::createRectOnMousePos(float mx, float my, float m, float width, float height, SDL_FColor color) {
     // doing this cause createRect does same thing to reverse the y axis
     my = m_sdl.renderer.getWindowHeight() - my;
-    m_game.createRect(mx, my, m, width, height, color);
+    m_game.createRect(mx, my, m, width, height, color, 0);
 }

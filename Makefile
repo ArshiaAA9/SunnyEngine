@@ -8,7 +8,7 @@ OBJ = $(patsubst %.cpp, build/%.o, $(SRC_APP) $(SRC_ENGINE))
 
 TARGET = bin/physicsGame
 
-all: clean build run
+all: build run
 
 build: $(TARGET)
 
