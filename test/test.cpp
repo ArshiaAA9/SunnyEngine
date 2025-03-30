@@ -1,7 +1,12 @@
 
+
 class Static {
 public:
-    static int foo() { return 1; }
+    static int bar() { return 1; }
 };
 
-int main() { Static::foo(); }
+int main() {
+    int i = 0;
+    i++;
+    Static::bar();
+}

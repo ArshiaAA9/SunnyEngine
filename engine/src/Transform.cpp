@@ -2,10 +2,10 @@
 
 #include <iostream>
 
-#include "headers/Objects.h"
-
 namespace SE {
 
+// BUG: rotation not working correctly
+//
 // publics:
 
 void Transform::moveTo(Vector2 position) {
@@ -21,6 +21,11 @@ void Transform::transform() {
         }
         hasTransformed = true;
     }
+}
+
+void Transform::changeAngle(float amount) {
+    this->angle = amount;
+    this->hasTransformed = false;
 }
 
 // private:

@@ -47,6 +47,8 @@ int Game::test() {
     return 0;
 }
 
+void Game::rotateObject(ObjectPtr object, float amount) { object->transform.changeAngle(amount); }
+
 void Game::loopCount() {
     static int count = 1;
     std::cout << "loop count: " << count << std::endl;

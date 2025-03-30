@@ -65,7 +65,8 @@ void Events::keydownEvents() {
             m_game.stopObject(mainObj);
             break;
         case SDLK_F:
-            std::cout << "----------------------------------------------------------------------------";
+            m_game.rotateObject(mainObj, M_PI / 4);
+            std::cout << "----------------------------------------------------------------------------\n";
             break;
     }
 }

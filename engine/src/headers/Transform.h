@@ -28,6 +28,7 @@ public:
     void moveTo(Vector2 position);
 
     void transform();
+    void changeAngle(float amount);
 
 private:
     void calculateRectVertices();

@@ -61,7 +61,7 @@ struct RectObject : public Object {
             Vector2(-width / 2, this->transform.position.y - height / 2),
             Vector2(width / 2, this->transform.position.y - height / 2),
             Vector2(width / 2, this->transform.position.y + height / 2)};
-        this->transform.transformedVertices.resize(this->transform.vertices.size());
+        this->transform.transformedVertices.resize(4);
     }
 
     ~RectObject() = default;
