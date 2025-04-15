@@ -37,7 +37,6 @@ struct Object {
 
     // dynamics:
     void applyForce(Vector2 force);
-    void move(Vector2 amount);
     void setVelocity(Vector2 velocity);
     void addVelocity(Vector2 veloctiy);
 
@@ -57,10 +56,8 @@ struct RectObject : public Object {
         , width(width) {
         checkValidDimensions();
         this->transform.vertices = {
-            Vector2(-width / 2, this->transform.position.y + height / 2),
-            Vector2(-width / 2, this->transform.position.y - height / 2),
-            Vector2(width / 2, this->transform.position.y - height / 2),
-            Vector2(width / 2, this->transform.position.y + height / 2)};
+            Vector2(-width / 2, height / 2), Vector2(-width / 2, -height / 2), Vector2(width / 2, -height / 2),
+            Vector2(width / 2, height / 2)};
         this->transform.transformedVertices.resize(4);
     }
 

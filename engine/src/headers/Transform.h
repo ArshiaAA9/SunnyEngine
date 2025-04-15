@@ -10,7 +10,6 @@ class Object;
 struct Transform {
 public:
     Vector2 position;
-    bool hasTransformed;
     std::vector<Vector2> vertices;
     std::vector<Vector2> transformedVertices;
     float angle = 0;
@@ -21,21 +20,23 @@ public:
     Transform(float x, float y, Object& object, float angle)
         : position(x, y)
         , ownerObject(object) {
-        sinValue = std::sin(angle);
-        cosValue = std::cos(angle);
+        changeAngle(angle);
     }
 
+    void move(Vector2 amount);
     void moveTo(Vector2 position);
 
     void transform();
+    void increaseAngle(float amount);
     void changeAngle(float amount);
+
+    void printVertices() const;
 
 private:
     void calculateRectVertices();
-    void rotate(float amount);
     Vector2 rotate(Vector2 vector);
 
     Object& ownerObject;
-    float cachedAngle = 0;
+    bool hasTransformed;
 };
 } // namespace SE

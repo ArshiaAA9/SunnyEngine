@@ -4,9 +4,14 @@ LDFLAGS = `pkg-config --libs sdl3 sdl3-ttf`
 
 SRC_APP = $(wildcard app/src/*.cpp)
 SRC_ENGINE = $(wildcard engine/src/*.cpp)
+ENGINE_OBJ = $(patsubst %.cpp, build/%.o, $(SRC_ENGINE))
+ENGINE_LIB = build/libSunnyEngine.a
 OBJ = $(patsubst %.cpp, build/%.o, $(SRC_APP) $(SRC_ENGINE))
 
 TARGET = bin/physicsGame
+
+$(ENGINE_LIB): $(ENGINE_OBJ)
+	ar rcs $@ $^
 
 all: build run
 
@@ -14,7 +19,7 @@ build: $(TARGET)
 
 $(TARGET): $(OBJ)
 	mkdir -p bin
-	$(CXX) $(OBJ) -o $(TARGET) $(LDFLAGS)
+	$(CXX) $^ -o $(TARGET) $(LDFLAGS)
 
 build/%.o: %.cpp
 	mkdir -p $(dir $@)

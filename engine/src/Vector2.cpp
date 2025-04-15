@@ -1,5 +1,7 @@
 #include "headers/Vector2.h"
 
+#include <iostream>
+
 namespace SE {
 Vector2 Vector2::operator+(const Vector2& other) const {
     // Addition operator for Vector2
@@ -110,4 +112,10 @@ void Vector2::checkScalar(float scalar) {
         throw std::invalid_argument("scalar must be non-zero.");
     }
 }
+
+std::ostream& operator<<(std::ostream& os, const Vector2& vec) {
+    os << "(" << vec.x << ',' << vec.y << ')';
+    return os;
+}
+
 } // namespace SE

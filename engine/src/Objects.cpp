@@ -5,11 +5,6 @@ namespace SE {
 // Objects Base Functions:
 void Object::applyForce(Vector2 force) { this->force += force; }
 
-void Object::move(Vector2 amount) {
-    this->transform.position += amount;
-    this->transform.hasTransformed = false;
-}
-
 void Object::setVelocity(Vector2 velocity) { this->velocity = velocity; }
 
 void Object::addVelocity(Vector2 velocity) { this->velocity += velocity; }

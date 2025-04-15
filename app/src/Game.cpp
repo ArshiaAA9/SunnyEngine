@@ -9,8 +9,6 @@
 
 using namespace SE;
 
-// TODO: ADD ROTATION
-//  simulation itself
 int Game::start() {
     m_world.setGravity(Vector2(0, -0));
     float dt = 1.0f / 60.0f;
@@ -25,7 +23,7 @@ int Game::start() {
 
     // main loop
     while (m_sdl.event.loop()) {
-        loopCount();
+        // loopCount();
         m_world.cD.m_grid.updateCellDimensions(); // FIX:THIS IS WHY THE RIGHT HALF DOESNT WORK
         m_world.step(dt);
         m_sdl.renderer.update(m_world);
@@ -47,7 +45,15 @@ int Game::test() {
     return 0;
 }
 
-void Game::rotateObject(ObjectPtr object, float amount) { object->transform.changeAngle(amount); }
+// test function
+void Game::rotateObject(ObjectPtr object, float amount) {
+    std::cout << "position: " << object->transform.position << " angle: " << object->transform.angle << '\n';
+    object->transform.printVertices();
+    object->transform.increaseAngle(amount);
+    std::cout << "angle: " << object->transform.angle << "\n";
+    object->transform.transform();
+    object->transform.printVertices();
+}
 
 void Game::loopCount() {
     static int count = 1;
@@ -59,23 +65,19 @@ void Game::setMainObject(ObjectPtr object) { m_mainObject = object; }
 
 ObjectPtr Game::getMainObject() { return m_mainObject; }
 
-void Game::moveObject(ObjectPtr object, Vector2 amount) {
-    object->applyForce(amount);
-    std::cout << amount.x << ',' << amount.y << '\n';
-}
+void Game::moveObject(ObjectPtr object, Vector2 amount) { object->applyForce(amount); }
 
 void Game::moveObjectTo(ObjectPtr object, Vector2 position) { object->transform.moveTo(position); }
 
 void Game::stopObject(ObjectPtr object) { object->setVelocity(Vector2(0, 0)); }
 
 ObjectPtr Game::createRect(float x, float y, float mass, float width, float height, SDL_FColor color, float angle) {
-    std::cout << "this is called\n";
     ObjectPtr pObject = m_world.Handler.createRectObj(x, y, mass, width, height, angle);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;
 }
 
-// FIX:: throws segfault error
+// NOTE:: can be optimized for performance
 void Game::deleteAllObjects() {
     auto renderMap = m_sdl.renderer.getRenderMap(); // copy all objects
     std::vector<ObjectPtr> tempVector;              // NOTE: can play with this for performance

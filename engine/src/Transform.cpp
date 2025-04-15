@@ -1,12 +1,13 @@
 #include "headers/Transform.h"
 
-#include <iostream>
-
 namespace SE {
 
-// BUG: rotation not working correctly
-//
 // publics:
+
+void Transform::move(Vector2 amount) {
+    this->position += amount;
+    this->hasTransformed = false;
+}
 
 void Transform::moveTo(Vector2 position) {
     this->position = position;
@@ -23,9 +24,25 @@ void Transform::transform() {
     }
 }
 
+void Transform::increaseAngle(float amount) {
+    this->angle += amount;
+    this->sinValue = std::sin(this->angle);
+    this->cosValue = std::cos(this->angle);
+    this->hasTransformed = false;
+}
+
 void Transform::changeAngle(float amount) {
     this->angle = amount;
+    this->sinValue = std::sin(this->angle);
+    this->cosValue = std::cos(this->angle);
     this->hasTransformed = false;
+}
+
+void Transform::printVertices() const {
+    std::cout << "1.vertices: " << this->transformedVertices[0] << '\n'
+              << "2.vertices: " << this->transformedVertices[1] << '\n'
+              << "3.vertices: " << this->transformedVertices[2] << '\n'
+              << "4.vertices: " << this->transformedVertices[3] << std::endl;
 }
 
 // private:

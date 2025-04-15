@@ -41,31 +41,29 @@ void Events::keydownEvents() {
     switch (m_sdlEvent.key.key) {
         case SDLK_W:
             m_game.moveObject(mainObj, Vector2(0, 1000));
-            std::cout << "w pressed ";
             break;
         case SDLK_D:
             m_game.moveObject(mainObj, Vector2(1000, 0));
-            std::cout << "d pressed ";
             break;
         case SDLK_A:
             m_game.moveObject(mainObj, Vector2(-1000, 0));
-            std::cout << "a pressed ";
             break;
         case SDLK_S:
             m_game.moveObject(mainObj, Vector2(0, -1000));
-            std::cout << "s pressed ";
             break;
         case SDLK_SPACE:
+            // stop button
             m_game.stopObject(mainObj);
-            std::cout << "space pressed ";
             break;
         case SDLK_R:
+            // reset button
             m_game.deleteAllObjects();
             m_game.moveObjectTo(mainObj, Vector2(500, 250));
             m_game.stopObject(mainObj);
             break;
         case SDLK_F:
-            m_game.rotateObject(mainObj, M_PI / 4);
+            // rotate button
+            m_game.rotateObject(mainObj, M_PI / 2);
             std::cout << "----------------------------------------------------------------------------\n";
             break;
     }

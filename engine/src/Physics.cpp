@@ -21,7 +21,7 @@ void PhysicsWorld::dynamicsUpdate(float dt) {
     for (auto& obj : Handler.getObjects()) {
         obj->applyForce(m_gravity * obj->mass);
         obj->addVelocity(obj->force / obj->mass * dt);
-        obj->move(obj->velocity * dt);
+        obj->transform.move(obj->velocity * dt);
         obj->transform.transform();
         obj->force = Vector2(0, 0); // reset net force at the end
     }

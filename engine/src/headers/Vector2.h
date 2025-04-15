@@ -49,6 +49,9 @@ struct Vector2 {
     bool operator<(const Vector2& other) const;
     bool operator>(Vector2& other) const;
 
+    // << bitwise operator overloadder
+    std::ostream& operator<<(std::ostream& os);
+
     void addScaledVector2(float scale, const Vector2& vector);
 
     // Methods:
@@ -67,4 +70,8 @@ struct Vector2 {
 private:
     void checkScalar(float scalar);
 };
+
+// overloader for << operator
+std::ostream& operator<<(std::ostream& os, const Vector2& vec);
+
 } // namespace SE
