@@ -1,7 +1,6 @@
 #include "headers/CollisionDetection.h"
 
 #include <algorithm>
-#include <iostream>
 #include <memory>
 
 #include "headers/CollisionPair.h"
@@ -9,6 +8,8 @@
 #include "headers/Objects.h"
 #include "headers/Types.h"
 #include "headers/Vector2.h"
+
+// TODO: MORE TO SAT
 
 namespace SE {
 

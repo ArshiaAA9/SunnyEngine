@@ -3,6 +3,8 @@ todo.txt
 test/test.cpp
 test/test
 test/Makefile
+.cache
+
 
 compile_commands.json
 # Ignore all .o object files (anywhere)
