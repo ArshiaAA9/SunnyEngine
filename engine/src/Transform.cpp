@@ -18,7 +18,7 @@ void Transform::transform() {
     // go over vertices and transform them
     if (hasTransformed == false) {
         for (size_t i = 0; i < transformedVertices.size(); i++) {
-            transformedVertices[i] = rotate(vertices[i]);
+            transformedVertices[i] = rotate(vertices[i]) + position;
         }
         hasTransformed = true;
     }
@@ -54,10 +54,7 @@ Vector2 Transform::rotate(Vector2 vector) {
     float rx = vector.x * this->cosValue - vector.y * this->sinValue;
     float ry = vector.x * this->sinValue + vector.y * this->cosValue;
 
-    float tx = rx + position.x;
-    float ty = ry + position.y;
-
-    return Vector2(tx, ty);
+    return Vector2(rx, ry);
 }
 
 } // namespace SE
