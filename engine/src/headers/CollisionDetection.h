@@ -22,7 +22,7 @@ public:
     // returns a pointer to collisionpair vector
     const std::vector<std::unique_ptr<CollisionPair>>& getClPairs() const;
 
-    void addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth);
+    void addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth, Vector2 normal);
     void deleteClPair(CollisionPair* pair);
 
     GridPartition m_grid;

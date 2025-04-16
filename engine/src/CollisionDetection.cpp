@@ -101,12 +101,13 @@ void CollisionDetection::clCircleCircle(ObjectPtr c1, ObjectPtr c2) {
     if (distance <= (c1r + c2r)) {
         float depth = (c1r + c2r) - distance;
         // calculating pointA pointB:
-        Vector2 direction = c1->transform.position - c2->transform.position; // finding direction from c1 to c2
-        direction.normalize();                                               // normalizing the vector
+        // FIX: FIX THIS IF THERE IS A ISSUE WITH COLLISION RESOLUTION OF CIRCLES
+        Vector2 direction = c1->transform.position - c2->transform.position;
+        direction.normalize();
 
         Vector2 pointA = c1->transform.position - direction * c1r;
         Vector2 pointB = c2->transform.position - direction * c2r;
-        addClPair(c1, pointA, c2, pointB, depth);
+        addClPair(c1, pointA, c2, pointB, depth, direction);
     }
 }
 
@@ -138,7 +139,7 @@ void CollisionDetection::clCircleRect(ObjectPtr c, ObjectPtr rect) {
 
         Vector2 pointA = cPos - direction * r;
         Vector2 pointB = p;
-        addClPair(c, pointA, rect, pointB, penDepth);
+        addClPair(c, pointA, rect, pointB, penDepth, direction);
     }
 }
 
@@ -157,6 +158,7 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
         Vector2 edge = vertex2 - vertex1;
         if (edge.squaredMagnitude() < 1e-8) continue;
         Vector2 axis = Vector2(edge.y, -edge.x);
+        axis.normalize();
 
         Vector2 minMaxA = satProject(verticesA, axis);
         Vector2 minMaxB = satProject(verticesB, axis);
@@ -177,6 +179,7 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
         Vector2 edge = vertex2 - vertex1;
         if (edge.squaredMagnitude() < 1e-8) continue;
         Vector2 axis = Vector2(edge.y, -edge.x);
+        axis.normalize();
 
         Vector2 minMaxA = satProject(verticesA, axis);
         Vector2 minMaxB = satProject(verticesB, axis);
@@ -188,8 +191,11 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
             collisionNormal = axis;
         }
     }
+    Vector2 dir = r1->transform.position - r2->transform.position;
+    if (dir.dotProduct(collisionNormal) < 0) {
+        collisionNormal.invert(); // Flip direction if needed
+    }
 
-    // 2. Find deepest point on A (max projection)
     Vector2 pointA;
     float maxProjA = -INFINITY;
     for (auto& vertex : verticesA) {
@@ -200,7 +206,6 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
         }
     }
 
-    // 3. Find deepest point on B (min projection)
     Vector2 pointB;
     float minProjB = INFINITY;
     for (auto& vertex : verticesB) {
@@ -210,8 +215,9 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
             pointB = vertex;
         }
     }
+
     float penDepth = minOverlap;
-    addClPair(r1, pointA, r2, pointB, penDepth);
+    addClPair(r1, pointA, r2, pointB, penDepth, collisionNormal);
     std::cout << "SAT SUCCESFULL!";
 }
 
@@ -254,15 +260,18 @@ void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
         // Calculate overlap on both axes
         float overlapX = std::min(r1Right, r2Right) - std::max(r1Left, r2Left);
         float overlapY = std::min(r1Top, r2Top) - std::max(r1Bot, r2Bot);
+        Vector2 normal;
 
         Vector2 pointA, pointB;
         float penDepth;
         // the collision is primarily on smaller overlap
         if (overlapX < overlapY) { // if X axis collision:
             if (r1Pos.x > r2Pos.x) {
+                normal = Vector2(1, 0);
                 pointA = Vector2(r1Left, r1Pos.y);
                 pointB = Vector2(r2Right, r2Pos.y);
             } else {
+                normal = Vector2(-1, 0);
                 pointA = Vector2(r1Right, r1Pos.y);
                 pointB = Vector2(r2Left, r2Pos.y);
             }
@@ -271,27 +280,38 @@ void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
             if (r1Pos.y > r2Pos.y) { // if Y axis collision:
                 pointA = Vector2(r1Pos.x, r1Bot);
                 pointB = Vector2(r2Pos.x, r2Top);
+                normal = Vector2(0, 1);
             } else {
+                normal = Vector2(0, -1);
                 pointA = Vector2(r1Pos.x, r1Top);
                 pointB = Vector2(r2Pos.x, r2Bot);
             }
             penDepth = overlapY;
         }
-        addClPair(r1, pointA, r2, pointB, penDepth);
+        addClPair(r1, pointA, r2, pointB, penDepth, normal);
     }
 }
 
 void CollisionDetection::clRectRect(ObjectPtr r1, ObjectPtr r2) {
-    if (r1->transform.angle != 0 || r2->transform.angle != 0) {
+    // NOTE: NO CLUE WHAT THSI DOES, SHOUTOUT TO AI
+    const float PI_OVER_2 = static_cast<float>(M_PI) / 2.0f;
+    const float EPSILON = 1e-5f;
+
+    auto isRotated = [PI_OVER_2, EPSILON](float angle) { return std::abs(std::fmod(angle, PI_OVER_2)) > EPSILON; };
+
+    if (isRotated(r1->transform.angle) || isRotated(r2->transform.angle)) {
         sat(r1, r2);
-    } else
+    } else {
         aabb(r1, r2);
+    }
 }
 
 // interfaces:
 // adds collisions pairs to the m_collisionPair member
-void CollisionDetection::addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth) {
-    std::unique_ptr<CollisionPair> collisionPair = std::make_unique<CollisionPair>(obj1, pointA, obj2, pointB, depth);
+void CollisionDetection::addClPair(
+    ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth, Vector2 normal) {
+    std::unique_ptr<CollisionPair> collisionPair =
+        std::make_unique<CollisionPair>(obj1, pointA, obj2, pointB, depth, normal);
     m_collisionPairs.push_back(std::move(collisionPair));
 }
 

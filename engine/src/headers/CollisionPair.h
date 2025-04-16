@@ -14,21 +14,14 @@ struct CollisionPair {
     Vector2 pointB; // deepest point of object B in object A
     Vector2 normal;
     float depth;
-    bool hasCollision;
 
-    CollisionPair(ObjectPtr obj1, Vector2 PointA, ObjectPtr obj2, Vector2 PointB, float depth, bool hasCol = true)
+    CollisionPair(ObjectPtr obj1, Vector2 PointA, ObjectPtr obj2, Vector2 PointB, float depth, Vector2 normal)
         : objectA(obj1)
         , pointA(PointA)
         , objectB(obj2)
         , pointB(PointB)
         , depth(depth)
-        , hasCollision(hasCol) {
-        normal = objectA->transform.position - objectB->transform.position;
-        normal.normalize(); // gives a direction from B to A where Object A is the one that has to be moved
-        // std::cout << " normal: " << normal.x << ',' << normal.y << " pointA:" << pointA.x << ','
-        //          << pointA.y << " pointB " << pointB.x << ',' << pointB.y << " depth: " << depth
-        //          << '\n';
-    }
+        , normal(normal) {}
 
     ~CollisionPair() = default;
 };
