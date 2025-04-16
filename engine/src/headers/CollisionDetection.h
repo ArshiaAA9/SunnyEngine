@@ -36,8 +36,9 @@ private:
 
     void clCircleRect(ObjectPtr obj1, ObjectPtr obj2);
 
-    bool aabb(ObjectPtr obj1, ObjectPtr obj2);
-    bool sat(ObjectPtr obj1, ObjectPtr obj2);
+    void aabb(ObjectPtr obj1, ObjectPtr obj2);
+    void sat(ObjectPtr obj1, ObjectPtr obj2);
+    Vector2 satProject(std::vector<Vector2>& vertices, Vector2 axis);
 
     void clRectRect(ObjectPtr obj1, ObjectPtr obj2);
 };

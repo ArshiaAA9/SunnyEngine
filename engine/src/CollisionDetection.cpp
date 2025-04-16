@@ -1,15 +1,15 @@
 #include "headers/CollisionDetection.h"
 
 #include <algorithm>
-#include <memory>
+#include <cmath>
+#include <vector>
 
-#include "headers/CollisionPair.h"
 #include "headers/GridPartition.h"
 #include "headers/Objects.h"
 #include "headers/Types.h"
 #include "headers/Vector2.h"
 
-// TODO: MORE TO SAT
+// TODO: IMPLEMENT SAT
 
 namespace SE {
 
@@ -142,7 +142,94 @@ void CollisionDetection::clCircleRect(ObjectPtr c, ObjectPtr rect) {
     }
 }
 
-bool CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
+// used for polygons
+void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
+    auto& verticesA = r1->transform.transformedVertices;
+    auto& verticesB = r2->transform.transformedVertices;
+    float minOverlap = INFINITY; // used to find penDepth
+    Vector2 collisionNormal;
+
+    // first polygon
+    for (size_t i = 0; i < verticesA.size(); i++) {
+        Vector2 vertex1 = verticesA[i];
+        Vector2 vertex2 = verticesA[(i + 1) % verticesA.size()]; // use modulu operator to avoid out of bound
+
+        Vector2 edge = vertex2 - vertex1;
+        if (edge.squaredMagnitude() < 1e-8) continue;
+        Vector2 axis = Vector2(edge.y, -edge.x);
+
+        Vector2 minMaxA = satProject(verticesA, axis);
+        Vector2 minMaxB = satProject(verticesB, axis);
+        float overlap = std::min(minMaxA.y, minMaxB.y) - std::max(minMaxA.x, minMaxB.x);
+
+        if (minMaxA.x >= minMaxB.y || minMaxB.x >= minMaxA.y) return;
+        if (overlap < minOverlap) {
+            minOverlap = overlap;
+            collisionNormal = axis;
+        }
+    }
+
+    // second polygon
+    for (size_t i = 0; i < verticesB.size(); i++) {
+        Vector2 vertex1 = verticesB[i];
+        Vector2 vertex2 = verticesB[(i + 1) % verticesB.size()]; // use modulu operator to avoid out of bound
+
+        Vector2 edge = vertex2 - vertex1;
+        if (edge.squaredMagnitude() < 1e-8) continue;
+        Vector2 axis = Vector2(edge.y, -edge.x);
+
+        Vector2 minMaxA = satProject(verticesA, axis);
+        Vector2 minMaxB = satProject(verticesB, axis);
+        float overlap = std::min(minMaxA.y, minMaxB.y) - std::max(minMaxA.x, minMaxB.x);
+
+        if (minMaxA.x >= minMaxB.y || minMaxB.x >= minMaxA.y) return;
+        if (overlap < minOverlap) {
+            minOverlap = overlap;
+            collisionNormal = axis;
+        }
+    }
+
+    // 2. Find deepest point on A (max projection)
+    Vector2 pointA;
+    float maxProjA = -INFINITY;
+    for (auto& vertex : verticesA) {
+        float proj = vertex.dotProduct(collisionNormal);
+        if (proj > maxProjA) {
+            maxProjA = proj;
+            pointA = vertex;
+        }
+    }
+
+    // 3. Find deepest point on B (min projection)
+    Vector2 pointB;
+    float minProjB = INFINITY;
+    for (auto& vertex : verticesB) {
+        float proj = vertex.dotProduct(collisionNormal);
+        if (proj < minProjB) {
+            minProjB = proj;
+            pointB = vertex;
+        }
+    }
+    float penDepth = minOverlap;
+    addClPair(r1, pointA, r2, pointB, penDepth);
+    std::cout << "SAT SUCCESFULL!";
+}
+
+Vector2 CollisionDetection::satProject(std::vector<Vector2>& vertices, Vector2 axis) {
+    float min = INFINITY;
+    float max = -INFINITY;
+
+    for (size_t i = 0; i < vertices.size(); i++) {
+        Vector2 vertex = vertices[i];
+        float projection = vertex.dotProduct(axis);
+
+        min = std::min(min, projection);
+        max = std::max(max, projection);
+    }
+    return Vector2(min, max);
+}
+
+void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
     Vector2 r1Pos = r1->transform.position;
     Vector2 r2Pos = r2->transform.position;
 
@@ -162,29 +249,7 @@ bool CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
     float r2Top = r2Pos.y + halfHeight2;
     float r2Bot = r2Pos.y - halfHeight2;
 
-    return (r1Left <= r2Right && r1Right >= r2Left && r1Bot <= r2Top && r1Top >= r2Bot);
-}
-
-void CollisionDetection::clRectRect(ObjectPtr r1, ObjectPtr r2) {
-    if (aabb(r1, r2)) {
-        Vector2 r1pos = r1->transform.position;
-        Vector2 r2pos = r2->transform.position;
-
-        float r1halfWidth = r1->getDimensions().x / 2.0f;
-        float r1halfHeight = r1->getDimensions().y / 2.0f;
-
-        float r2halfWidth = r2->getDimensions().x / 2.0f;
-        float r2halfHeight = r2->getDimensions().y / 2.0f;
-
-        float r1Left = r1->transform.position.x - r1halfWidth;
-        float r1Right = r1->transform.position.x + r1halfWidth;
-        float r1Top = r1->transform.position.y + r1halfHeight;
-        float r1Bot = r1->transform.position.y - r1halfHeight;
-
-        float r2Left = r2->transform.position.x - r2halfWidth;
-        float r2Right = r2->transform.position.x + r2halfWidth;
-        float r2Top = r2->transform.position.y + r2halfHeight;
-        float r2Bot = r2->transform.position.y - r2halfHeight;
+    if (r1Left <= r2Right && r1Right >= r2Left && r1Bot <= r2Top && r1Top >= r2Bot) {
 
         // Calculate overlap on both axes
         float overlapX = std::min(r1Right, r2Right) - std::max(r1Left, r2Left);
@@ -194,26 +259,33 @@ void CollisionDetection::clRectRect(ObjectPtr r1, ObjectPtr r2) {
         float penDepth;
         // the collision is primarily on smaller overlap
         if (overlapX < overlapY) { // if X axis collision:
-            if (r1pos.x > r2pos.x) {
-                pointA = Vector2(r1Left, r1pos.y);
-                pointB = Vector2(r2Right, r2pos.y);
+            if (r1Pos.x > r2Pos.x) {
+                pointA = Vector2(r1Left, r1Pos.y);
+                pointB = Vector2(r2Right, r2Pos.y);
             } else {
-                pointA = Vector2(r1Right, r1pos.y);
-                pointB = Vector2(r2Left, r2pos.y);
+                pointA = Vector2(r1Right, r1Pos.y);
+                pointB = Vector2(r2Left, r2Pos.y);
             }
             penDepth = overlapX;
         } else {
-            if (r1pos.y > r2pos.y) { // if Y axis collision:
-                pointA = Vector2(r1pos.x, r1Bot);
-                pointB = Vector2(r2pos.x, r2Top);
+            if (r1Pos.y > r2Pos.y) { // if Y axis collision:
+                pointA = Vector2(r1Pos.x, r1Bot);
+                pointB = Vector2(r2Pos.x, r2Top);
             } else {
-                pointA = Vector2(r1pos.x, r1Top);
-                pointB = Vector2(r2pos.x, r2Bot);
+                pointA = Vector2(r1Pos.x, r1Top);
+                pointB = Vector2(r2Pos.x, r2Bot);
             }
             penDepth = overlapY;
         }
         addClPair(r1, pointA, r2, pointB, penDepth);
     }
+}
+
+void CollisionDetection::clRectRect(ObjectPtr r1, ObjectPtr r2) {
+    if (r1->transform.angle != 0 || r2->transform.angle != 0) {
+        sat(r1, r2);
+    } else
+        aabb(r1, r2);
 }
 
 // interfaces:
@@ -235,4 +307,5 @@ void CollisionDetection::deleteClPair(CollisionPair* pair) {
 
 /**@return a constant reference to m_collisionPairs*/
 const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const { return m_collisionPairs; }
+
 } // namespace SE
