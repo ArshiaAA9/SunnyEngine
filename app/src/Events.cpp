@@ -71,18 +71,21 @@ void Events::keydownEvents() {
 void Events::mouseButtonUpEvents() {
     float mx = m_sdlEvent.button.x;
     float my = m_sdlEvent.button.y;
-    SDL_FColor color = {0, 0, 255, 1};
+    SDL_FColor rColor = {0, 0, 255, 255};
+    SDL_FColor cColor = {255, 0, 0, 255};
     switch (m_sdlEvent.button.button) {
         case SDL_BUTTON_LEFT:
-            createRectOnMousePos(mx, my, 5, 50, 50, color);
+            createRectOnMousePos(mx, my, 5, 50, 50, rColor);
             break;
         case SDL_BUTTON_RIGHT:
-            createRectOnMousePos(mx, my, 2, 10, 10);
+            my = m_sdl.renderer.getWindowHeight() - my;
+            m_game.createCircle(mx, my, 5, 20, cColor);
             break;
     }
 }
 
-void Events::createRectOnMousePos(float mx, float my, float m, float width, float height, SDL_FColor color) {
+void Events::createRectOnMousePos(float mx, float my, float m, float width, float height,
+                                  SDL_FColor color) {
     // doing this cause createRect does same thing to reverse the y axis
     my = m_sdl.renderer.getWindowHeight() - my;
     m_game.createRect(mx, my, m, width, height, color, 0);

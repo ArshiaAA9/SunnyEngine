@@ -48,11 +48,13 @@ private:
     // clears screen to white
     void clearScreen();
 
-    // used to draw filled rects
-    void drawColoredRect(const ObjectPtr object, SDL_FColor color);
-    void drawRotatedRect2(const ObjectPtr object, SDL_FColor color);
+    // used to draw rects
+    void drawRect(const ObjectPtr object, SDL_FColor color);
+    void drawFilledRect(const ObjectPtr object, SDL_FColor color);
+    void drawRotatedRect(const ObjectPtr object, SDL_FColor color);
+    void drawRotatedFilledRect(const ObjectPtr object, SDL_FColor color);
 
-    void drawColoredCircle(const ObjectPtr object, SDL_FColor color);
+    void drawCircle(const ObjectPtr object, SDL_FColor color);
     void drawRotatedCircle(const ObjectPtr object, SDL_FColor color);
     // used to show the living objects count in the simulation
     void renderObjectCount(int count);

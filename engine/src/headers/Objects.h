@@ -42,8 +42,8 @@ struct Object {
         , mass(mass)
         , type(type)
         , velocity(0, 0)
-        , force(0, 0) {
-        std::cout << "creating non-static object;" << std::endl;
+        , force(0, 0)
+        , isStatic(false) {
         checkValidValues();
         invertedMass = 1.0f / mass;
     }
@@ -56,7 +56,6 @@ struct Object {
         , velocity(0, 0)
         , force(0, 0)
         , isStatic(true) {
-        std::cout << "creating static object" << std::endl;
         invertedMass = 0;
     }
 

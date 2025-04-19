@@ -19,9 +19,12 @@ void Renderer::update(PhysicsWorld& world) {
     // TODO: change this to use shape specific functions
     for (const auto& [obj, color] : m_renderMap) {
         if (obj->getType() == RECT)
-            drawRotatedRect2(obj, color);
+            if (obj->isStatic)
+                drawRotatedFilledRect(obj, color);
+            else
+                drawRotatedRect(obj, color);
         else
-            drawColoredCircle(obj, color);
+            drawCircle(obj, color);
         objectCount++;
     }
     renderObjectCount(objectCount);
@@ -59,7 +62,22 @@ void Renderer::clearScreen() {
     SDL_RenderClear(m_renderer);
 }
 
-void Renderer::drawColoredRect(const ObjectPtr object, SDL_FColor color) {
+void Renderer::drawRect(const ObjectPtr object, SDL_FColor color) {
+    // draws a rectangle using a object pointer and a SDL_Color
+    SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
+    // sdl_rect takes position as topleft point of rect
+    float width = object->getDimensions().w;
+    float height = object->getDimensions().h;
+    Vector2 pos = object->transform.position;
+    SDL_FRect rect;
+    rect.x = pos.x - width / 2;
+    rect.y = m_windowHeight - pos.y - height / 2;
+    rect.w = width;
+    rect.h = height;
+    SDL_RenderRect(m_renderer, &rect);
+}
+
+void Renderer::drawFilledRect(const ObjectPtr object, SDL_FColor color) {
     // draws a rectangle using a object pointer and a SDL_Color
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     // sdl_rect takes position as topleft point of rect
@@ -74,7 +92,21 @@ void Renderer::drawColoredRect(const ObjectPtr object, SDL_FColor color) {
     SDL_RenderFillRect(m_renderer, &rect);
 }
 
-void Renderer::drawRotatedRect2(const ObjectPtr object, SDL_FColor color) {
+void Renderer::drawRotatedRect(const ObjectPtr object, SDL_FColor color) {
+    SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
+    std::array<SDL_FPoint, 5> points;
+    for (size_t i = 0; i < 4; i++) {
+        points[i].x = object->transform.transformedVertices[i].x;
+        points[i].y = m_windowHeight - object->transform.transformedVertices[i].y;
+    }
+    points[4].x = object->transform.transformedVertices[0].x;
+    points[4].y = m_windowHeight - object->transform.transformedVertices[0].y;
+
+    SDL_RenderLines(m_renderer, points.data(), 5);
+}
+
+void Renderer::drawRotatedFilledRect(const ObjectPtr object, SDL_FColor color) {
+    SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     std::array<SDL_Vertex, 4> vertices;
     // std::cout << " position:" << object->transform.position << " (width,height)" <<
     // object->getDimensions() << '\n';
@@ -93,7 +125,7 @@ void Renderer::drawRotatedRect2(const ObjectPtr object, SDL_FColor color) {
     SDL_RenderGeometry(m_renderer, nullptr, vertices.data(), 4, indices, 6);
 }
 
-void Renderer::drawColoredCircle(ObjectPtr object, SDL_FColor color) {
+void Renderer::drawCircle(ObjectPtr object, SDL_FColor color) {
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     int r = static_cast<int>(std::round(object->getDimensions().r));
     int cx = static_cast<int>(std::round(object->transform.position.x));
@@ -122,7 +154,6 @@ void Renderer::drawColoredCircle(ObjectPtr object, SDL_FColor color) {
             x--;
             error += 2 * (y - x) + 1; // Diagonal move
         }
-        std::cout << "printed\n";
     }
 }
 

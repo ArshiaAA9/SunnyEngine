@@ -9,22 +9,22 @@
 using namespace SE;
 
 int Game::start() {
-    m_world.setGravity(Vector2(0, -30));
+    m_world.setGravity(Vector2(0, -50));
     float dt = 1.0f / 60.0f;
     float delay = 1000.0f / 60.0f;
     ObjectPtr rect1;
-    ObjectPtr rect2;
-    ObjectPtr rect3;
-    ObjectPtr rect4;
     ObjectPtr circle;
-    SDL_FColor color = {0, 255, 0, 255};
-    SDL_FColor staticObjectColor = {0, 0, 255, 255};
-    rect1 = createRect(100, 250.5, 1, 50, 100, color, 0);
-    circle = createCircle(100, 150, 1, 50, color, 0);
 
-    rect2 = createStaticRect(0, 250, 10, 450, staticObjectColor, 0);
-    rect3 = createStaticRect(995, 250, 10, 450, staticObjectColor, 0);
-    rect4 = createStaticRect(500, 0, 1000, 10, staticObjectColor, 0);
+    SDL_FColor circleColor = {0, 0, 255, 255};
+    SDL_FColor rectColor = {0, 255, 0, 255};
+    SDL_FColor staticObjectColor = {0, 0, 255, 255};
+
+    rect1 = createRect(100, 250, 1, 50, 50, rectColor, 0);
+    circle = createCircle(100, 150, 1, 40, circleColor, 0);
+
+    createStaticRect(5, 250, 10, 479, staticObjectColor, 0);
+    createStaticRect(995, 250, 10, 479, staticObjectColor, 0);
+    createStaticRect(500, 5, 1000, 10, staticObjectColor, 0);
 
     setMainObject(rect1);
     m_world.cD.m_grid.updateCellDimensions();

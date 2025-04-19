@@ -62,8 +62,8 @@ void CollisionDetection::checkCollisions() {
                         // Check all object pairs between current and neighbor cell
                         for (auto& obj1 : objectsInCell) {
                             for (auto& obj2 : pNeighborObjectsInCell) {
-                                checkCollisionByType(
-                                    obj1, obj2); // .get() to get pointers to object from unique_ptr
+                                checkCollisionByType(obj1, obj2); // .get() to get pointers to
+                                                                  // object from unique_ptr
                             }
                         }
                     }
@@ -81,9 +81,9 @@ void CollisionDetection::checkCollisionByType(ObjectPtr obj1, ObjectPtr obj2) {
     } else if (obj1->getType() == CIRCLE && obj2->getType() == CIRCLE) { // Circle-Circle
         clCircleCircle(obj1, obj2);
 
-    } else if (
-        (obj1->getType() == RECT && obj2->getType() == CIRCLE) ||
-        (obj1->getType() == CIRCLE && obj2->getType() == RECT)) { // Rect-Circle or Circle-Rect
+    } else if ((obj1->getType() == RECT && obj2->getType() == CIRCLE) ||
+               (obj1->getType() == CIRCLE &&
+                obj2->getType() == RECT)) { // Rect-Circle or Circle-Rect
 
         // Ensure the first object is always the circle
         if (obj1->type == CIRCLE) {
@@ -113,6 +113,7 @@ void CollisionDetection::clCircleCircle(ObjectPtr c1, ObjectPtr c2) {
     }
 }
 
+// FIX: DOESNT WORK WITH ROTATED OBJECTS CAUSE OF ROTATED WIDTH HEIGHT
 // Circle vs. Rectangle Collision Detection
 void CollisionDetection::clCircleRect(ObjectPtr c, ObjectPtr rect) {
     Vector2 cPos = c->transform.position;
@@ -238,6 +239,7 @@ Vector2 CollisionDetection::satProject(std::vector<Vector2>& vertices, Vector2 a
     return Vector2(min, max);
 }
 
+// FIX: DOESNT WORK WITH ROTATED OBJECTS CAUSE OF ROTATED WIDTH HEIGHT
 void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
     Vector2 r1Pos = r1->transform.position;
     Vector2 r2Pos = r2->transform.position;
@@ -304,8 +306,8 @@ void CollisionDetection::clRectRect(ObjectPtr r1, ObjectPtr r2) {
 
 // interfaces:
 // adds collisions pairs to the m_collisionPair member
-void CollisionDetection::addClPair(
-    ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth, Vector2 normal) {
+void CollisionDetection::addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB,
+                                   float depth, Vector2 normal) {
     std::unique_ptr<CollisionPair> collisionPair =
         std::make_unique<CollisionPair>(obj1, pointA, obj2, pointB, depth, normal);
     m_collisionPairs.push_back(std::move(collisionPair));
@@ -314,9 +316,10 @@ void CollisionDetection::addClPair(
 // deletes a pair from m_collisionPair member
 void CollisionDetection::deleteClPair(CollisionPair* pair) {
     if (!pair) return;
-    auto itr = std::find_if(
-        m_collisionPairs.begin(), m_collisionPairs.end(),
-        [pair](const std::unique_ptr<CollisionPair>& ptr) { return ptr.get() == pair; });
+    auto itr = std::find_if(m_collisionPairs.begin(), m_collisionPairs.end(),
+                            [pair](const std::unique_ptr<CollisionPair>& ptr) {
+                                return ptr.get() == pair;
+                            });
     if (itr == m_collisionPairs.end()) return;
     m_collisionPairs.erase(itr);
 }

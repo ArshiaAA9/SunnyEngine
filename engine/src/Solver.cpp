@@ -1,14 +1,11 @@
 #include "headers/Solver.h"
 
-#include <iostream>
-#include <ostream>
-
 #include "headers/Physics.h"
 #include "headers/Types.h"
 #include "headers/Vector2.h"
 
 // TODO: IMPLEMENT ANGULAR VELOCIRTY AND ROTATIONALA SOLVER
-
+// FIX: SOLVER A BIT GLITCHY
 namespace SE {
 void Solver::solveCollisionPairs() {
     auto& clPairs = m_world.cD.getClPairs();

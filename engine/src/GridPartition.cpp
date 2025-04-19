@@ -43,8 +43,6 @@ void GridPartition::updateCells() {
         if (col >= 0 && col <= colnum && row >= 0 && row <= rownum) {
             m_cellObjects[col][row].push_back(obj);
             // std::cout << "adding object\n";
-        } else {
-            // std::cout << "not adding object\n";
         }
     }
 }
