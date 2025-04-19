@@ -147,7 +147,6 @@ void CollisionDetection::clCircleRect(ObjectPtr c, ObjectPtr rect) {
 
 // used for polygons
 void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
-    std::cout << "SAT\n";
     auto& verticesA = r1->transform.transformedVertices;
     auto& verticesB = r2->transform.transformedVertices;
     float minOverlap = INFINITY; // used to find penDepth
@@ -240,7 +239,6 @@ Vector2 CollisionDetection::satProject(std::vector<Vector2>& vertices, Vector2 a
 }
 
 void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
-    std::cout << "AABB\n";
     Vector2 r1Pos = r1->transform.position;
     Vector2 r2Pos = r2->transform.position;
 
@@ -298,7 +296,6 @@ void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
 
 void CollisionDetection::clRectRect(ObjectPtr r1, ObjectPtr r2) {
     if (r1->transform.angle == 0 && r2->transform.angle == 0) {
-        std::cout << "angle1: " << r1->transform.angle << " angle: " << r2->transform.angle << '\n';
         aabb(r1, r2);
     } else {
         sat(r1, r2);

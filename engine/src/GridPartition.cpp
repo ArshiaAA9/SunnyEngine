@@ -12,15 +12,12 @@ void GridPartition::updateCellDimensions() {
     // used to update maxH and maxW
     auto& allObjects = m_world.Handler.getObjects();
     for (auto& obj : allObjects) {
-        // x = width y = height
-        Dimensions heighWidth = obj->getDimensions();
+        Dimensions dimensions = obj->getDimensions();
         if (obj->type == RECT) {
-
-            if (heighWidth.w > cellWidth) cellWidth = heighWidth.w;
-            if (heighWidth.w > cellHeight) cellHeight = heighWidth.w;
+            if (dimensions.w > cellWidth) cellWidth = dimensions.w;
+            if (dimensions.h > cellHeight) cellHeight = dimensions.h;
         } else if (obj->type == CIRCLE) {
-            // y = diameter
-            float radius = heighWidth.r;
+            float radius = dimensions.r;
             if (radius > cellWidth) cellWidth = radius;
             if (radius > cellHeight) cellHeight = radius;
         }
@@ -35,16 +32,19 @@ void GridPartition::updateCells() {
     deleteAllObject();
 
     // loops over all object&s in world and adds them to a cell
+    // std::cout << "cellWidth: " << cellWidth << " cellHeight: " << cellHeight << '\n';
     for (auto& obj : m_world.Handler.getObjects()) {
         Vector2 objPos = obj->transform.position;
         int col = static_cast<int>(objPos.x / cellWidth);
         int row = static_cast<int>(objPos.y / cellHeight);
-
+        // std::cout << "col: " << col << " colnum: " << colnum << "\nrow: " << row
+        //           << " rownum:" << rownum << '\n';
         // checks for out of bound
-        if (col >= 0 && col < colnum && row >= 0 && row < rownum) {
-            // std::cout << "col " << col << " row: " << row << '\n';
+        if (col >= 0 && col <= colnum && row >= 0 && row <= rownum) {
             m_cellObjects[col][row].push_back(obj);
-            // logAllObjects();
+            // std::cout << "adding object\n";
+        } else {
+            // std::cout << "not adding object\n";
         }
     }
 }
@@ -76,8 +76,9 @@ void GridPartition::logAllObjects() {
     std::cout << " Count: " << count << '\n';
 }
 
-// private methods:
 const std::vector<ObjectPtr>& GridPartition::getObjectInCell(int col, int row) const {
     return m_cellObjects[col][row];
 }
+
+// private methods:
 } // namespace SE

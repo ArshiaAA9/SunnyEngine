@@ -1,6 +1,5 @@
 #include "headers/Game.h"
 
-#include <algorithm>
 #include <cmath>
 #include <iostream>
 
@@ -10,24 +9,31 @@
 using namespace SE;
 
 int Game::start() {
-    m_world.setGravity(Vector2(0, 0));
+    m_world.setGravity(Vector2(0, -30));
     float dt = 1.0f / 60.0f;
     float delay = 1000.0f / 60.0f;
     ObjectPtr rect1;
     ObjectPtr rect2;
+    ObjectPtr rect3;
+    ObjectPtr rect4;
+    ObjectPtr circle;
     SDL_FColor color = {0, 255, 0, 255};
+    SDL_FColor staticObjectColor = {0, 0, 255, 255};
     rect1 = createRect(100, 250.5, 1, 50, 100, color, 0);
-    rect2 = createStaticRect(100, 150, 100, 100, color, 0);
+    circle = createCircle(100, 150, 1, 50, color, 0);
+
+    rect2 = createStaticRect(0, 250, 10, 450, staticObjectColor, 0);
+    rect3 = createStaticRect(995, 250, 10, 450, staticObjectColor, 0);
+    rect4 = createStaticRect(500, 0, 1000, 10, staticObjectColor, 0);
 
     setMainObject(rect1);
+    m_world.cD.m_grid.updateCellDimensions();
     m_world.step(dt);
 
     // main loop
     while (m_sdl.event.loop()) {
         // loopCount();
-        m_world.cD.m_grid.updateCellDimensions(); // FIX:THIS IS WHY THE RIGHT HALF DOESNT WORK
         m_world.step(dt);
-        rect1->printProperties();
         m_sdl.renderer.update(m_world);
         SDL_Delay(delay);
     }
@@ -49,8 +55,8 @@ int Game::test() {
 
 // test function
 void Game::rotateObject(ObjectPtr object, float amount) {
-    // std::cout << "position: " << object->transform.position << " angle: " << object->transform.angle << '\n';
-    // object->transform.printVertices();
+    // std::cout << "position: " << object->transform.position << " angle: " <<
+    // object->transform.angle << '\n'; object->transform.printVertices();
     object->transform.increaseAngle(amount);
     // std::cout << "angle: " << object->transform.angle << "\n";
     object->transform.transform();
@@ -73,14 +79,29 @@ void Game::moveObjectTo(ObjectPtr object, Vector2 position) { object->transform.
 
 void Game::stopObject(ObjectPtr object) { object->setVelocity(Vector2(0, 0)); }
 
-ObjectPtr Game::createRect(float x, float y, float mass, float width, float height, SDL_FColor color, float angle) {
+ObjectPtr Game::createRect(float x, float y, float mass, float width, float height,
+                           SDL_FColor color, float angle) {
     ObjectPtr pObject = m_world.Handler.createRectObj(x, y, mass, width, height, angle);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;
 }
 
-ObjectPtr Game::createStaticRect(float x, float y, float width, float height, SDL_FColor color, float angle) {
+ObjectPtr Game::createStaticRect(float x, float y, float width, float height, SDL_FColor color,
+                                 float angle) {
     ObjectPtr pObject = m_world.Handler.createStaticRect(x, y, width, height, angle);
+    m_sdl.renderer.addRenderPair(pObject, color);
+    return pObject;
+}
+
+ObjectPtr Game::createCircle(float x, float y, float mass, float radius, SDL_FColor color,
+                             float angle) {
+    ObjectPtr pObject = m_world.Handler.createCircleObj(x, y, mass, radius, angle);
+    m_sdl.renderer.addRenderPair(pObject, color);
+    return pObject;
+}
+
+ObjectPtr Game::createStaticCircle(float x, float y, float radius, SDL_FColor color, float angle) {
+    ObjectPtr pObject = m_world.Handler.createStaticCircle(x, y, radius, angle);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;
 }

@@ -43,6 +43,7 @@ struct Object {
         , type(type)
         , velocity(0, 0)
         , force(0, 0) {
+        std::cout << "creating non-static object;" << std::endl;
         checkValidValues();
         invertedMass = 1.0f / mass;
     }
@@ -55,6 +56,7 @@ struct Object {
         , velocity(0, 0)
         , force(0, 0)
         , isStatic(true) {
+        std::cout << "creating static object" << std::endl;
         invertedMass = 0;
     }
 
@@ -117,9 +119,17 @@ struct CircleObject : public Object {
     float radius;
 
     // constructor:
-    CircleObject(float x, float y, float mass, float radius, float angle = 0)
+    CircleObject(float x, float y, float mass, float radius, float angle)
         : Object(x, y, mass, CIRCLE, angle)
-        , radius(radius) {}
+        , radius(radius) {
+        checkValidDimensions();
+    }
+
+    CircleObject(float x, float y, float radius, float angle)
+        : Object(x, y, CIRCLE, angle)
+        , radius(radius) {
+        checkValidDimensions();
+    }
 
     ~CircleObject() = default;
 

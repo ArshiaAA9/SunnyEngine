@@ -18,7 +18,6 @@ public:
         , m_world(world) {
         rownum = gridHeight / cellHeight;
         colnum = gridWidth / cellWidth;
-
         // initialize the vector
         m_cellObjects.resize(static_cast<size_t>(colnum));
         for (auto& col : m_cellObjects) {
@@ -49,7 +48,8 @@ private:
     float cellWidth = 1.0f;
     float cellHeight = 1.0f;
 
-    // sucks but makes most sense first vector represent col 2nd row 3rd the cell with objects inside of it
+    // sucks but makes most sense first vector represent col 2nd row 3rd the cell with objects
+    // inside of it
     std::vector<std::vector<std::vector<ObjectPtr>>> m_cellObjects;
 };
 } // namespace SE

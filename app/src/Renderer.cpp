@@ -18,7 +18,10 @@ void Renderer::update(PhysicsWorld& world) {
 
     // TODO: change this to use shape specific functions
     for (const auto& [obj, color] : m_renderMap) {
-        drawColoredRect2(obj, color);
+        if (obj->getType() == RECT)
+            drawRotatedRect2(obj, color);
+        else
+            drawColoredCircle(obj, color);
         objectCount++;
     }
     renderObjectCount(objectCount);
@@ -71,7 +74,7 @@ void Renderer::drawColoredRect(const ObjectPtr object, SDL_FColor color) {
     SDL_RenderFillRect(m_renderer, &rect);
 }
 
-void Renderer::drawColoredRect2(const ObjectPtr object, SDL_FColor color) {
+void Renderer::drawRotatedRect2(const ObjectPtr object, SDL_FColor color) {
     std::array<SDL_Vertex, 4> vertices;
     // std::cout << " position:" << object->transform.position << " (width,height)" <<
     // object->getDimensions() << '\n';
@@ -88,6 +91,39 @@ void Renderer::drawColoredRect2(const ObjectPtr object, SDL_FColor color) {
     }
     const int indices[] = {1, 2, 3, 3, 0, 1};
     SDL_RenderGeometry(m_renderer, nullptr, vertices.data(), 4, indices, 6);
+}
+
+void Renderer::drawColoredCircle(ObjectPtr object, SDL_FColor color) {
+    SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
+    int r = static_cast<int>(std::round(object->getDimensions().r));
+    int cx = static_cast<int>(std::round(object->transform.position.x));
+    int cy = m_windowHeight - static_cast<int>(std::round(object->transform.position.y));
+
+    const int diameter = static_cast<int>(2 * r);
+    int x = r;
+    int y = 0;
+    int error = 1 - r;
+
+    while (x >= y) {
+        //  Each of the following renders an octant of the circle
+        SDL_RenderPoint(m_renderer, cx + x, cy - y);
+        SDL_RenderPoint(m_renderer, cx + x, cy + y);
+        SDL_RenderPoint(m_renderer, cx - x, cy - y);
+        SDL_RenderPoint(m_renderer, cx - x, cy + y);
+        SDL_RenderPoint(m_renderer, cx + y, cy - x);
+        SDL_RenderPoint(m_renderer, cx + y, cy + x);
+        SDL_RenderPoint(m_renderer, cx - y, cy - x);
+        SDL_RenderPoint(m_renderer, cx - y, cy + x);
+
+        y++;
+        if (error <= 0) {
+            error += 2 * y + 1; // Vertical move
+        } else {
+            x--;
+            error += 2 * (y - x) + 1; // Diagonal move
+        }
+        std::cout << "printed\n";
+    }
 }
 
 bool Renderer::initWindowAndRenderer() {

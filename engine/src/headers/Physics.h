@@ -1,14 +1,7 @@
 #pragma once
 
-#include <algorithm>
-#include <iostream>
-#include <vector>
-
 #include "CollisionDetection.h"
-#include "CollisionPair.h"
-#include "GridPartition.h"
 #include "ObjectHandler.h"
-#include "Objects.h"
 #include "Solver.h"
 #include "Vector2.h"
 
@@ -20,11 +13,11 @@ public:
     ObjectHandler Handler; // public cause handles Objects
 
     /**
-     *@param gridHeight simulations height
-     *@param gridWidth simulations width
+     *@param gridWidth simulations height
+     *@param griHeight simulations width
      *@return
      * */
-    PhysicsWorld(float gridHeight, float gridWidth)
+    PhysicsWorld(float gridWidth, float gridHeight)
         : cD(gridHeight, gridWidth, *this)
         , m_solver(*this)
         , Handler(*this) {}

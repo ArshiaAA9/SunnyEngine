@@ -35,7 +35,8 @@ public:
     // removes a pair from the map
     void deleteRenderPair(ObjectPtr);
     // returns a contsant reference to renderMap
-    const std::unordered_map<ObjectPtr, SDL_FColor>& getRenderMap(); // stores objects with a corresponding color
+    const std::unordered_map<ObjectPtr, SDL_FColor>&
+    getRenderMap(); // stores objects with a corresponding color
 
     SDL_Window* getWindow() const;
     SDL_Renderer* getRenderer() const;
@@ -49,15 +50,18 @@ private:
 
     // used to draw filled rects
     void drawColoredRect(const ObjectPtr object, SDL_FColor color);
-    void drawColoredRect2(const ObjectPtr object, SDL_FColor color);
+    void drawRotatedRect2(const ObjectPtr object, SDL_FColor color);
 
+    void drawColoredCircle(const ObjectPtr object, SDL_FColor color);
+    void drawRotatedCircle(const ObjectPtr object, SDL_FColor color);
     // used to show the living objects count in the simulation
     void renderObjectCount(int count);
 
     // initializes everything and member vars
     bool initWindowAndRenderer();
 
-    std::unordered_map<ObjectPtr, SDL_FColor> m_renderMap; // stores objects with a corresponding color
+    std::unordered_map<ObjectPtr, SDL_FColor>
+        m_renderMap; // stores objects with a corresponding color
 
     int m_windowWidth, m_windowHeight; // window width, height
     SDL_Window* m_window;              // window

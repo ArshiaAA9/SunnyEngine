@@ -14,8 +14,13 @@ public:
     int test();
 
     // used in Events class to create object dynamicly
-    ObjectPtr createRect(float x, float y, float mass, float width, float height, SDL_FColor color, float angle = 0);
-    ObjectPtr createStaticRect(float x, float y, float width, float height, SDL_FColor color, float angle = 0);
+    ObjectPtr createRect(float x, float y, float mass, float width, float height, SDL_FColor color,
+                         float angle = 0);
+    ObjectPtr createStaticRect(float x, float y, float width, float height, SDL_FColor color,
+                               float angle = 0);
+    ObjectPtr createCircle(float x, float y, float mass, float radius, SDL_FColor color,
+                           float angle = 0);
+    ObjectPtr createStaticCircle(float x, float y, float radius, SDL_FColor color, float angle = 0);
 
     void setMainObject(ObjectPtr object);
     ObjectPtr getMainObject();
