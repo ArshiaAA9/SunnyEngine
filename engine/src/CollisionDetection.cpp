@@ -261,7 +261,6 @@ void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
     float r2Bot = r2Pos.y - halfHeight2;
 
     if (r1Left <= r2Right && r1Right >= r2Left && r1Bot <= r2Top && r1Top >= r2Bot) {
-
         // Calculate overlap on both axes
         float overlapX = std::min(r1Right, r2Right) - std::max(r1Left, r2Left);
         float overlapY = std::min(r1Top, r2Top) - std::max(r1Bot, r2Bot);
@@ -298,18 +297,11 @@ void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
 }
 
 void CollisionDetection::clRectRect(ObjectPtr r1, ObjectPtr r2) {
-    // NOTE: NO CLUE WHAT THSI DOES, SHOUTOUT TO AI
-    const float PI_OVER_2 = static_cast<float>(M_PI) / 2.0f;
-    const float EPSILON = 1e-5f;
-
-    auto isRotated = [PI_OVER_2, EPSILON](float angle) {
-        return std::abs(std::fmod(angle, PI_OVER_2)) > EPSILON;
-    };
-
-    if (isRotated(r1->transform.angle) || isRotated(r2->transform.angle)) {
-        sat(r1, r2);
-    } else {
+    if (r1->transform.angle == 0 && r2->transform.angle == 0) {
+        std::cout << "angle1: " << r1->transform.angle << " angle: " << r2->transform.angle << '\n';
         aabb(r1, r2);
+    } else {
+        sat(r1, r2);
     }
 }
 

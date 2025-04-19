@@ -37,6 +37,7 @@ void Solver::solve(CollisionPair* pair) {
         // Position correction
         pair->objectA->transform.position += correctionA;
         pair->objectB->transform.position -= correctionB;
+        // }
     }
 }
 
