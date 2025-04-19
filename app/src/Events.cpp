@@ -64,7 +64,6 @@ void Events::keydownEvents() {
         case SDLK_F:
             // rotate button
             m_game.rotateObject(mainObj, M_PI / 20);
-            std::cout << "----------------------------------------------------------------------------\n";
             break;
     }
 }
@@ -75,7 +74,7 @@ void Events::mouseButtonUpEvents() {
     SDL_FColor color = {0, 0, 255, 1};
     switch (m_sdlEvent.button.button) {
         case SDL_BUTTON_LEFT:
-            createRectOnMousePos(mx, my, 10, 50, 50, color);
+            createRectOnMousePos(mx, my, 5, 50, 50, color);
             break;
         case SDL_BUTTON_RIGHT:
             createRectOnMousePos(mx, my, 2, 10, 10);

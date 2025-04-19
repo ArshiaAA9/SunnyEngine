@@ -1,10 +1,13 @@
 #include "headers/Solver.h"
 
 #include <iostream>
+#include <ostream>
 
 #include "headers/Physics.h"
 #include "headers/Types.h"
 #include "headers/Vector2.h"
+
+// TODO: IMPLEMENT ANGULAR VELOCIRTY AND ROTATIONALA SOLVER
 
 namespace SE {
 void Solver::solveCollisionPairs() {
@@ -23,18 +26,19 @@ void Solver::solve(CollisionPair* pair) {
     if (vrel < 0) { // if negative mean objects are moving into each other
         Vector2 j = calculateImpulse(pair, vrel);
         applyImpulse(pair, j);
+    } else if (vrel == 0) {
+        // position correction for when 2 objects have same velocity and coliding
+        float massA = pair->objectA->mass;
+        float massB = pair->objectB->mass;
+        float totalMass = massA + massB;
+
+        Vector2 correctionA = pair->normal * (pair->depth * (pair->objectB->mass / totalMass));
+        Vector2 correctionB = pair->normal * (pair->depth * (pair->objectA->mass / totalMass));
+
+        // Position correction
+        pair->objectA->transform.position += correctionA;
+        pair->objectB->transform.position -= correctionB;
     }
-    // position correction for when 2 objects have same velocity and coliding
-    float massA = pair->objectA->mass;
-    float massB = pair->objectB->mass;
-    float totalMass = massA + massB;
-
-    Vector2 correctionA = pair->normal * (pair->depth * (pair->objectB->mass / totalMass));
-    Vector2 correctionB = pair->normal * (pair->depth * (pair->objectA->mass / totalMass));
-
-    // Position correction
-    pair->objectA->transform.position += correctionA;
-    pair->objectB->transform.position -= correctionB;
 }
 
 float Solver::calculateRelativeVelocity(CollisionPair* pair) {
@@ -46,12 +50,12 @@ float Solver::calculateRelativeVelocity(CollisionPair* pair) {
 }
 
 Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
-    float m1 = pair->objectA->mass;
-    float m2 = pair->objectB->mass;
+    float invertM1 = pair->objectA->invertedMass;
+    float invertM2 = pair->objectB->invertedMass;
     Vector2 normal = pair->normal;
 
-    float impulse = -2.0f * vrel;
-    impulse /= 1.0f / m1 + 1.0f / m2;
+    float impulse = -2.0f * vrel; // -2 cause all bodies are elastic
+    impulse /= invertM1 + invertM2;
 
     return normal * impulse;
 }
@@ -59,9 +63,8 @@ Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
 void Solver::applyImpulse(CollisionPair* pair, Vector2 impulse) {
     ObjectPtr obj1 = pair->objectA;
     ObjectPtr obj2 = pair->objectB;
-    std::cout << " impulse: " << impulse.x << ',' << impulse.y << '\n';
 
-    obj1->velocity += impulse / obj1->mass;
-    obj2->velocity -= impulse / obj2->mass;
+    obj1->velocity += impulse * obj1->invertedMass;
+    obj2->velocity -= impulse * obj2->invertedMass;
 }
 } // namespace SE

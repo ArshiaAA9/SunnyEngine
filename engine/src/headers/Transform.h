@@ -12,7 +12,7 @@ public:
     Vector2 position;
     std::vector<Vector2> vertices;
     std::vector<Vector2> transformedVertices;
-    float angle = 0;
+    float angle;
     float sinValue;
     float cosValue;
 

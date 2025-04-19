@@ -17,9 +17,12 @@ int Game::start() {
     ObjectPtr rect2;
     SDL_FColor color = {0, 255, 0, 255};
     rect1 = createRect(100, 250, 1, 100, 100, color, 0);
-    rect2 = createRect(200.5, 250, 1, 100, 100, color, 0);
+    rect2 = createRect(250, 250, 900000000, 100, 100, color, 0);
 
     setMainObject(rect1);
+    m_world.step(dt);
+    rect1->transform.increaseAngle(M_PI / 4);
+    rect2->transform.increaseAngle(M_PI / 4);
 
     // main loop
     while (m_sdl.event.loop()) {
@@ -47,12 +50,12 @@ int Game::test() {
 
 // test function
 void Game::rotateObject(ObjectPtr object, float amount) {
-    std::cout << "position: " << object->transform.position << " angle: " << object->transform.angle << '\n';
-    object->transform.printVertices();
+    // std::cout << "position: " << object->transform.position << " angle: " << object->transform.angle << '\n';
+    // object->transform.printVertices();
     object->transform.increaseAngle(amount);
-    std::cout << "angle: " << object->transform.angle << "\n";
+    // std::cout << "angle: " << object->transform.angle << "\n";
     object->transform.transform();
-    object->transform.printVertices();
+    // object->transform.printVertices();
 }
 
 void Game::loopCount() {

@@ -9,8 +9,6 @@
 #include "headers/Types.h"
 #include "headers/Vector2.h"
 
-// TODO: IMPLEMENT SAT
-
 namespace SE {
 
 /**@brief Performs collision detection using a spatial grid partitioning system.
@@ -218,7 +216,6 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
 
     float penDepth = minOverlap;
     addClPair(r1, pointA, r2, pointB, penDepth, collisionNormal);
-    std::cout << "SAT SUCCESFULL!";
 }
 
 Vector2 CollisionDetection::satProject(std::vector<Vector2>& vertices, Vector2 axis) {

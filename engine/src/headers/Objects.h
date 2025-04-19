@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <ostream>
 
 #include "Transform.h"
 #include "Vector2.h"
@@ -14,18 +15,26 @@ struct Object {
     float mass;
     Vector2 velocity;
     Vector2 force;
-
-    ObjectType type;
     Transform transform;
+    ObjectType type;
+
+    // static body related members
+    bool isStatic;
+    float invertedMass;
 
     // constructor:
-    Object(float x, float y, float mass, ObjectType type, float angle)
+    Object(float x, float y, float mass, ObjectType type, float angle, bool isStatic = false)
         : transform(x, y, *this, angle)
         , mass(mass)
         , type(type)
         , velocity(0, 0)
         , force(0, 0) {
         checkValidValues();
+        if (!isStatic) { // non-static objects
+            invertedMass = 1.0f / mass;
+        } else {
+            invertedMass = 0;
+        }
     }
 
     virtual ~Object() = default;
