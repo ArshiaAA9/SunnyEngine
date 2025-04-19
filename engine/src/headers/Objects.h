@@ -1,6 +1,5 @@
 #pragma once
 
-#include <algorithm>
 #include <iostream>
 #include <ostream>
 
@@ -8,6 +7,20 @@
 #include "Vector2.h"
 
 namespace SE {
+
+struct Dimensions {
+    float w;
+    float h;
+    float r;
+
+    Dimensions(float width, float height)
+        : w(width)
+        , h(height) {}
+
+    Dimensions(float radius)
+        : r(radius) {}
+};
+
 enum ObjectType { CIRCLE, RECT };
 
 struct Object {
@@ -20,26 +33,36 @@ struct Object {
 
     // static body related members
     bool isStatic;
+    // NOTE: do calculations with inverted mass. Inverted Mass of static objects are 0
     float invertedMass;
 
-    // constructor:
-    Object(float x, float y, float mass, ObjectType type, float angle, bool isStatic = false)
+    // non-static object constructor
+    Object(float x, float y, float mass, ObjectType type, float angle)
         : transform(x, y, *this, angle)
         , mass(mass)
         , type(type)
         , velocity(0, 0)
         , force(0, 0) {
+        std::cout << "creating non-static object;" << std::endl;
         checkValidValues();
-        if (!isStatic) { // non-static objects
-            invertedMass = 1.0f / mass;
-        } else {
-            invertedMass = 0;
-        }
+        invertedMass = 1.0f / mass;
+    }
+
+    // static object constructor
+    Object(float x, float y, ObjectType type, float angle)
+        : transform(x, y, *this, angle)
+        , type(type)
+        , mass(0)
+        , velocity(0, 0)
+        , force(0, 0)
+        , isStatic(true) {
+        std::cout << "creating static object" << std::endl;
+        invertedMass = 0;
     }
 
     virtual ~Object() = default;
 
-    virtual Vector2 getDimensions() const = 0;
+    virtual Dimensions getDimensions() const = 0;
     virtual ObjectType getType() const = 0;
 
     virtual void printProperties() const;
@@ -59,20 +82,31 @@ struct RectObject : public Object {
     int width;
 
     // constructor:
-    RectObject(float x, float y, float mass, float height, float width, float angle)
+    RectObject(float x, float y, float mass, float width, float height, float angle)
         : Object(x, y, mass, RECT, angle)
         , height(height)
         , width(width) {
         checkValidDimensions();
         this->transform.vertices = {
-            Vector2(-width / 2, height / 2), Vector2(-width / 2, -height / 2), Vector2(width / 2, -height / 2),
-            Vector2(width / 2, height / 2)};
+            Vector2(-width / 2, height / 2), Vector2(-width / 2, -height / 2),
+            Vector2(width / 2, -height / 2), Vector2(width / 2, height / 2)};
+        this->transform.transformedVertices.resize(4);
+    }
+
+    RectObject(float x, float y, float width, float height, float angle)
+        : Object(x, y, RECT, angle)
+        , height(height)
+        , width(width) {
+        checkValidDimensions();
+        this->transform.vertices = {
+            Vector2(-width / 2, height / 2), Vector2(-width / 2, -height / 2),
+            Vector2(width / 2, -height / 2), Vector2(width / 2, height / 2)};
         this->transform.transformedVertices.resize(4);
     }
 
     ~RectObject() = default;
 
-    Vector2 getDimensions() const override;
+    Dimensions getDimensions() const override;
     ObjectType getType() const override;
 
     void printProperties() const override;
@@ -92,7 +126,7 @@ struct CircleObject : public Object {
     ~CircleObject() = default;
 
     /**@return Vector2(radius, Circumference)*/
-    Vector2 getDimensions() const override;
+    Dimensions getDimensions() const override;
     ObjectType getType() const override;
 
     void printProperties() const override;
@@ -100,4 +134,5 @@ struct CircleObject : public Object {
 private:
     void checkValidDimensions() const;
 };
+
 } // namespace SE

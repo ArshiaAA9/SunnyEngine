@@ -63,7 +63,7 @@ void Events::keydownEvents() {
             break;
         case SDLK_F:
             // rotate button
-            m_game.rotateObject(mainObj, M_PI / 20);
+            m_game.rotateObject(mainObj, M_PI / 2);
             break;
     }
 }

@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include <vector>
 
 #include "headers/GridPartition.h"
@@ -51,15 +52,18 @@ void CollisionDetection::checkCollisions() {
                     int neighborRow = row + drow;
 
                     // Validate neighbor cell boundaries
-                    if (neighborCol >= 0 && neighborCol < colCount && neighborRow >= 0 && neighborRow < rowCount) {
+                    if (neighborCol >= 0 && neighborCol < colCount && neighborRow >= 0 &&
+                        neighborRow < rowCount) {
 
                         // Get reference to neighbor cell objects
-                        auto& pNeighborObjectsInCell = m_grid.getObjectInCell(neighborCol, neighborRow);
+                        auto& pNeighborObjectsInCell =
+                            m_grid.getObjectInCell(neighborCol, neighborRow);
 
                         // Check all object pairs between current and neighbor cell
                         for (auto& obj1 : objectsInCell) {
                             for (auto& obj2 : pNeighborObjectsInCell) {
-                                checkCollisionByType(obj1, obj2); // .get() to get pointers to object from unique_ptr
+                                checkCollisionByType(
+                                    obj1, obj2); // .get() to get pointers to object from unique_ptr
                             }
                         }
                     }
@@ -93,8 +97,8 @@ void CollisionDetection::checkCollisionByType(ObjectPtr obj1, ObjectPtr obj2) {
 
 void CollisionDetection::clCircleCircle(ObjectPtr c1, ObjectPtr c2) {
     float distance = c1->transform.position.lengthOf2Pos(c2->transform.position);
-    float c1r = c1->getDimensions().x;
-    float c2r = c2->getDimensions().x;
+    float c1r = c1->getDimensions().r;
+    float c2r = c2->getDimensions().r;
     // a collision is found
     if (distance <= (c1r + c2r)) {
         float depth = (c1r + c2r) - distance;
@@ -113,9 +117,9 @@ void CollisionDetection::clCircleCircle(ObjectPtr c1, ObjectPtr c2) {
 void CollisionDetection::clCircleRect(ObjectPtr c, ObjectPtr rect) {
     Vector2 cPos = c->transform.position;
     Vector2 rectPos = rect->transform.position;
-    float r = c->getDimensions().x;
-    float halfWidth = rect->getDimensions().x / 2.0f;
-    float halfHeight = rect->getDimensions().y / 2.0f;
+    float r = c->getDimensions().r;
+    float halfWidth = rect->getDimensions().w / 2.0f;
+    float halfHeight = rect->getDimensions().h / 2.0f;
 
     float rectLeft = rectPos.x - halfWidth;
     float rectRight = rectPos.x + halfWidth;
@@ -143,6 +147,7 @@ void CollisionDetection::clCircleRect(ObjectPtr c, ObjectPtr rect) {
 
 // used for polygons
 void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
+    std::cout << "SAT\n";
     auto& verticesA = r1->transform.transformedVertices;
     auto& verticesB = r2->transform.transformedVertices;
     float minOverlap = INFINITY; // used to find penDepth
@@ -151,7 +156,8 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
     // first polygon
     for (size_t i = 0; i < verticesA.size(); i++) {
         Vector2 vertex1 = verticesA[i];
-        Vector2 vertex2 = verticesA[(i + 1) % verticesA.size()]; // use modulu operator to avoid out of bound
+        Vector2 vertex2 =
+            verticesA[(i + 1) % verticesA.size()]; // use modulu operator to avoid out of bound
 
         Vector2 edge = vertex2 - vertex1;
         if (edge.squaredMagnitude() < 1e-8) continue;
@@ -172,7 +178,8 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
     // second polygon
     for (size_t i = 0; i < verticesB.size(); i++) {
         Vector2 vertex1 = verticesB[i];
-        Vector2 vertex2 = verticesB[(i + 1) % verticesB.size()]; // use modulu operator to avoid out of bound
+        Vector2 vertex2 =
+            verticesB[(i + 1) % verticesB.size()]; // use modulu operator to avoid out of bound
 
         Vector2 edge = vertex2 - vertex1;
         if (edge.squaredMagnitude() < 1e-8) continue;
@@ -233,14 +240,15 @@ Vector2 CollisionDetection::satProject(std::vector<Vector2>& vertices, Vector2 a
 }
 
 void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
+    std::cout << "AABB\n";
     Vector2 r1Pos = r1->transform.position;
     Vector2 r2Pos = r2->transform.position;
 
-    float halfWidth1 = r1->getDimensions().x / 2.0f;
-    float halfHeight1 = r1->getDimensions().y / 2.0f;
+    float halfWidth1 = r1->getDimensions().w / 2.0f;
+    float halfHeight1 = r1->getDimensions().h / 2.0f;
 
-    float halfWidth2 = r2->getDimensions().x / 2.0f;
-    float halfHeight2 = r2->getDimensions().y / 2.0f;
+    float halfWidth2 = r2->getDimensions().w / 2.0f;
+    float halfHeight2 = r2->getDimensions().h / 2.0f;
 
     float r1Left = r1Pos.x - halfWidth1;
     float r1Right = r1Pos.x + halfWidth1;
@@ -294,7 +302,9 @@ void CollisionDetection::clRectRect(ObjectPtr r1, ObjectPtr r2) {
     const float PI_OVER_2 = static_cast<float>(M_PI) / 2.0f;
     const float EPSILON = 1e-5f;
 
-    auto isRotated = [PI_OVER_2, EPSILON](float angle) { return std::abs(std::fmod(angle, PI_OVER_2)) > EPSILON; };
+    auto isRotated = [PI_OVER_2, EPSILON](float angle) {
+        return std::abs(std::fmod(angle, PI_OVER_2)) > EPSILON;
+    };
 
     if (isRotated(r1->transform.angle) || isRotated(r2->transform.angle)) {
         sat(r1, r2);
@@ -323,6 +333,8 @@ void CollisionDetection::deleteClPair(CollisionPair* pair) {
 }
 
 /**@return a constant reference to m_collisionPairs*/
-const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const { return m_collisionPairs; }
+const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const {
+    return m_collisionPairs;
+}
 
 } // namespace SE

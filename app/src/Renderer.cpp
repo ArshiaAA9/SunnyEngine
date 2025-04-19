@@ -6,6 +6,7 @@
 
 #include <array>
 #include <iostream>
+#include <ostream>
 #include <string>
 
 // public:
@@ -28,9 +29,9 @@ void Renderer::update(PhysicsWorld& world) {
 
 void Renderer::addRenderPair(ObjectPtr obj, SDL_FColor color) {
     m_renderMap.insert({obj, color});
-} // add a key value pari
+} // add a pair
 
-void Renderer::deleteRenderPair(ObjectPtr obj) { m_renderMap.erase(obj); } // remove a pair using key
+void Renderer::deleteRenderPair(ObjectPtr obj) { m_renderMap.erase(obj); } // remove a pair
 
 SDL_Window* Renderer::getWindow() const { return m_window; } // return window pointer
 
@@ -59,8 +60,8 @@ void Renderer::drawColoredRect(const ObjectPtr object, SDL_FColor color) {
     // draws a rectangle using a object pointer and a SDL_Color
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     // sdl_rect takes position as topleft point of rect
-    float width = object->getDimensions().x;
-    float height = object->getDimensions().y;
+    float width = object->getDimensions().w;
+    float height = object->getDimensions().h;
     Vector2 pos = object->transform.position;
     SDL_FRect rect;
     rect.x = pos.x - width / 2;
@@ -72,14 +73,20 @@ void Renderer::drawColoredRect(const ObjectPtr object, SDL_FColor color) {
 
 void Renderer::drawColoredRect2(const ObjectPtr object, SDL_FColor color) {
     std::array<SDL_Vertex, 4> vertices;
+    // std::cout << " position:" << object->transform.position << " (width,height)" <<
+    // object->getDimensions() << '\n';
     for (int i = 0; i < 4; i++) {
-        float py = m_windowHeight - object->transform.transformedVertices[i].y; // flip cause of sdl3
+        // std::cout << " original vertex" << i << ": " << object->transform.transformedVertices[i]
+        // << std::endl;
+        float py =
+            m_windowHeight - object->transform.transformedVertices[i].y; // flip cause of sdl3
+        // std::cout << " flipped vertex" << i << ": " << py << std::endl;
         SDL_FPoint position = {object->transform.transformedVertices[i].x, py};
         SDL_FPoint textCord = {0.0f, 0.0f};
         SDL_Vertex vertex = {position, color, textCord};
         vertices[i] = vertex;
     }
-    const int indices[] = {0, 1, 2, 2, 3, 0};
+    const int indices[] = {1, 2, 3, 3, 0, 1};
     SDL_RenderGeometry(m_renderer, nullptr, vertices.data(), 4, indices, 6);
 }
 

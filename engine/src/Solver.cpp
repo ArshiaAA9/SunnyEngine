@@ -27,7 +27,6 @@ void Solver::solve(CollisionPair* pair) {
         Vector2 j = calculateImpulse(pair, vrel);
         applyImpulse(pair, j);
     } else if (vrel == 0) {
-        // position correction for when 2 objects have same velocity and coliding
         float massA = pair->objectA->mass;
         float massB = pair->objectB->mass;
         float totalMass = massA + massB;
@@ -63,6 +62,7 @@ Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
 void Solver::applyImpulse(CollisionPair* pair, Vector2 impulse) {
     ObjectPtr obj1 = pair->objectA;
     ObjectPtr obj2 = pair->objectB;
+    std::cout << " impulse: " << impulse.x << ',' << impulse.y << '\n';
 
     obj1->velocity += impulse * obj1->invertedMass;
     obj2->velocity -= impulse * obj2->invertedMass;

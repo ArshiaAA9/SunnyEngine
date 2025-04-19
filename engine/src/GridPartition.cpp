@@ -13,14 +13,14 @@ void GridPartition::updateCellDimensions() {
     auto& allObjects = m_world.Handler.getObjects();
     for (auto& obj : allObjects) {
         // x = width y = height
-        Vector2 heighWidth = obj->getDimensions();
+        Dimensions heighWidth = obj->getDimensions();
         if (obj->type == RECT) {
 
-            if (heighWidth.x > cellWidth) cellWidth = heighWidth.x;
-            if (heighWidth.y > cellHeight) cellHeight = heighWidth.y;
+            if (heighWidth.w > cellWidth) cellWidth = heighWidth.w;
+            if (heighWidth.w > cellHeight) cellHeight = heighWidth.w;
         } else if (obj->type == CIRCLE) {
             // y = diameter
-            float radius = heighWidth.y;
+            float radius = heighWidth.r;
             if (radius > cellWidth) cellWidth = radius;
             if (radius > cellHeight) cellHeight = radius;
         }
@@ -77,5 +77,7 @@ void GridPartition::logAllObjects() {
 }
 
 // private methods:
-const std::vector<ObjectPtr>& GridPartition::getObjectInCell(int col, int row) const { return m_cellObjects[col][row]; }
+const std::vector<ObjectPtr>& GridPartition::getObjectInCell(int col, int row) const {
+    return m_cellObjects[col][row];
+}
 } // namespace SE

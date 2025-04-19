@@ -19,11 +19,13 @@ void PhysicsWorld::step(float dt) {
 // privates:
 void PhysicsWorld::dynamicsUpdate(float dt) {
     for (auto& obj : Handler.getObjects()) {
-        obj->applyForce(m_gravity * obj->mass);
-        obj->addVelocity(obj->force / obj->mass * dt);
-        obj->transform.move(obj->velocity * dt);
+        if (!obj->isStatic) {
+            obj->applyForce(m_gravity * obj->mass);
+            obj->addVelocity(obj->force / obj->mass * dt);
+            obj->transform.move(obj->velocity * dt);
+            obj->force = Vector2(0, 0); // reset net force at the end
+        }
         obj->transform.transform();
-        obj->force = Vector2(0, 0); // reset net force at the end
     }
 }
 

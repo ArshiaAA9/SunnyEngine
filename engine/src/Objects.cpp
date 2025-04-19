@@ -11,19 +11,15 @@ void Object::addVelocity(Vector2 velocity) { this->velocity += velocity; }
 
 // printProperties() virtual function:
 void Object::printProperties() const {
-    std::cout << "Position: (" << this->transform.position.x << ", " << this->transform.position.y << ")"
+    std::cout << "Position: (" << this->transform.position.x << ", " << this->transform.position.y
+              << ")"
               << " Velocity: (" << this->velocity.x << ", " << this->velocity.y << ")"
               << " Force: (" << this->force.x << ", " << this->force.y << ")";
 }
 
 void RectObject::printProperties() const {
-    std::cout << " topleft: " << this->transform.transformedVertices[0].x << ',' << this->transform.vertices[0].y;
-    std::cout << " botleft: " << this->transform.transformedVertices[1].x << ',' << this->transform.vertices[1].y;
-    std::cout << " botRight: " << this->transform.transformedVertices[2].x << ',' << this->transform.vertices[2].y;
-    std::cout << " topRight: " << this->transform.transformedVertices[3].x << ',' << this->transform.vertices[3].y
-              << '\n';
-    // Object::printProperties();
-    // std::cout << " Dimensions: " << this->width << "," << this->height << "\n";
+    Object::printProperties();
+    std::cout << " Dimensions: " << this->width << "," << this->height << "\n";
 }
 
 void CircleObject::printProperties() const {
@@ -38,16 +34,12 @@ void Object::checkValidValues() const {
 }
 
 void RectObject::checkValidDimensions() const {
-    // Helper function to check validity. used in constructors to avoid division
-    // by 0,0 Mass and negative friction
     if (this->height <= 0 || this->width <= 0) {
         throw std::invalid_argument("Height, and width must be positive int.");
     }
 }
 
 void CircleObject::checkValidDimensions() const {
-    // Helper function to check validity. used in constructors to avoid division
-    // by 0,0 Mass and negative friction
     if (this->radius <= 0) {
         throw std::invalid_argument("Radius must be positive int.");
     }
@@ -59,9 +51,9 @@ ObjectType RectObject::getType() const { return this->type; }
 ObjectType CircleObject::getType() const { return this->type; }
 
 // getDimensions pure virtual function:
-/**@return Vector2(height, width)*/
-Vector2 RectObject::getDimensions() const { return Vector2(height, width); }
+/**@return Dimensions(width, height)*/
+Dimensions RectObject::getDimensions() const { return Dimensions(width, height); }
 
-/**@return Vector2(radius, diameter)*/
-Vector2 CircleObject::getDimensions() const { return Vector2(radius, radius * 2); }
+/**@return Dimensions(radius, diameter)*/
+Dimensions CircleObject::getDimensions() const { return Dimensions(radius); }
 } // namespace SE

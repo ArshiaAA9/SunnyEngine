@@ -6,6 +6,7 @@
 namespace SE {
 
 using ObjectPtr = std::shared_ptr<Object>;
+
 using ObjectWeakPtr = std::weak_ptr<Object>;
 
 using RectObjectPtr = std::shared_ptr<RectObject>;
