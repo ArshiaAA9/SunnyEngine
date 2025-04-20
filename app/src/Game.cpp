@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 #include "headers/Events.h"
 #include "headers/Sdl.h"
@@ -13,18 +14,26 @@ int Game::start() {
     float dt = 1.0f / 60.0f;
     float delay = 1000.0f / 60.0f;
     ObjectPtr rect1;
+    ObjectPtr rect2;
     ObjectPtr circle;
 
     SDL_FColor circleColor = {0, 0, 255, 255};
     SDL_FColor rectColor = {0, 255, 0, 255};
+    SDL_FColor staticCircleColor = {255, 0, 0, 255};
     SDL_FColor staticObjectColor = {0, 0, 255, 255};
 
     rect1 = createRect(100, 250, 1, 50, 50, rectColor, 0);
-    circle = createCircle(100, 150, 1, 40, circleColor, 0);
+    circle = createCircle(300, 150, 3, 40, circleColor, 0);
 
-    createStaticRect(5, 250, 10, 479, staticObjectColor, 0);
-    createStaticRect(995, 250, 10, 479, staticObjectColor, 0);
+    createStaticCircle(100, 100, 35, staticCircleColor, 0);
+    createStaticCircle(700, 400, 25, staticCircleColor, 0);
+    createStaticCircle(900, 130, 30, staticCircleColor, 0);
+
+    createStaticRect(5, 243, 10, 479.9, staticObjectColor, 0);
+    createStaticRect(995, 243, 10, 479.9, staticObjectColor, 0);
     createStaticRect(500, 5, 1000, 10, staticObjectColor, 0);
+    // FIX:FIX GRID TO MAKE THIS COLLIDE
+    createStaticRect(500, 478.9, 1000, 10, staticObjectColor, 0);
 
     setMainObject(rect1);
     m_world.cD.m_grid.updateCellDimensions();
@@ -34,19 +43,6 @@ int Game::start() {
     while (m_sdl.event.loop()) {
         // loopCount();
         m_world.step(dt);
-        m_sdl.renderer.update(m_world);
-        SDL_Delay(delay);
-    }
-    return 0;
-}
-
-int Game::test() {
-    // m_world.setGravity(Vector2(0, -0));
-    // float dt = 1.0f / 60.0f;
-    float delay = 1000.0f / 60.0f;
-
-    while (m_sdl.event.loop()) {
-        loopCount();
         m_sdl.renderer.update(m_world);
         SDL_Delay(delay);
     }
@@ -110,6 +106,7 @@ ObjectPtr Game::createStaticCircle(float x, float y, float radius, SDL_FColor co
 void Game::deleteAllObjects() {
     auto renderMap = m_sdl.renderer.getRenderMap(); // copy all objects
     std::vector<ObjectPtr> tempVector;              // NOTE: can play with this for performance
+    tempVector.resize(renderMap.size());
     for (const auto& [obj, color] : renderMap) {
         if (obj == m_mainObject) continue;
         tempVector.push_back(obj); // add them to temporarly vector

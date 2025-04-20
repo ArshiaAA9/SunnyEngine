@@ -101,7 +101,6 @@ void Renderer::drawRotatedRect(const ObjectPtr object, SDL_FColor color) {
     }
     points[4].x = object->transform.transformedVertices[0].x;
     points[4].y = m_windowHeight - object->transform.transformedVertices[0].y;
-
     SDL_RenderLines(m_renderer, points.data(), 5);
 }
 
@@ -130,12 +129,10 @@ void Renderer::drawCircle(ObjectPtr object, SDL_FColor color) {
     int r = static_cast<int>(std::round(object->getDimensions().r));
     int cx = static_cast<int>(std::round(object->transform.position.x));
     int cy = m_windowHeight - static_cast<int>(std::round(object->transform.position.y));
-
     const int diameter = static_cast<int>(2 * r);
     int x = r;
     int y = 0;
     int error = 1 - r;
-
     while (x >= y) {
         //  Each of the following renders an octant of the circle
         SDL_RenderPoint(m_renderer, cx + x, cy - y);
@@ -146,7 +143,6 @@ void Renderer::drawCircle(ObjectPtr object, SDL_FColor color) {
         SDL_RenderPoint(m_renderer, cx + y, cy + x);
         SDL_RenderPoint(m_renderer, cx - y, cy - x);
         SDL_RenderPoint(m_renderer, cx - y, cy + x);
-
         y++;
         if (error <= 0) {
             error += 2 * y + 1; // Vertical move

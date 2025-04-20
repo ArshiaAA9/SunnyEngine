@@ -1,5 +1,7 @@
 #include "headers/Solver.h"
 
+#include <iostream>
+
 #include "headers/Physics.h"
 #include "headers/Types.h"
 #include "headers/Vector2.h"
@@ -20,6 +22,7 @@ void Solver::solveCollisionPairs() {
 
 void Solver::solve(CollisionPair* pair) {
     float vrel = calculateRelativeVelocity(pair);
+    // std::cout << "vrel:" << vrel << '\n';
     if (vrel < 0) { // if negative mean objects are moving into each other
         Vector2 j = calculateImpulse(pair, vrel);
         applyImpulse(pair, j);
@@ -27,14 +30,16 @@ void Solver::solve(CollisionPair* pair) {
         float massA = pair->objectA->mass;
         float massB = pair->objectB->mass;
         float totalMass = massA + massB;
+        // std::cout << " massA: " << massA << " massB: " << massB << " totalMass: " << totalMass
+        //           << " normal: " << pair->normal << " depth: " << pair->depth << '\n';
 
         Vector2 correctionA = pair->normal * (pair->depth * (pair->objectB->mass / totalMass));
         Vector2 correctionB = pair->normal * (pair->depth * (pair->objectA->mass / totalMass));
 
         // Position correction
+        // std::cout << " correctionA: " << correctionA << " correctionB: " << correctionB << '\n';
         pair->objectA->transform.position += correctionA;
         pair->objectB->transform.position -= correctionB;
-        // }
     }
 }
 

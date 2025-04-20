@@ -2,13 +2,14 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 #include <vector>
 
 #include "headers/GridPartition.h"
 #include "headers/Objects.h"
 #include "headers/Types.h"
 #include "headers/Vector2.h"
+
+// TODO: ADD A WAY FOR USER TO CHECK IF TWO SPECIFIC OBJECT COLLIDE WITH EATCH OTHER
 
 namespace SE {
 
@@ -62,8 +63,7 @@ void CollisionDetection::checkCollisions() {
                         // Check all object pairs between current and neighbor cell
                         for (auto& obj1 : objectsInCell) {
                             for (auto& obj2 : pNeighborObjectsInCell) {
-                                checkCollisionByType(obj1, obj2); // .get() to get pointers to
-                                                                  // object from unique_ptr
+                                checkCollisionByType(obj1, obj2);
                             }
                         }
                     }
@@ -75,16 +75,19 @@ void CollisionDetection::checkCollisions() {
 
 // used inside checkCollision function
 void CollisionDetection::checkCollisionByType(ObjectPtr obj1, ObjectPtr obj2) {
-    if (obj1->getType() == RECT && obj2->getType() == RECT) { // Rect-Rect
-        clRectRect(obj1, obj2);
-
+    if (obj1->isStatic && obj2->isStatic) {
+        return;
+    } else if (obj1->getType() == RECT && obj2->getType() == RECT) { // Rect-Rect
+        if (obj1->transform.angle == 0 && obj2->transform.angle == 0) {
+            aabb(obj1, obj2);
+        } else {
+            sat(obj1, obj2);
+        }
     } else if (obj1->getType() == CIRCLE && obj2->getType() == CIRCLE) { // Circle-Circle
         clCircleCircle(obj1, obj2);
-
     } else if ((obj1->getType() == RECT && obj2->getType() == CIRCLE) ||
                (obj1->getType() == CIRCLE &&
                 obj2->getType() == RECT)) { // Rect-Circle or Circle-Rect
-
         // Ensure the first object is always the circle
         if (obj1->type == CIRCLE) {
             clCircleRect(obj1, obj2);
@@ -103,7 +106,6 @@ void CollisionDetection::clCircleCircle(ObjectPtr c1, ObjectPtr c2) {
     if (distance <= (c1r + c2r)) {
         float depth = (c1r + c2r) - distance;
         // calculating pointA pointB:
-        // FIX: FIX THIS IF THERE IS A ISSUE WITH COLLISION RESOLUTION OF CIRCLES
         Vector2 direction = c1->transform.position - c2->transform.position;
         direction.normalize();
 
@@ -146,8 +148,8 @@ void CollisionDetection::clCircleRect(ObjectPtr c, ObjectPtr rect) {
     }
 }
 
-// used for polygons
 void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
+    // std::cout << "sat\n";
     auto& verticesA = r1->transform.transformedVertices;
     auto& verticesB = r2->transform.transformedVertices;
     float minOverlap = INFINITY; // used to find penDepth
@@ -182,7 +184,6 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
             verticesB[(i + 1) % verticesB.size()]; // use modulu operator to avoid out of bound
 
         Vector2 edge = vertex2 - vertex1;
-        if (edge.squaredMagnitude() < 1e-8) continue;
         Vector2 axis = Vector2(edge.y, -edge.x);
         axis.normalize();
 
@@ -241,6 +242,7 @@ Vector2 CollisionDetection::satProject(std::vector<Vector2>& vertices, Vector2 a
 
 // FIX: DOESNT WORK WITH ROTATED OBJECTS CAUSE OF ROTATED WIDTH HEIGHT
 void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
+    // std::cout << "aabb\n";
     Vector2 r1Pos = r1->transform.position;
     Vector2 r2Pos = r2->transform.position;
 
@@ -293,14 +295,6 @@ void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
             penDepth = overlapY;
         }
         addClPair(r1, pointA, r2, pointB, penDepth, normal);
-    }
-}
-
-void CollisionDetection::clRectRect(ObjectPtr r1, ObjectPtr r2) {
-    if (r1->transform.angle == 0 && r2->transform.angle == 0) {
-        aabb(r1, r2);
-    } else {
-        sat(r1, r2);
     }
 }
 

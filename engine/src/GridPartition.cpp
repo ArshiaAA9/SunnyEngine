@@ -6,6 +6,7 @@
 #include "headers/Types.h"
 
 namespace SE {
+// FIX: BUGGY GRID TOP STATIC BOUNDRY OBJECT NOT WORKING WHEN TOO FAR
 
 // use it to update biggest grid cell size
 void GridPartition::updateCellDimensions() {
@@ -31,8 +32,8 @@ void GridPartition::updateCells() {
     // m_cellObjects[col][row][objects]
     deleteAllObject();
 
-    // loops over all object&s in world and adds them to a cell
     // std::cout << "cellWidth: " << cellWidth << " cellHeight: " << cellHeight << '\n';
+    // loops over all object&s in world and adds them to a cell
     for (auto& obj : m_world.Handler.getObjects()) {
         Vector2 objPos = obj->transform.position;
         int col = static_cast<int>(objPos.x / cellWidth);
@@ -67,7 +68,6 @@ void GridPartition::logAllObjects() {
         for (auto& row : col) {
             for (auto& obj : row) {
                 count++;
-                obj->printProperties();
             }
         }
     }

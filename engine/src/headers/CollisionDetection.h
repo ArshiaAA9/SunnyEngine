@@ -22,7 +22,8 @@ public:
     // returns a pointer to collisionpair vector
     const std::vector<std::unique_ptr<CollisionPair>>& getClPairs() const;
 
-    void addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth, Vector2 normal);
+    void addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth,
+                   Vector2 normal);
     void deleteClPair(CollisionPair* pair);
 
     GridPartition m_grid;
@@ -39,7 +40,5 @@ private:
     void aabb(ObjectPtr obj1, ObjectPtr obj2);
     void sat(ObjectPtr obj1, ObjectPtr obj2);
     Vector2 satProject(std::vector<Vector2>& vertices, Vector2 axis);
-
-    void clRectRect(ObjectPtr obj1, ObjectPtr obj2);
 };
 } // namespace SE
