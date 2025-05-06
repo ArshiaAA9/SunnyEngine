@@ -13,6 +13,8 @@ cd SunnyEngine
 make build run
 ```
 ## Controls
-you can move the main object with W,A,S,D.
-stop the main object with SPACE 
-delete all objects but the main object with R
+Move the main object: **W, A, S, D**
+
+Stop the main object: **SPACE**
+
+Delete all objects except the main object: **R**
