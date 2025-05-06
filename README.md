@@ -1,12 +1,18 @@
 # SunnyEngine
 
-SunnyEngine is a personal peroject made by me to learn c++.
+Sunny Engine is a simple personal 2D physics engine project, written in c++ with sdl.
+
+## Requierments 
+Requiers SDl3 and sdl3-ttf and make to be installed. 
 
 ## Installation 
-To install and run the demo do
-
+To clone and run the simulation:
 ```bash
 git clone "https://github.com/ArshiaAA9/SunnyEngine/"
 cd SunnyEngine
 make build run
 ```
+## Controlls
+you can move the main object with W,A,S,D.
+stop the main object with SPACE 
+delete all object but main object with R
