@@ -19,8 +19,7 @@ void Renderer::update(PhysicsWorld& world) {
     // TODO: change this to use shape specific functions
     for (const auto& [obj, color] : m_renderMap) {
         if (obj->getType() == RECT)
-            if (obj->isStatic)
-                drawRotatedFilledRect(obj, color);
+            if (obj->isStatic) drawRotatedFilledRect(obj, color);
             else
                 drawRotatedRect(obj, color);
         else
@@ -33,9 +32,7 @@ void Renderer::update(PhysicsWorld& world) {
     SDL_RenderPresent(m_renderer);
 }
 
-void Renderer::addRenderPair(ObjectPtr obj, SDL_FColor color) {
-    m_renderMap.insert({obj, color});
-} // add a pair
+void Renderer::addRenderPair(ObjectPtr obj, SDL_FColor color) { m_renderMap.insert({obj, color}); } // add a pair
 
 void Renderer::deleteRenderPair(ObjectPtr obj) { m_renderMap.erase(obj); } // remove a pair
 
@@ -112,8 +109,7 @@ void Renderer::drawRotatedFilledRect(const ObjectPtr object, SDL_FColor color) {
     for (int i = 0; i < 4; i++) {
         // std::cout << " original vertex" << i << ": " << object->transform.transformedVertices[i]
         // << std::endl;
-        float py =
-            m_windowHeight - object->transform.transformedVertices[i].y; // flip cause of sdl3
+        float py = m_windowHeight - object->transform.transformedVertices[i].y; // flip cause of sdl3
         // std::cout << " flipped vertex" << i << ": " << py << std::endl;
         SDL_FPoint position = {object->transform.transformedVertices[i].x, py};
         SDL_FPoint textCord = {0.0f, 0.0f};
@@ -160,7 +156,7 @@ bool Renderer::initWindowAndRenderer() {
     }
 
     // create font
-    m_font = TTF_OpenFont("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24);
+    m_font = TTF_OpenFont("app/fonts//Comic_Neue/ComicNeue-Regular.ttf", 24);
     if (!m_font) {
         std::cerr << "Failed to load font: " << SDL_GetError() << std::endl;
     }
