@@ -20,4 +20,5 @@ Stop the main object: **SPACE**
 Delete all objects except the main object: **R**
 
 Spawn a rectangle object: **LMB**
+
 Spawn a circle object: **RMB**
