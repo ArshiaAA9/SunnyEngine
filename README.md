@@ -12,7 +12,7 @@ git clone "https://github.com/ArshiaAA9/SunnyEngine/"
 cd SunnyEngine
 make build run
 ```
-## Controlls
+## Controls
 you can move the main object with W,A,S,D.
 stop the main object with SPACE 
 delete all object but main object with R
