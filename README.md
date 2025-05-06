@@ -18,3 +18,6 @@ Move the main object: **W, A, S, D**
 Stop the main object: **SPACE**
 
 Delete all objects except the main object: **R**
+
+Spawn a rectangle object: **LMB**
+Spawn a circle object: **RMB**
