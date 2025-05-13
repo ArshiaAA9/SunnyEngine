@@ -25,8 +25,6 @@ public:
         if (!initWindowAndRenderer()) std::cerr << "Failed to initalize everything";
     }
 
-    // NOTE: TEST FUNCTION
-    void testFunction();
     void update(PhysicsWorld& world);
 
     // interfaces:
@@ -35,8 +33,7 @@ public:
     // removes a pair from the map
     void deleteRenderPair(ObjectPtr);
     // returns a contsant reference to renderMap
-    const std::unordered_map<ObjectPtr, SDL_FColor>&
-    getRenderMap(); // stores objects with a corresponding color
+    const std::unordered_map<ObjectPtr, SDL_FColor>& getRenderMap(); // stores objects with a corresponding color
 
     SDL_Window* getWindow() const;
     SDL_Renderer* getRenderer() const;
@@ -62,8 +59,7 @@ private:
     // initializes everything and member vars
     bool initWindowAndRenderer();
 
-    std::unordered_map<ObjectPtr, SDL_FColor>
-        m_renderMap; // stores objects with a corresponding color
+    std::unordered_map<ObjectPtr, SDL_FColor> m_renderMap; // stores objects with a corresponding color
 
     int m_windowWidth, m_windowHeight; // window width, height
     SDL_Window* m_window;              // window

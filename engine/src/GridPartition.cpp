@@ -9,6 +9,8 @@ namespace SE {
 // FIX: BUGGY GRID TOP STATIC BOUNDRY OBJECT NOT WORKING WHEN TOO FAR
 
 // use it to update biggest grid cell size
+// FIX: CHANGE THIS FUNCTION SO IT DOESNT NEED TO BE USED AT START
+// CHECK IF THIS IS USED BEFORE. IF NOT THROW ERORR
 void GridPartition::updateCellDimensions() {
     // used to update maxH and maxW
     auto& allObjects = m_world.Handler.getObjects();
@@ -74,9 +76,7 @@ void GridPartition::logAllObjects() {
     std::cout << " Count: " << count << '\n';
 }
 
-const std::vector<ObjectPtr>& GridPartition::getObjectInCell(int col, int row) const {
-    return m_cellObjects[col][row];
-}
+const std::vector<ObjectPtr>& GridPartition::getObjectInCell(int col, int row) const { return m_cellObjects[col][row]; }
 
 // private methods:
 } // namespace SE

@@ -156,7 +156,7 @@ bool Renderer::initWindowAndRenderer() {
     }
 
     // create font
-    m_font = TTF_OpenFont("app/fonts//Comic_Neue/ComicNeue-Regular.ttf", 24);
+    m_font = TTF_OpenFont("app/fonts/Comic_Neue/ComicNeue-Regular.ttf", 24);
     if (!m_font) {
         std::cerr << "Failed to load font: " << SDL_GetError() << std::endl;
     }
