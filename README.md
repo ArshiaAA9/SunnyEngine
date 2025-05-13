@@ -26,8 +26,7 @@ cmake --install build --prefix ~/.local #local installation (recommneded)
 sudo cmake --install build #system-wide installtion
 ```
 
-##Running the Simulation
-
+Run the Simulation
 ```bash
 cd ./bin/Simulation
 ```
