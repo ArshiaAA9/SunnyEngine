@@ -8,6 +8,7 @@ Currently only supports rigid and fully elastic bodies.
 Requires SDl3, sdl3-ttf, gcc and make to be installed. 
 
 ## Installation
+
 ###Building and Installing
 clone the repo:
 ```bash
