@@ -9,8 +9,7 @@ Requires SDl3, sdl3-ttf, gcc and make to be installed.
 
 ## Installation
 
-###Building and Installing
-
+Building and Installing
 clone the repo:
 ```bash
 git clone https://github.com/ArshiaAA9/SunnyEngine.git
