@@ -21,15 +21,12 @@ cmake -B build
 cmake --build build --parallel $(nproc)
 ```
 Do one of the following:
-User-local installation (recommended):
 ```bash
-cmake --install build --prefix ~/.local
+cmake --install build --prefix ~/.local #local installation (recommneded)
+sudo cmake --install build #system-wide installtion
 ```
-system-wide installation:
-```bash
-sudo cmake --install build
-```
-###Running the Simulation
+
+##Running the Simulation
 
 ```bash
 cd ./bin/Simulation
