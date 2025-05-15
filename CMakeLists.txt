@@ -25,7 +25,10 @@ file(GLOB_RECURSE ENGINE_SOURCES CONFIGURE_DEPENDS ${ENGINE_SOURCE_DIR}/*.cpp)
 # Ceate Static library
 add_library(SunnyEngine STATIC ${ENGINE_SOURCES})
 
-target_include_directories(SunnyEngine PUBLIC ${ENGINE_SOURCE_DIR}/headers)
+target_include_directories(SunnyEngine PUBLIC
+    $<BUILD_INTERFACE:${ENGINE_SOURCE_DIR}/headers>
+    $<INSTALL_INTERFACE:include>
+)
 
 # Compiler flags for the engine
 target_compile_options(SunnyEngine PRIVATE -Wall -Wextra -O2)
@@ -34,12 +37,17 @@ target_compile_options(SunnyEngine PRIVATE -Wall -Wextra -O2)
 include(GNUInstallDirs)
 
  
-install(TARGETS SunnyEngine
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    INCLUDES DESTINATION include
+# Install the library and export targets
+install(
+    TARGETS SunnyEngine
+    EXPORT SunnyEngineTargets
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include  # Key: Sets INTERFACE_INCLUDE_DIRECTORIES to "include"
 )
 
-install(DIRECTORY ${ENGINE_SOURCE_DIR}/headers
+install(DIRECTORY ${ENGINE_SOURCE_DIR}/headers/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/SunnyEngine
     FILES_MATCHING
     PATTERN "*.h"
@@ -52,6 +60,7 @@ install(EXPORT SunnyEngineTargets
     NAMESPACE SunnyEngine::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SunnyEngine
 )
+
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
@@ -93,7 +102,7 @@ target_link_libraries(Simulation PRIVATE
 )
 
 # Compile options
-target_compile_options(Simulation PRIVATE -Wall -Wextra -O2)
+#target_compile_options(Simulation PRIVATE -Wall -Wextra -O2)
 
 #cmake -B build
 #cmake --build build
