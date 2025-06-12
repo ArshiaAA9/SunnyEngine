@@ -14,4 +14,5 @@ using RectObjectWeakPtr = std::weak_ptr<RectObject>;
 
 using CircleObjectPtr = std::shared_ptr<CircleObject>;
 using CircleObjectWeakPtr = std::weak_ptr<CircleObject>;
+
 } // namespace SE

@@ -1,9 +1,7 @@
 #pragma once
 
-#include <memory>
 #include <vector>
 
-#include "Objects.h"
 #include "Types.h"
 
 namespace SE {
@@ -13,9 +11,9 @@ struct Object;
 class GridPartition {
 public:
     GridPartition(int gridHeight, int gridWidth, PhysicsWorld& world)
-        : gridHeight(gridHeight)
-        , gridWidth(gridWidth)
-        , m_world(world) {
+        : m_world(world)
+        , gridHeight(gridHeight)
+        , gridWidth(gridWidth) {
         rownum = gridHeight / cellHeight;
         colnum = gridWidth / cellWidth;
         // initialize the vector

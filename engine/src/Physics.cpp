@@ -1,5 +1,7 @@
 #include "headers/Physics.h"
 
+#include <iostream>
+
 namespace SE {
 
 // public:

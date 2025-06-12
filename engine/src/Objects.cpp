@@ -1,5 +1,7 @@
 #include "headers/Objects.h"
 
+#include <iostream>
+
 namespace SE {
 
 // Objects Base Functions:
@@ -9,10 +11,25 @@ void Object::setVelocity(Vector2 velocity) { this->velocity = velocity; }
 
 void Object::addVelocity(Vector2 velocity) { this->velocity += velocity; }
 
+// Objects Base private Methods:
+float RectObject::calculateInertia(float paramMass, float paramWidth, float paramHeight) {
+    // Ic = 1/12m(h^2 + w^2))
+    float inertia = 1.0f / 12.0f * paramMass * (paramHeight * paramHeight + paramWidth * paramWidth);
+    std::cout << "mass: " << paramMass << " paramHeight: " << paramHeight << " paramWidth: " << paramWidth
+              << " rect inertia: " << inertia << '\n';
+    return inertia;
+}
+
+float CircleObject::calculateInertia(float paramMass, float paramRadius) {
+    // I = 1/2Mr^2
+    float inertia = 1.0f / 2.0f * paramMass * paramRadius * paramRadius;
+    std::cout << "mass: " << paramMass << " radius:" << paramRadius << " circle inertia: " << inertia << '\n';
+    return inertia;
+}
+
 // printProperties() virtual function:
 void Object::printProperties() const {
-    std::cout << "Position: (" << this->transform.position.x << ", " << this->transform.position.y
-              << ")"
+    std::cout << "Position: (" << this->transform.position.x << ", " << this->transform.position.y << ")"
               << " Velocity: (" << this->velocity.x << ", " << this->velocity.y << ")"
               << " Force: (" << this->force.x << ", " << this->force.y << ")";
 }

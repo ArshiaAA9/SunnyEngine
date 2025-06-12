@@ -1,13 +1,10 @@
 #include "headers/Solver.h"
 
-#include <iostream>
-
 #include "headers/Physics.h"
 #include "headers/Types.h"
 #include "headers/Vector2.h"
 
 // TODO: IMPLEMENT ANGULAR VELOCIRTY AND ROTATIONALA SOLVER
-// FIX: SOLVER A BIT GLITCHY
 namespace SE {
 void Solver::solveCollisionPairs() {
     auto& clPairs = m_world.cD.getClPairs();
@@ -52,6 +49,12 @@ float Solver::calculateRelativeVelocity(CollisionPair* pair) {
 }
 
 Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
+    // wA2 = wA1 + (rAP . hjn) / IA
+    //
+    // j = (-(1+e) vAB1 . n) / ((n.n) (1/m1 + 1/m2) + (rAP.n)^2/IA + (rBP . n)^2/IB)
+    // e is 1 because of rigid bodies
+    // for adding non rigid bodies modify the function to count in the e of the object
+    //
     float invertM1 = pair->objectA->invertedMass;
     float invertM2 = pair->objectB->invertedMass;
     Vector2 normal = pair->normal;

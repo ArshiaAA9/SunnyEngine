@@ -22,7 +22,7 @@ int Game::start() {
     SDL_FColor staticCircleColor = {255, 0, 0, 255};
     SDL_FColor staticObjectColor = {0, 0, 255, 255};
 
-    rect1 = createRect(100, 250, 1, 50, 50, rectColor, 0);
+    rect1 = createRect(250, 250, 1, 50, 50, rectColor, 0);
     circle = createCircle(300, 150, 3, 40, circleColor, 0);
 
     createStaticCircle(100, 100, 35, staticCircleColor, 0);
@@ -75,22 +75,19 @@ void Game::moveObjectTo(ObjectPtr object, Vector2 position) { object->transform.
 
 void Game::stopObject(ObjectPtr object) { object->setVelocity(Vector2(0, 0)); }
 
-ObjectPtr Game::createRect(float x, float y, float mass, float width, float height,
-                           SDL_FColor color, float angle) {
+ObjectPtr Game::createRect(float x, float y, float mass, float width, float height, SDL_FColor color, float angle) {
     ObjectPtr pObject = m_world.Handler.createRectObj(x, y, mass, width, height, angle);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;
 }
 
-ObjectPtr Game::createStaticRect(float x, float y, float width, float height, SDL_FColor color,
-                                 float angle) {
+ObjectPtr Game::createStaticRect(float x, float y, float width, float height, SDL_FColor color, float angle) {
     ObjectPtr pObject = m_world.Handler.createStaticRect(x, y, width, height, angle);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;
 }
 
-ObjectPtr Game::createCircle(float x, float y, float mass, float radius, SDL_FColor color,
-                             float angle) {
+ObjectPtr Game::createCircle(float x, float y, float mass, float radius, SDL_FColor color, float angle) {
     ObjectPtr pObject = m_world.Handler.createCircleObj(x, y, mass, radius, angle);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;

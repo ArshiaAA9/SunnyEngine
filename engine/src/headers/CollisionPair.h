@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 
 #include "Types.h"
 #include "Vector2.h"
@@ -12,8 +11,8 @@ struct CollisionPair {
     Vector2 pointA; // deepest point of object A in object B
     ObjectPtr objectB;
     Vector2 pointB; // deepest point of object B in object A
-    Vector2 normal;
     float depth;
+    Vector2 normal;
 
     CollisionPair(ObjectPtr obj1, Vector2 PointA, ObjectPtr obj2, Vector2 PointB, float depth, Vector2 normal)
         : objectA(obj1)

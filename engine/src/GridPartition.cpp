@@ -69,6 +69,7 @@ void GridPartition::logAllObjects() {
     for (auto& col : m_cellObjects) {
         for (auto& row : col) {
             for (auto& obj : row) {
+                obj->printProperties();
                 count++;
             }
         }
