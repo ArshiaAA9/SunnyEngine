@@ -5,7 +5,6 @@
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_video.h>
 
-#include <cmath>
 #include <iostream>
 
 #include "headers/Game.h"
@@ -35,21 +34,22 @@ SDL_Event& Events::getEventVar() { return m_sdlEvent; }
 void Events::keydownEvents() {
     ObjectPtr mainObj = m_game.getMainObject(); // Get main object once
     if (!mainObj) {
-        std::cout << " mainObject hasnt been set ";
+        std::cout << " mainObject has not been set ";
         return; // Early exit if no main object
     }
+    int forceAmount = 1000;
     switch (m_sdlEvent.key.key) {
         case SDLK_W:
-            m_game.moveObject(mainObj, Vector2(0, 1000));
+            m_game.moveObject(mainObj, Vector2(0, forceAmount));
             break;
         case SDLK_D:
-            m_game.moveObject(mainObj, Vector2(1000, 0));
+            m_game.moveObject(mainObj, Vector2(forceAmount, 0));
             break;
         case SDLK_A:
-            m_game.moveObject(mainObj, Vector2(-1000, 0));
+            m_game.moveObject(mainObj, Vector2(-forceAmount, 0));
             break;
         case SDLK_S:
-            m_game.moveObject(mainObj, Vector2(0, -1000));
+            m_game.moveObject(mainObj, Vector2(0, -forceAmount));
             break;
         case SDLK_SPACE:
             // stop button
@@ -79,14 +79,13 @@ void Events::mouseButtonUpEvents() {
             break;
         case SDL_BUTTON_RIGHT:
             my = m_sdl.renderer.getWindowHeight() - my;
-            m_game.createCircle(mx, my, 1, 20, cColor);
+            m_game.createCircle(mx, my, 1, 20, cColor, 0, 1);
             break;
     }
 }
 
-void Events::createRectOnMousePos(float mx, float my, float m, float width, float height,
-                                  SDL_FColor color) {
-    // doing this cause createRect does same thing to reverse the y axis
+void Events::createRectOnMousePos(float mx, float my, float m, float width, float height, SDL_FColor color) {
+    // reversing the y axis
     my = m_sdl.renderer.getWindowHeight() - my;
-    m_game.createRect(mx, my, m, width, height, color, 0);
+    m_game.createRect(mx, my, m, width, height, color, 0, 1.0f);
 }

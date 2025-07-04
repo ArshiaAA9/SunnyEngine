@@ -1,12 +1,13 @@
 #pragma once
 #include <memory>
 
+#include "CircleObject.h"
 #include "Objects.h"
+#include "RectObject.h"
 
 namespace SE {
 
 using ObjectPtr = std::shared_ptr<Object>;
-
 using ObjectWeakPtr = std::weak_ptr<Object>;
 
 using RectObjectPtr = std::shared_ptr<RectObject>;

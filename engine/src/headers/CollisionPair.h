@@ -13,6 +13,7 @@ struct CollisionPair {
     Vector2 pointB; // deepest point of object B in object A
     float depth;
     Vector2 normal;
+    float averageCof;
 
     CollisionPair(ObjectPtr obj1, Vector2 PointA, ObjectPtr obj2, Vector2 PointB, float depth, Vector2 normal)
         : objectA(obj1)
@@ -20,7 +21,9 @@ struct CollisionPair {
         , objectB(obj2)
         , pointB(PointB)
         , depth(depth)
-        , normal(normal) {}
+        , normal(normal) {
+        this->averageCof = (objectA->cof + objectB->cof) / 2;
+    }
 
     ~CollisionPair() = default;
 };

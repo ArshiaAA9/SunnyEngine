@@ -19,24 +19,28 @@ void Solver::solveCollisionPairs() {
 
 void Solver::solve(CollisionPair* pair) {
     float vrel = calculateRelativeVelocity(pair);
-    // std::cout << "vrel:" << vrel << '\n';
-    if (vrel < 0) { // if negative mean objects are moving into each other
+    if (vrel < 0) { // if negative mean objects are moving into each other so we only check that
         Vector2 j = calculateImpulse(pair, vrel);
         applyImpulse(pair, j);
     } else if (vrel == 0) {
         float massA = pair->objectA->mass;
         float massB = pair->objectB->mass;
         float totalMass = massA + massB;
-        // std::cout << " massA: " << massA << " massB: " << massB << " totalMass: " << totalMass
-        //           << " normal: " << pair->normal << " depth: " << pair->depth << '\n';
+        std::cout << " massA: " << massA << " massB: " << massB << " totalMass: " << totalMass
+                  << " normal: " << pair->normal << " depth: " << pair->depth << '\n';
 
         Vector2 correctionA = pair->normal * (pair->depth * (pair->objectB->mass / totalMass));
         Vector2 correctionB = pair->normal * (pair->depth * (pair->objectA->mass / totalMass));
 
         // Position correction
         // std::cout << " correctionA: " << correctionA << " correctionB: " << correctionB << '\n';
-        pair->objectA->transform.position += correctionA;
-        pair->objectB->transform.position -= correctionB;
+        if (!pair->objectA->isStatic && !pair->objectB->isStatic) {
+            // if none of them are static we do normal correction
+            pair->objectA->transform.position += correctionA;
+            pair->objectB->transform.position -= correctionB;
+            return;
+        }
+        // need a way to calculate the normal other
     }
 }
 
@@ -58,8 +62,9 @@ Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
     float invertM1 = pair->objectA->invertedMass;
     float invertM2 = pair->objectB->invertedMass;
     Vector2 normal = pair->normal;
+    float e = pair->averageCof;
 
-    float impulse = -2.0f * vrel; // -2 cause all bodies are elastic
+    float impulse = -(1.0f + e) * vrel;
     impulse /= invertM1 + invertM2;
 
     return normal * impulse;
