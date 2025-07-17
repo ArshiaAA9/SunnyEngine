@@ -1,5 +1,6 @@
 #include "headers/Game.h"
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -22,23 +23,24 @@ int Game::start() {
     SDL_FColor rectColor = {0, 255, 0, 255};
     SDL_FColor staticCircleColor = {255, 0, 0, 255};
     SDL_FColor staticObjectColor = {0, 0, 255, 255};
+    float angle = 0;
 
-    rect1 = createRect(250, 250, 1, 50, 50, rectColor, 0, 1.0f);
-    circle = createCircle(300, 150, 3, 40, circleColor, 0, 0.8f);
+    rect1 = createRect(250, 250, 1, 50, 50, rectColor, angle, 1.0f);
+    circle = createCircle(300, 150, 3, 40, circleColor, angle, 0.8f);
 
-    createStaticCircle(100, 100, 35, staticCircleColor, 0);
-    createStaticCircle(700, 400, 25, staticCircleColor, 0);
-    createStaticCircle(900, 130, 30, staticCircleColor, 0);
+    createStaticCircle(100, 100, 35, staticCircleColor, angle);
+    createStaticCircle(700, 400, 25, staticCircleColor, angle);
+    createStaticCircle(900, 130, 30, staticCircleColor, angle);
 
-    createStaticRect(5, 243, 10, 479.9, staticObjectColor, 0);
-    createStaticRect(995, 243, 10, 479.9, staticObjectColor, 0);
-    ObjectPtr staticRect = createStaticRect(500, 5, 1000, 10, staticObjectColor, 0);
+    createStaticRect(5, 243, 10, 479.9, staticObjectColor, angle);
+    createStaticRect(995, 243, 10, 479.9, staticObjectColor, angle);
+    createStaticRect(500, 5, 1000, 10, staticObjectColor, angle);
+
     // FIX:FIX GRID TO MAKE THIS COLLIDE
     createStaticRect(500, 478.9, 1000, 10, staticObjectColor, 0);
 
     setMainObject(rect1);
     m_world.cD.m_grid.updateCellDimensions();
-    m_world.step(dt);
 
     // main loop
     while (m_sdl.event.loop()) {

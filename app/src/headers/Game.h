@@ -23,7 +23,7 @@ public:
     void setMainObject(ObjectPtr object);
     ObjectPtr getMainObject();
 
-    // event functions:
+    // functions used in event.h
     void rotateObject(ObjectPtr object, float amount);
     void moveObject(ObjectPtr object, Vector2 amount);
     void moveObjectTo(ObjectPtr object, Vector2 position);
