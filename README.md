@@ -1,10 +1,10 @@
 # SunnyEngine
 
-SunnyEngine is a simple personal 2D physics engine project, written in c++.
+SunnyEngine is a simple personal hobby 2D physics engine project written in c++.
 
-Currently only supports rigid and fully elastic bodies.
+Currently only supports rigid bodies.
 
-Only tested on arch linux so far so other operating systems might require additional setup.
+Only tested on arch linux, other operating systems might require additional setup.
 
 ## Requirements 
 Requires SDl3, sdl3-ttf, gcc and cmake to be installed. 
@@ -24,7 +24,7 @@ cmake --build build --parallel $(nproc)
 ```
 Do one of the following:
 ```bash
-cmake --install build --prefix ~/.local #local installation (recommneded)
+cmake --install build --prefix ~/.local #local installation
 sudo cmake --install build #system-wide installtion
 ```
 
