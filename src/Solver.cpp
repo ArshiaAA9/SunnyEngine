@@ -1,8 +1,8 @@
-#include "headers/Solver.h"
+#include "Solver.h"
 
-#include "headers/Physics.h"
-#include "headers/Types.h"
-#include "headers/Vector2.h"
+#include "Physics.h"
+#include "Types.h"
+#include "Vector2.h"
 
 // TODO: IMPLEMENT ANGULAR VELOCIRTY AND ROTATIONALA SOLVER
 namespace SE {

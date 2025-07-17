@@ -1,4 +1,4 @@
-#include "headers/Events.h"
+#include "Events.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_error.h>
@@ -7,8 +7,9 @@
 
 #include <iostream>
 
-#include "headers/Game.h"
-#include "headers/Renderer.h"
+#include "Game.h"
+#include "Physics.h"
+#include "Renderer.h"
 
 bool Events::loop() {
     while (SDL_PollEvent(&m_sdlEvent)) {

@@ -4,10 +4,11 @@ project(SunnyEngine VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)  # Critical for clangd
 
 # Source directories
-set(ENGINE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/engine/src")
-set(APP_SOURCE_DIR "${CMAKE_SOURCE_DIR}/app/src")
+set(ENGINE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
+set(APP_SOURCE_DIR "${CMAKE_SOURCE_DIR}/app")
 
 # Output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/lib)
@@ -20,13 +21,13 @@ find_package(SDL3_ttf REQUIRED)
 
 #------------------SunnyEngine------------------
 # Set Source Files
-file(GLOB_RECURSE ENGINE_SOURCES CONFIGURE_DEPENDS ${ENGINE_SOURCE_DIR}/*.cpp)
+file(GLOB_RECURSE ENGINE_SOURCES CONFIGURE_DEPENDS "${ENGINE_SOURCE_DIR}/*.cpp")
 
 # Ceate Static library
 add_library(SunnyEngine STATIC ${ENGINE_SOURCES})
 
 target_include_directories(SunnyEngine PUBLIC
-    $<BUILD_INTERFACE:${ENGINE_SOURCE_DIR}/headers>
+    $<BUILD_INTERFACE:${ENGINE_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 
@@ -41,13 +42,13 @@ include(GNUInstallDirs)
 install(
     TARGETS SunnyEngine
     EXPORT SunnyEngineTargets
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     INCLUDES DESTINATION include  # Key: Sets INTERFACE_INCLUDE_DIRECTORIES to "include"
 )
 
-install(DIRECTORY ${ENGINE_SOURCE_DIR}/headers/
+install(DIRECTORY ${ENGINE_SOURCE_DIR}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/SunnyEngine
     FILES_MATCHING
     PATTERN "*.h"
@@ -83,7 +84,7 @@ install(FILES
 
 #------------------Simulation-------------------
 # Set Source Files
-file(GLOB_RECURSE APP_SOURCES CONFIGURE_DEPENDS ${APP_SOURCE_DIR}/*.cpp)
+file(GLOB_RECURSE APP_SOURCES CONFIGURE_DEPENDS "${APP_SOURCE_DIR}/*.cpp")
 
 # Ceate Executable
 add_executable(Simulation ${APP_SOURCES})
@@ -91,7 +92,7 @@ add_executable(Simulation ${APP_SOURCES})
 # Add headers
 target_include_directories(
     Simulation PRIVATE 
-    ${APP_SOURCE_DIR}/headers
+    ${APP_SOURCE_DIR}
 )
 
 # Link simulation with Engine and sdl3

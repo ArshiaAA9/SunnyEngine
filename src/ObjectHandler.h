@@ -20,7 +20,7 @@ public:
     ObjectPtr createStaticCircle(float x, float y, float radius);
 
     // use this to delete an object
-    void deleteObject(ObjectPtr object);
+    bool deleteObject(ObjectPtr object);
 
 private:
     PhysicsWorld& m_world;

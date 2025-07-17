@@ -1,11 +1,12 @@
-#include "headers/Game.h"
+#include "Game.h"
+
+#include <Physics.h>
 
 #include <iostream>
 #include <vector>
 
-#include "Types.h"
-#include "headers/Events.h"
-#include "headers/Sdl.h"
+#include "Events.h"
+#include "Sdl.h"
 
 using namespace SE;
 

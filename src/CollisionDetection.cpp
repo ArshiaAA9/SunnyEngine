@@ -1,13 +1,13 @@
-#include "headers/CollisionDetection.h"
+#include "CollisionDetection.h"
 
 #include <algorithm>
 #include <cmath>
 #include <vector>
 
-#include "headers/GridPartition.h"
-#include "headers/Objects.h"
-#include "headers/Types.h"
-#include "headers/Vector2.h"
+#include "GridPartition.h"
+#include "Objects.h"
+#include "Types.h"
+#include "Vector2.h"
 
 // TODO: ADD A WAY FOR USER TO CHECK IF TWO SPECIFIC OBJECT COLLIDE WITH EATCH OTHER
 

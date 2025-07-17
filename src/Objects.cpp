@@ -1,4 +1,4 @@
-#include "headers/Objects.h"
+#include "Objects.h"
 
 #include <iostream>
 
@@ -22,7 +22,7 @@ void Object::checkValidValues() const {
     if (!m_isStatic) {
         if (this->m_mass <= 0.0f) throw std::invalid_argument("Mass must be positive value");
     }
-    if (!(0 <= cof && cof <= 1)) {
+    if (!(0 <= m_restitution && m_restitution <= 1)) {
         std::cerr << "error: coeffisient of restitution should be withing 0 and 1";
     }
 }
@@ -34,5 +34,7 @@ ObjectType Object::getType() const { return this->m_type; }
 bool Object::isStatic() const { return m_isStatic; }
 
 float Object::getInvertedMass() const { return m_invertedMass; }
+
+float Object::getRestitution() const { return m_restitution; }
 
 } // namespace SE

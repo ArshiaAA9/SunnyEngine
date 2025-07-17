@@ -1,4 +1,4 @@
-#include "headers/Vector2.h"
+#include "Vector2.h"
 
 #include <iostream>
 

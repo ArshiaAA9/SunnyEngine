@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Transform.h"
 #include "Vector2.h"
 
@@ -25,15 +24,14 @@ public:
     Vector2 velocity = Vector2(0, 0);
     Vector2 force = Vector2(0, 0);
 
-    float cof = 1; // coeffisient of restitution
-
 protected:
     float m_mass;
     ObjectType m_type;
     bool m_isStatic;
     float m_inertia;
     float m_invertedInertia;
-    float m_invertedMass; // Inverted Mass of static objects are 0
+    float m_invertedMass;    // Inverted Mass of static objects are 0
+    float m_restitution = 1; // coeffisient of restitution
 
 public:
     // non-static object constructor
@@ -75,6 +73,7 @@ public:
     float getInvertedMass() const;
     ObjectType getType() const;
     bool isStatic() const;
+    float getRestitution() const;
 
 private:
     void checkValidValues() const;

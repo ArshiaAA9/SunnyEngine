@@ -1,9 +1,9 @@
-#include "headers/GridPartition.h"
+#include "GridPartition.h"
 
 #include <iostream>
 
-#include "headers/Physics.h"
-#include "headers/Types.h"
+#include "Physics.h"
+#include "Types.h"
 
 namespace SE {
 // FIX: BUGGY GRID TOP STATIC BOUNDRY OBJECT NOT WORKING WHEN TOO FAR

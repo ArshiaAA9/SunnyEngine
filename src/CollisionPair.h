@@ -22,7 +22,7 @@ struct CollisionPair {
         , pointB(PointB)
         , depth(depth)
         , normal(normal) {
-        this->averageCof = (objectA->cof + objectB->cof) / 2;
+        this->averageCof = (objectA->getRestitution() + objectB->getRestitution()) / 2;
     }
 
     ~CollisionPair() = default;

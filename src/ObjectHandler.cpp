@@ -1,9 +1,10 @@
-#include "headers/ObjectHandler.h"
+#include "ObjectHandler.h"
 
 #include <algorithm>
+#include <iostream>
 #include <memory>
 
-#include "headers/Types.h"
+#include "Types.h"
 
 namespace SE {
 
@@ -12,11 +13,18 @@ void ObjectHandler::addObject(ObjectPtr object) {
     m_objects.push_back(std::move(object));
 }
 
-void ObjectHandler::deleteObject(ObjectPtr object) {
-    if (!object) return;
+bool ObjectHandler::deleteObject(ObjectPtr object) {
+    if (!object) {
+        std::cerr << "[WARN] Attempted to delete null object\n";
+        return false;
+    }
     auto itr = std::find(m_objects.begin(), m_objects.end(), object);
-    if (itr == m_objects.end()) return;
+    if (itr == m_objects.end()) {
+        std::cerr << "[INFO] Object not found";
+        return false;
+    }
     m_objects.erase(itr);
+    return true;
 }
 
 const std::vector<ObjectPtr>& ObjectHandler::getObjects() const { return m_objects; }

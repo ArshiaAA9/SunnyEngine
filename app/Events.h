@@ -2,8 +2,6 @@
 
 #include <SDL3/SDL_events.h>
 
-#include "../../../engine/src/headers/Types.h"
-
 class Game;
 class Sdl;
 
