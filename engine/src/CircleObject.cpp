@@ -20,8 +20,12 @@ void CircleObject::printProperties() const {
     std::cout << " Radius: " << this->radius << "\n";
 }
 
-ObjectType CircleObject::getType() const { return this->type; }
+ObjectType CircleObject::getType() const { return this->m_type; }
 
-/**@return Dimensions(radius, diameter)*/
 Dimensions CircleObject::getDimensions() const { return Dimensions(radius); }
+
+void CircleObject::setMass(float mass) {
+    m_mass = mass;
+    m_inertia = calculateInertia(mass, radius);
+}
 } // namespace SE

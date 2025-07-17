@@ -19,12 +19,20 @@ void Object::printProperties() const {
 }
 
 void Object::checkValidValues() const {
-    if (!isStatic) {
-        if (this->mass <= 0.0f) throw std::invalid_argument("Mass must be positive value");
+    if (!m_isStatic) {
+        if (this->m_mass <= 0.0f) throw std::invalid_argument("Mass must be positive value");
     }
     if (!(0 <= cof && cof <= 1)) {
         std::cerr << "error: coeffisient of restitution should be withing 0 and 1";
     }
 }
+
+float Object::getMass() const { return m_mass; }
+
+ObjectType Object::getType() const { return this->m_type; }
+
+bool Object::isStatic() const { return m_isStatic; }
+
+float Object::getInvertedMass() const { return m_invertedMass; }
 
 } // namespace SE

@@ -19,7 +19,7 @@ void Renderer::update(PhysicsWorld& world) {
     // TODO: change this to use shape specific functions
     for (const auto& [obj, color] : m_renderMap) {
         if (obj->getType() == RECT)
-            if (obj->isStatic) drawRotatedFilledRect(obj, color);
+            if (obj->isStatic()) drawRotatedFilledRect(obj, color);
             else
                 drawRotatedRect(obj, color);
         else

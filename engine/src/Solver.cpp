@@ -23,18 +23,18 @@ void Solver::solve(CollisionPair* pair) {
         Vector2 j = calculateImpulse(pair, vrel);
         applyImpulse(pair, j);
     } else if (vrel == 0) {
-        float massA = pair->objectA->mass;
-        float massB = pair->objectB->mass;
+        float massA = pair->objectA->getMass();
+        float massB = pair->objectB->getMass();
         float totalMass = massA + massB;
         std::cout << " massA: " << massA << " massB: " << massB << " totalMass: " << totalMass
                   << " normal: " << pair->normal << " depth: " << pair->depth << '\n';
 
-        Vector2 correctionA = pair->normal * (pair->depth * (pair->objectB->mass / totalMass));
-        Vector2 correctionB = pair->normal * (pair->depth * (pair->objectA->mass / totalMass));
+        Vector2 correctionA = pair->normal * (pair->depth * (massA / totalMass));
+        Vector2 correctionB = pair->normal * (pair->depth * (massB / totalMass));
 
         // Position correction
         // std::cout << " correctionA: " << correctionA << " correctionB: " << correctionB << '\n';
-        if (!pair->objectA->isStatic && !pair->objectB->isStatic) {
+        if (!pair->objectA->isStatic() && !pair->objectB->isStatic()) {
             // if none of them are static we do normal correction
             pair->objectA->transform.position += correctionA;
             pair->objectB->transform.position -= correctionB;
@@ -59,8 +59,8 @@ Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
     // e is 1 because of rigid bodies
     // for adding non rigid bodies modify the function to count in the e of the object
     //
-    float invertM1 = pair->objectA->invertedMass;
-    float invertM2 = pair->objectB->invertedMass;
+    float invertM1 = pair->objectA->getInvertedMass();
+    float invertM2 = pair->objectB->getInvertedMass();
     Vector2 normal = pair->normal;
     float e = pair->averageCof;
 
@@ -75,7 +75,7 @@ void Solver::applyImpulse(CollisionPair* pair, Vector2 impulse) {
     ObjectPtr obj2 = pair->objectB;
     // std::cout << " impulse: " << impulse.x << ',' << impulse.y << '\n';
 
-    obj1->velocity += impulse * obj1->invertedMass;
-    obj2->velocity -= impulse * obj2->invertedMass;
+    obj1->velocity += impulse * obj1->getInvertedMass();
+    obj2->velocity -= impulse * obj2->getInvertedMass();
 }
 } // namespace SE

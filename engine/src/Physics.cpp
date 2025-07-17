@@ -1,13 +1,11 @@
 #include "headers/Physics.h"
 
-#include <iostream>
-
 namespace SE {
 
 // public:
 void PhysicsWorld::step(float dt) {
     // updates objects inside each cell at start of each frame
-    cD.m_grid.updateCells();
+    cD.grid.updateCells();
     // check for collisions
     cD.checkCollisions();
     // solve the collisions
@@ -18,10 +16,11 @@ void PhysicsWorld::step(float dt) {
 
 // privates:
 void PhysicsWorld::dynamicsUpdate(float dt) {
-    for (auto& obj : Handler.getObjects()) {
-        if (!obj->isStatic) {
-            obj->applyForce(m_gravity * obj->mass);
-            obj->addVelocity(obj->force / obj->mass * dt);
+    for (auto& obj : handler.getObjects()) {
+        if (!obj->isStatic()) {
+            float objMass = obj->getMass();
+            obj->applyForce(m_gravity * objMass);
+            obj->addVelocity(obj->force / objMass * dt);
             obj->transform.move(obj->velocity * dt);
             obj->force = Vector2(0, 0); // reset net force at the end
         }

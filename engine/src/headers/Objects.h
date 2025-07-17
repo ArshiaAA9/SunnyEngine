@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 #include "Transform.h"
 #include "Vector2.h"
 
@@ -21,62 +19,62 @@ struct Dimensions {
 
 enum ObjectType { CIRCLE, RECT };
 
-struct Object {
-
+class Object {
+public:
     Transform transform;
-    float mass;
-    ObjectType type;
-    Vector2 velocity;
-    Vector2 force;
+    Vector2 velocity = Vector2(0, 0);
+    Vector2 force = Vector2(0, 0);
 
-    bool isStatic;
-    float invertedMass; // Inverted Mass of static objects are 0
+    float cof = 1; // coeffisient of restitution
 
-    float inertia;
-    float invertedInertia;
-    float cof; // coeffisient of restitution
+protected:
+    float m_mass;
+    ObjectType m_type;
+    bool m_isStatic;
+    float m_inertia;
+    float m_invertedInertia;
+    float m_invertedMass; // Inverted Mass of static objects are 0
 
+public:
     // non-static object constructor
-    Object(float x, float y, float mass, ObjectType type, float angle, float inertia, float cof)
-        : transform(x, y, *this, angle)
-        , mass(mass)
-        , type(type)
-        , velocity(0, 0)
-        , force(0, 0)
-        , isStatic(false)
-        , inertia(inertia)
-        , invertedInertia(1 / inertia)
-        , cof(cof) {
+    Object(float x, float y, float mass, ObjectType type, float inertia)
+        : transform(x, y, *this)
+        , m_mass(mass)
+        , m_type(type)
+        , m_isStatic(false)
+        , m_inertia(inertia)
+        , m_invertedInertia(1 / inertia) {
         checkValidValues();
-        invertedMass = 1.0f / mass;
+        m_invertedMass = 1.0f / mass;
     }
 
     // static object constructor
-    Object(float x, float y, ObjectType type, float angle, float inertia, float cof)
-        : transform(x, y, *this, angle)
-        , mass(0)
-        , type(type)
-        , velocity(0, 0)
-        , force(0, 0)
-        , isStatic(true)
-        , inertia(inertia)
-        , invertedInertia(1 / inertia)
-        , cof(cof) {
+    Object(float x, float y, ObjectType type, float inertia)
+        : transform(x, y, *this)
+        , m_mass(0)
+        , m_type(type)
+        , m_isStatic(true)
+        , m_inertia(inertia)
+        , m_invertedInertia(1 / inertia) {
         checkValidValues();
-        invertedMass = 0;
+        m_invertedMass = 0;
     }
 
     virtual ~Object() = default;
 
     virtual Dimensions getDimensions() const = 0;
-    virtual ObjectType getType() const = 0;
 
     virtual void printProperties() const;
-
-    // dynamics:
     void applyForce(Vector2 force);
-    void setVelocity(Vector2 velocity);
     void addVelocity(Vector2 veloctiy);
+    void setVelocity(Vector2 velocity);
+
+    // its virtual because we have to calculate inertia differently depending on object type
+    virtual void setMass(float mass) = 0;
+    float getMass() const;
+    float getInvertedMass() const;
+    ObjectType getType() const;
+    bool isStatic() const;
 
 private:
     void checkValidValues() const;

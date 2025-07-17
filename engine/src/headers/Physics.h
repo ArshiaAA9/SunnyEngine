@@ -10,7 +10,7 @@ namespace SE {
 class PhysicsWorld {
 public:
     CollisionDetection cD;
-    ObjectHandler Handler;
+    ObjectHandler handler;
 
     /**
      *@param gridWidth simulations height
@@ -19,7 +19,7 @@ public:
      * */
     PhysicsWorld(float gridWidth, float gridHeight)
         : cD(gridHeight, gridWidth, *this)
-        , Handler(*this)
+        , handler(*this)
         , m_solver(*this) {}
 
     void step(float dt);

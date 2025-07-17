@@ -6,36 +6,36 @@ namespace SE {
 
 void Transform::move(Vector2 amount) {
     this->position += amount;
-    this->hasTransformed = false;
+    this->m_hasTransformed = false;
 }
 
 void Transform::moveTo(Vector2 position) {
     this->position = position;
-    hasTransformed = false;
+    m_hasTransformed = false;
 }
 
 void Transform::transform() {
     // go over vertices and transform them
-    if (hasTransformed == false) {
+    if (m_hasTransformed == false) {
         for (size_t i = 0; i < transformedVertices.size(); i++) {
             transformedVertices[i] = rotate(vertices[i]) + position;
         }
-        hasTransformed = true;
+        m_hasTransformed = true;
     }
 }
 
 void Transform::increaseAngle(float amount) {
-    this->angle += amount;
-    this->sinValue = std::sin(this->angle);
-    this->cosValue = std::cos(this->angle);
-    this->hasTransformed = false;
+    this->m_angle += amount;
+    this->m_sinValue = std::sin(this->m_angle);
+    this->m_cosValue = std::cos(this->m_angle);
+    this->m_hasTransformed = false;
 }
 
 void Transform::changeAngle(float amount) {
-    this->angle = amount;
-    this->sinValue = std::sin(this->angle);
-    this->cosValue = std::cos(this->angle);
-    this->hasTransformed = false;
+    this->m_angle = amount;
+    this->m_sinValue = std::sin(this->m_angle);
+    this->m_cosValue = std::cos(this->m_angle);
+    this->m_hasTransformed = false;
 }
 
 void Transform::printVertices() const {
@@ -51,10 +51,12 @@ Vector2 Transform::rotate(Vector2 vector) {
     // x1 = x0cos(θ) – y0sin(θ)(Equation 1)
     // y1 = x0sin(θ) + y0cos(θ)(Equation 2)
 
-    float rx = vector.x * this->cosValue - vector.y * this->sinValue;
-    float ry = vector.x * this->sinValue + vector.y * this->cosValue;
+    float rx = vector.x * this->m_cosValue - vector.y * this->m_sinValue;
+    float ry = vector.x * this->m_sinValue + vector.y * this->m_cosValue;
 
     return Vector2(rx, ry);
 }
+
+float Transform::getAngle() const { return m_angle; }
 
 } // namespace SE

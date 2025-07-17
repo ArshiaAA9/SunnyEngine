@@ -13,13 +13,14 @@ namespace SE {
 // CHECK IF THIS IS USED BEFORE. IF NOT THROW ERORR
 void GridPartition::updateCellDimensions() {
     // used to update maxH and maxW
-    auto& allObjects = m_world.Handler.getObjects();
+    auto& allObjects = m_world.handler.getObjects();
     for (auto& obj : allObjects) {
         Dimensions dimensions = obj->getDimensions();
-        if (obj->type == RECT) {
+        ObjectType objType = obj->getType();
+        if (objType == RECT) {
             if (dimensions.w > cellWidth) cellWidth = dimensions.w;
             if (dimensions.h > cellHeight) cellHeight = dimensions.h;
-        } else if (obj->type == CIRCLE) {
+        } else if (objType == CIRCLE) {
             float radius = dimensions.r;
             if (radius > cellWidth) cellWidth = radius;
             if (radius > cellHeight) cellHeight = radius;
@@ -36,7 +37,7 @@ void GridPartition::updateCells() {
 
     // std::cout << "cellWidth: " << cellWidth << " cellHeight: " << cellHeight << '\n';
     // loops over all object&s in world and adds them to a cell
-    for (auto& obj : m_world.Handler.getObjects()) {
+    for (auto& obj : m_world.handler.getObjects()) {
         Vector2 objPos = obj->transform.position;
         int col = static_cast<int>(objPos.x / cellWidth);
         int row = static_cast<int>(objPos.y / cellHeight);

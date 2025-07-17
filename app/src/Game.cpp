@@ -1,7 +1,5 @@
 #include "headers/Game.h"
 
-#include <algorithm>
-#include <cmath>
 #include <iostream>
 #include <vector>
 
@@ -40,7 +38,7 @@ int Game::start() {
     createStaticRect(500, 478.9, 1000, 10, staticObjectColor, 0);
 
     setMainObject(rect1);
-    m_world.cD.m_grid.updateCellDimensions();
+    m_world.cD.grid.updateCellDimensions();
 
     // main loop
     while (m_sdl.event.loop()) {
@@ -80,26 +78,26 @@ void Game::stopObject(ObjectPtr object) { object->setVelocity(Vector2(0, 0)); }
 
 ObjectPtr
 Game::createRect(float x, float y, float mass, float width, float height, SDL_FColor color, float angle, float cof) {
-    ObjectPtr pObject = m_world.Handler.createRectObj(x, y, mass, width, height, angle, cof);
+    ObjectPtr pObject = m_world.handler.createRectObj(x, y, mass, width, height);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;
 }
 
 ObjectPtr
 Game::createStaticRect(float x, float y, float width, float height, SDL_FColor color, float angle, float cof) {
-    ObjectPtr pObject = m_world.Handler.createStaticRect(x, y, width, height, angle, cof);
+    ObjectPtr pObject = m_world.handler.createStaticRect(x, y, width, height);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;
 }
 
 ObjectPtr Game::createCircle(float x, float y, float mass, float radius, SDL_FColor color, float angle, float cof) {
-    ObjectPtr pObject = m_world.Handler.createCircleObj(x, y, mass, radius, angle, cof);
+    ObjectPtr pObject = m_world.handler.createCircleObj(x, y, mass, radius);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;
 }
 
 ObjectPtr Game::createStaticCircle(float x, float y, float radius, SDL_FColor color, float angle, float cof) {
-    ObjectPtr pObject = m_world.Handler.createStaticCircle(x, y, radius, angle, cof);
+    ObjectPtr pObject = m_world.handler.createStaticCircle(x, y, radius);
     m_sdl.renderer.addRenderPair(pObject, color);
     return pObject;
 }
@@ -117,7 +115,7 @@ void Game::deleteAllObjects() {
     // Delete each object and remove from render map
     for (ObjectPtr obj : tempVector) {
         try {
-            m_world.Handler.deleteObject(obj);    // Delete from the world
+            m_world.handler.deleteObject(obj);    // Delete from the world
             m_sdl.renderer.deleteRenderPair(obj); // Remove from render map
         } catch (const std::exception& e) {
             std::cerr << "Error deleting object " << obj << ": " << e.what() << "\n";

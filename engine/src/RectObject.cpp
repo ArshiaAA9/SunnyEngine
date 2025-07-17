@@ -12,19 +12,19 @@ float RectObject::calculateInertia(float paramMass, float paramWidth, float para
 
 void RectObject::printProperties() const {
     Object::printProperties();
-    std::cout << " Dimensions: " << this->width << "," << this->height << "\n";
+    std::cout << " Dimensions: " << this->m_width << "," << this->m_height << "\n";
 }
 
 void RectObject::checkValidDimensions() const {
-    if (this->height <= 0 || this->width <= 0) {
-        throw std::invalid_argument("Height, and width must be positive int.");
+    if (this->m_height <= 0 || this->m_width <= 0) {
+        throw std::invalid_argument("m_height, and m_width must be positive int.");
     }
 }
 
-// getType pure virtual function:
-ObjectType RectObject::getType() const { return this->type; }
+Dimensions RectObject::getDimensions() const { return Dimensions(m_width, m_height); }
 
-// getDimensions pure virtual function:
-/**@return Dimensions(width, height)*/
-Dimensions RectObject::getDimensions() const { return Dimensions(width, height); }
+void RectObject::setMass(float mass) {
+    m_mass = mass;
+    m_inertia = calculateInertia(m_mass, m_width, m_height);
+}
 } // namespace SE

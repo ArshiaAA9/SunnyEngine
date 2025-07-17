@@ -14,7 +14,7 @@ class PhysicsWorld;
 class CollisionDetection {
 public:
     CollisionDetection(float gridHeight, float gridWidth, PhysicsWorld& world)
-        : m_grid(gridHeight, gridWidth, world) {}
+        : grid(gridHeight, gridWidth, world) {}
 
     // collision detection inerface:
     void checkCollisions();
@@ -22,11 +22,10 @@ public:
     // returns a pointer to collisionpair vector
     const std::vector<std::unique_ptr<CollisionPair>>& getClPairs() const;
 
-    void addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth,
-                   Vector2 normal);
+    void addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth, Vector2 normal);
     void deleteClPair(CollisionPair* pair);
 
-    GridPartition m_grid;
+    GridPartition grid;
 
 private:
     std::vector<std::unique_ptr<CollisionPair>> m_collisionPairs;

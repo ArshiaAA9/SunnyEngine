@@ -7,29 +7,28 @@ struct CircleObject : public Object {
     float radius;
 
     // constructor:
-    CircleObject(float x, float y, float mass, float radius, float angle, float cof)
-        : Object(x, y, mass, CIRCLE, angle, calculateInertia(mass, radius), cof)
+    CircleObject(float x, float y, float mass, float radius)
+        : Object(x, y, mass, CIRCLE, calculateInertia(mass, radius))
         , radius(radius) {
         checkValidDimensions();
     }
 
-    CircleObject(float x, float y, float radius, float angle, float cof)
-        // FIX: NOT SURE WHAT TO PASS IN FOR STATIC OBJECTS MASS
-        : Object(x, y, CIRCLE, angle, calculateInertia(0, radius), cof)
+    CircleObject(float x, float y, float radius)
+        : Object(x, y, CIRCLE, calculateInertia(0, radius))
         , radius(radius) {
         checkValidDimensions();
     }
 
     ~CircleObject() = default;
 
-    /**@return Vector2(radius, Circumference)*/
     Dimensions getDimensions() const override;
-    ObjectType getType() const override;
+    ObjectType getType() const;
 
     void printProperties() const override;
+    void setMass(float mass) override;
 
 private:
-    float calculateInertia(float mass, float radius);
+    static float calculateInertia(float mass, float radius);
     void checkValidDimensions() const;
 };
 } // namespace SE

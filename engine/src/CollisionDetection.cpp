@@ -18,14 +18,14 @@ namespace SE {
  * @brief and between objects in neighboring cells to handle boundary/cross-cell collisions.*/
 void CollisionDetection::checkCollisions() {
     // Get grid dimensions
-    int rowCount = m_grid.getRowCount();
-    int colCount = m_grid.getColCount();
+    int rowCount = grid.getRowCount();
+    int colCount = grid.getColCount();
 
     // Iterate through all cells in the grid
     for (int col = 0; col < colCount; col++) {
         for (int row = 0; row < rowCount; row++) {
             // Get reference to objects in current cell
-            auto& objectsInCell = m_grid.getObjectInCell(col, row);
+            auto& objectsInCell = grid.getObjectInCell(col, row);
 
             // Skip empty cells to optimize processing
             if (objectsInCell.empty()) continue;
@@ -53,12 +53,10 @@ void CollisionDetection::checkCollisions() {
                     int neighborRow = row + drow;
 
                     // Validate neighbor cell boundaries
-                    if (neighborCol >= 0 && neighborCol < colCount && neighborRow >= 0 &&
-                        neighborRow < rowCount) {
+                    if (neighborCol >= 0 && neighborCol < colCount && neighborRow >= 0 && neighborRow < rowCount) {
 
                         // Get reference to neighbor cell objects
-                        auto& pNeighborObjectsInCell =
-                            m_grid.getObjectInCell(neighborCol, neighborRow);
+                        auto& pNeighborObjectsInCell = grid.getObjectInCell(neighborCol, neighborRow);
 
                         // Check all object pairs between current and neighbor cell
                         for (auto& obj1 : objectsInCell) {
@@ -75,21 +73,21 @@ void CollisionDetection::checkCollisions() {
 
 // used inside checkCollision function
 void CollisionDetection::checkCollisionByType(ObjectPtr obj1, ObjectPtr obj2) {
-    if (obj1->isStatic && obj2->isStatic) {
+    if (obj1->isStatic() && obj2->isStatic()) {
         return;
     } else if (obj1->getType() == RECT && obj2->getType() == RECT) { // Rect-Rect
-        if (obj1->transform.angle == 0 && obj2->transform.angle == 0) {
+        if (obj1->transform.getAngle() == 0 && obj2->transform.getAngle() == 0) {
             aabb(obj1, obj2);
         } else {
             sat(obj1, obj2);
         }
     } else if (obj1->getType() == CIRCLE && obj2->getType() == CIRCLE) { // Circle-Circle
         clCircleCircle(obj1, obj2);
-    } else if ((obj1->getType() == RECT && obj2->getType() == CIRCLE) ||
-               (obj1->getType() == CIRCLE &&
-                obj2->getType() == RECT)) { // Rect-Circle or Circle-Rect
+    } else if (
+        (obj1->getType() == RECT && obj2->getType() == CIRCLE) ||
+        (obj1->getType() == CIRCLE && obj2->getType() == RECT)) { // Rect-Circle or Circle-Rect
         // Ensure the first object is always the circle
-        if (obj1->type == CIRCLE) {
+        if (obj1->getType() == CIRCLE) {
             clCircleRect(obj1, obj2);
 
         } else {
@@ -158,8 +156,7 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
     // first polygon
     for (size_t i = 0; i < verticesA.size(); i++) {
         Vector2 vertex1 = verticesA[i];
-        Vector2 vertex2 =
-            verticesA[(i + 1) % verticesA.size()]; // use modulu operator to avoid out of bound
+        Vector2 vertex2 = verticesA[(i + 1) % verticesA.size()]; // use modulu operator to avoid out of bound
 
         Vector2 edge = vertex2 - vertex1;
         if (edge.squaredMagnitude() < 1e-8) continue;
@@ -180,8 +177,7 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
     // second polygon
     for (size_t i = 0; i < verticesB.size(); i++) {
         Vector2 vertex1 = verticesB[i];
-        Vector2 vertex2 =
-            verticesB[(i + 1) % verticesB.size()]; // use modulu operator to avoid out of bound
+        Vector2 vertex2 = verticesB[(i + 1) % verticesB.size()]; // use modulu operator to avoid out of bound
 
         Vector2 edge = vertex2 - vertex1;
         Vector2 axis = Vector2(edge.y, -edge.x);
@@ -300,8 +296,8 @@ void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
 
 // interfaces:
 // adds collisions pairs to the m_collisionPair member
-void CollisionDetection::addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB,
-                                   float depth, Vector2 normal) {
+void CollisionDetection::addClPair(
+    ObjectPtr obj1, Vector2 pointA, ObjectPtr obj2, Vector2 pointB, float depth, Vector2 normal) {
     std::unique_ptr<CollisionPair> collisionPair =
         std::make_unique<CollisionPair>(obj1, pointA, obj2, pointB, depth, normal);
     m_collisionPairs.push_back(std::move(collisionPair));
@@ -310,17 +306,14 @@ void CollisionDetection::addClPair(ObjectPtr obj1, Vector2 pointA, ObjectPtr obj
 // deletes a pair from m_collisionPair member
 void CollisionDetection::deleteClPair(CollisionPair* pair) {
     if (!pair) return;
-    auto itr = std::find_if(m_collisionPairs.begin(), m_collisionPairs.end(),
-                            [pair](const std::unique_ptr<CollisionPair>& ptr) {
-                                return ptr.get() == pair;
-                            });
+    auto itr = std::find_if(
+        m_collisionPairs.begin(), m_collisionPairs.end(),
+        [pair](const std::unique_ptr<CollisionPair>& ptr) { return ptr.get() == pair; });
     if (itr == m_collisionPairs.end()) return;
     m_collisionPairs.erase(itr);
 }
 
 /**@return a constant reference to m_collisionPairs*/
-const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const {
-    return m_collisionPairs;
-}
+const std::vector<std::unique_ptr<CollisionPair>>& CollisionDetection::getClPairs() const { return m_collisionPairs; }
 
 } // namespace SE

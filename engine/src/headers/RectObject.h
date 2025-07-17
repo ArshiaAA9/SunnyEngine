@@ -3,16 +3,13 @@
 #include "Objects.h"
 
 namespace SE {
-struct RectObject : public Object {
-    int height;
-    int width;
-
+class RectObject : public Object {
+public:
     // constructor:
-    // FIX: inertia is being calculated before object, height and with are initialized
-    RectObject(float x, float y, float mass, float width, float height, float angle, float cof)
-        : Object(x, y, mass, RECT, angle, calculateInertia(mass, width, height), cof)
-        , height(height)
-        , width(width) {
+    RectObject(float x, float y, float mass, float width, float height)
+        : Object(x, y, mass, ObjectType::RECT, calculateInertia(mass, width, height))
+        , m_height(height)
+        , m_width(width) {
         checkValidDimensions();
         this->transform.vertices = {
             Vector2(-width / 2, height / 2), Vector2(-width / 2, -height / 2), Vector2(width / 2, -height / 2),
@@ -20,11 +17,10 @@ struct RectObject : public Object {
         this->transform.transformedVertices.resize(4);
     }
 
-    RectObject(float x, float y, float width, float height, float angle, float cof)
-        // FIX: NOT SURE WHAT TO PASS IN FOR STATIC OBJECTS MASS
-        : Object(x, y, RECT, angle, calculateInertia(0, width, height), cof)
-        , height(height)
-        , width(width) {
+    RectObject(float x, float y, float width, float height)
+        : Object(x, y, ObjectType::RECT, calculateInertia(0, width, height))
+        , m_height(height)
+        , m_width(width) {
         checkValidDimensions();
         this->transform.vertices = {
             Vector2(-width / 2, height / 2), Vector2(-width / 2, -height / 2), Vector2(width / 2, -height / 2),
@@ -35,12 +31,15 @@ struct RectObject : public Object {
     ~RectObject() = default;
 
     Dimensions getDimensions() const override;
-    ObjectType getType() const override;
-
+    ObjectType getType() const;
     void printProperties() const override;
 
 private:
     void checkValidDimensions() const;
     float calculateInertia(float mass, float width, float height);
+    void setMass(float mass) override;
+
+    int m_height;
+    int m_width;
 };
 } // namespace SE
