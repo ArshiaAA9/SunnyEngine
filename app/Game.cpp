@@ -25,11 +25,12 @@ int Game::start() {
     float angle = 0;
 
     rect1 = createRect(250, 250, 1, 50, 50, rectColor, angle, 1.0f);
+    createRect(400, 250, 1, 50, 50, rectColor, angle, 1.0f);
     circle = createCircle(300, 150, 3, 40, circleColor, angle, 0.8f);
 
     createStaticCircle(200, 200, 35, staticCircleColor, angle);
     createStaticCircle(500, 200, 25, staticCircleColor, angle);
-    createStaticCircle(600, 200, 30, staticCircleColor, angle);
+    createStaticRect(600, 200, 30, 10, staticCircleColor, angle);
 
     createStaticRect(5, 243, 10, 479.9, staticObjectColor, angle);
     createStaticRect(995, 243, 10, 479.9, staticObjectColor, angle);
@@ -71,11 +72,19 @@ void Game::setMainObject(ObjectPtr object) { m_mainObject = object; }
 
 ObjectPtr Game::getMainObject() { return m_mainObject; }
 
+void Game::spinObject(ObjectPtr object, float amount) { // object->applyTorque(amount);
+    object->setAngularVelocity(amount);
+}
+
 void Game::moveObject(ObjectPtr object, Vector2 amount) { object->applyForce(amount); }
 
 void Game::moveObjectTo(ObjectPtr object, Vector2 position) { object->transform.moveTo(position); }
 
-void Game::stopObject(ObjectPtr object) { object->setVelocity(Vector2(0, 0)); }
+void Game::stopObject(ObjectPtr object) {
+    object->setVelocity(Vector2(0, 0));
+    object->setAngularVelocity(0);
+    object->transform.changeAngle(0);
+}
 
 ObjectPtr
 Game::createRect(float x, float y, float mass, float width, float height, SDL_FColor color, float angle, float cof) {

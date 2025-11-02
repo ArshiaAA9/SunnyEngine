@@ -57,10 +57,7 @@ void Events::keydownEvents() {
             m_game.stopObject(mainObj);
             break;
         case SDLK_R:
-            // reset button
-            m_game.deleteAllObjects();
-            m_game.moveObjectTo(mainObj, Vector2(500, 250));
-            m_game.stopObject(mainObj);
+            m_game.spinObject(mainObj, M_PI);
             break;
         case SDLK_F:
             // rotate button
