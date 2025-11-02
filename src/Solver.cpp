@@ -46,26 +46,39 @@ void Solver::solve(CollisionPair* pair) {
 
 float Solver::calculateRelativeVelocity(CollisionPair* pair) {
     Vector2 v1 = pair->objectA->velocity;
+    float w1 = pair->objectA->angularVelocity;
+    Vector2 r1 = pair->r1;
     Vector2 v2 = pair->objectB->velocity;
+    float w2 = pair->objectB->angularVelocity;
+    Vector2 r2 = pair->r2;
     Vector2 normal = pair->normal;
-    Vector2 vrel = v1 - v2;
+
+    // w x r = (-w * r.y, w * r.x)
+
+    Vector2 vrel = v1 + r1.cross(w1) - v2 - r2.cross(w2);
     return vrel.dotProduct(normal);
 }
 
 Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
-    // wA2 = wA1 + (rAP . hjn) / IA
-    //
     // j = (-(1+e) vAB1 . n) / ((n.n) (1/m1 + 1/m2) + (rAP.n)^2/IA + (rBP . n)^2/IB)
     // e is 1 because of rigid bodies
     // for adding non rigid bodies modify the function to count in the e of the object
     //
     float invertM1 = pair->objectA->getInvertedMass();
     float invertM2 = pair->objectB->getInvertedMass();
+    float invertI1 = pair->objectA->getInvertedInertia();
+    float invertI2 = pair->objectB->getInvertedInertia();
+    Vector2 r1 = pair->r1;
+    Vector2 r2 = pair->r2;
     Vector2 normal = pair->normal;
     float e = pair->averageRestitution;
 
+    float r1CrossNormal = r1.crossProduct(normal);
+    float r2CrossNormal = r2.crossProduct(normal);
+
     float impulse = -(1.0f + e) * vrel;
-    impulse /= invertM1 + invertM2;
+    impulse /=
+        invertM1 + invertM2 + invertI1 * r1CrossNormal * r1CrossNormal + invertI2 * r2CrossNormal * r2CrossNormal;
 
     return normal * impulse;
 }
@@ -73,9 +86,13 @@ Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
 void Solver::applyImpulse(CollisionPair* pair, Vector2 impulse) {
     ObjectPtr obj1 = pair->objectA;
     ObjectPtr obj2 = pair->objectB;
-    // std::cout << " impulse: " << impulse.x << ',' << impulse.y << '\n';
+    Vector2 r1 = pair->r1;
+    Vector2 r2 = pair->r2;
 
     obj1->velocity += impulse * obj1->getInvertedMass();
     obj2->velocity -= impulse * obj2->getInvertedMass();
+
+    obj1->angularVelocity += r1.crossProduct(impulse) * obj1->getInvertedInertia();
+    obj2->angularVelocity -= r2.crossProduct(impulse) * obj2->getInvertedInertia();
 }
 } // namespace SE

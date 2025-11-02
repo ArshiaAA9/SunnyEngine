@@ -14,6 +14,10 @@ struct CollisionPair {
     float depth;
     Vector2 normal;
     float averageRestitution;
+    Vector2 contactPoint = (this->pointA + this->pointB) * 0.5f;
+    // change this if there was problem with the direction of resolve
+    Vector2 r1 = contactPoint - objectA->transform.position;
+    Vector2 r2 = contactPoint - objectB->transform.position;
 
     CollisionPair(ObjectPtr obj1, Vector2 PointA, ObjectPtr obj2, Vector2 PointB, float depth, Vector2 normal)
         : objectA(obj1)

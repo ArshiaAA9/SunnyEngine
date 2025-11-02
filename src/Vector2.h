@@ -40,6 +40,12 @@ struct Vector2 {
     // Cross Product A x B = ax * by - ay * bx
     float crossProduct(const Vector2& vector);
 
+    Vector2 cross(const float s);
+
+    static float crossProduct(const Vector2& vector1, const Vector2& vector2) {
+        return vector1.x * vector2.y - vector1.y * vector2.x;
+    }
+
     // Divisions:
 
     // Division by a scalar

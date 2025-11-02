@@ -47,6 +47,8 @@ float Vector2::dotProduct(const Vector2& vector) { return x * vector.x + y * vec
 
 float Vector2::crossProduct(const Vector2& vector) { return x * vector.y - y * vector.x; }
 
+Vector2 Vector2::cross(float s) { return Vector2(-s * this->y, s * this->x); }
+
 Vector2 Vector2::operator/(float scalar) {
     checkScalar(scalar);
     return Vector2(x / scalar, y / scalar);

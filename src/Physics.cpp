@@ -24,6 +24,7 @@ void PhysicsWorld::dynamicsUpdate(float dt) {
 
             // angular velocity related:
             obj->addAngularVelocity(obj->torque * obj->getInvertedInertia() * dt);
+            obj->transform.increaseAngle(obj->angularVelocity * dt);
 
             obj->transform.move(obj->velocity * dt);
             obj->force = Vector2(0, 0); // reset net force at the end
