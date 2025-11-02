@@ -20,7 +20,11 @@ void PhysicsWorld::dynamicsUpdate(float dt) {
         if (!obj->isStatic()) {
             float objMass = obj->getMass();
             obj->applyForce(m_gravity * objMass);
-            obj->addVelocity(obj->force / objMass * dt);
+            obj->addVelocity(obj->force * obj->getInvertedMass() * dt);
+
+            // angular velocity related:
+            obj->addAngularVelocity(obj->torque * obj->getInvertedInertia() * dt);
+
             obj->transform.move(obj->velocity * dt);
             obj->force = Vector2(0, 0); // reset net force at the end
         }

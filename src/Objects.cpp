@@ -7,9 +7,19 @@ namespace SE {
 // Objects Base Functions:
 void Object::applyForce(Vector2 force) { this->force += force; }
 
-void Object::setVelocity(Vector2 velocity) { this->velocity = velocity; }
+void Object::setForce(Vector2 force) { this->force = force; }
+
+void Object::applyTorque(float torque) { this->torque += torque; }
+
+void Object::setTorque(float torque) { this->torque = torque; }
 
 void Object::addVelocity(Vector2 velocity) { this->velocity += velocity; }
+
+void Object::setVelocity(Vector2 velocity) { this->velocity = velocity; }
+
+void Object::addAngularVelocity(float angularVelocity) { this->angularVelocity += angularVelocity; }
+
+void Object::setAngularVelocity(float angularVelocity) { this->angularVelocity = angularVelocity; }
 
 // printProperties() virtual function:
 void Object::printProperties() const {
@@ -27,9 +37,13 @@ void Object::checkValidValues() const {
     }
 }
 
+float Object::getInvertedInertia() const { return m_invertedInertia; }
+
+float Object::getInertia() const { return m_inertia; }
+
 float Object::getMass() const { return m_mass; }
 
-ObjectType Object::getType() const { return this->m_type; }
+ObjectType Object::getType() const { return m_type; }
 
 bool Object::isStatic() const { return m_isStatic; }
 

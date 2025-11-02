@@ -62,7 +62,7 @@ Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
     float invertM1 = pair->objectA->getInvertedMass();
     float invertM2 = pair->objectB->getInvertedMass();
     Vector2 normal = pair->normal;
-    float e = pair->averageCof;
+    float e = pair->averageRestitution;
 
     float impulse = -(1.0f + e) * vrel;
     impulse /= invertM1 + invertM2;

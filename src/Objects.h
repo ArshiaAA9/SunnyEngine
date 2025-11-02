@@ -22,7 +22,11 @@ class Object {
 public:
     Transform transform;
     Vector2 velocity = Vector2(0, 0);
+    float angularVelocity = 0;
+
+    // these two reset every frame
     Vector2 force = Vector2(0, 0);
+    float torque = 0;
 
 protected:
     float m_mass;
@@ -53,7 +57,7 @@ public:
         , m_type(type)
         , m_isStatic(true)
         , m_inertia(inertia)
-        , m_invertedInertia(1 / inertia) {
+        , m_invertedInertia(0) {
         checkValidValues();
         m_invertedMass = 0;
     }
@@ -64,16 +68,28 @@ public:
 
     virtual void printProperties() const;
     void applyForce(Vector2 force);
+    void setForce(Vector2 force);
+    void applyTorque(float torque);
+    void setTorque(float torque);
+
     void addVelocity(Vector2 veloctiy);
     void setVelocity(Vector2 velocity);
 
-    // its virtual because we have to calculate inertia differently depending on object type
+    void addAngularVelocity(float angularVelocity);
+    void setAngularVelocity(float angularVelocity);
+
+    // its virtual because we have to calculate inertia differently
+    // depending on object type and we have to recalculate it each time
     virtual void setMass(float mass) = 0;
+
+    float getInvertedInertia() const;
+    float getInertia() const;
     float getMass() const;
     float getInvertedMass() const;
     ObjectType getType() const;
-    bool isStatic() const;
     float getRestitution() const;
+
+    bool isStatic() const;
 
 private:
     void checkValidValues() const;

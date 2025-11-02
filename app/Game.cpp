@@ -27,9 +27,9 @@ int Game::start() {
     rect1 = createRect(250, 250, 1, 50, 50, rectColor, angle, 1.0f);
     circle = createCircle(300, 150, 3, 40, circleColor, angle, 0.8f);
 
-    createStaticCircle(100, 100, 35, staticCircleColor, angle);
-    createStaticCircle(700, 400, 25, staticCircleColor, angle);
-    createStaticCircle(900, 130, 30, staticCircleColor, angle);
+    createStaticCircle(200, 200, 35, staticCircleColor, angle);
+    createStaticCircle(500, 200, 25, staticCircleColor, angle);
+    createStaticCircle(600, 200, 30, staticCircleColor, angle);
 
     createStaticRect(5, 243, 10, 479.9, staticObjectColor, angle);
     createStaticRect(995, 243, 10, 479.9, staticObjectColor, angle);

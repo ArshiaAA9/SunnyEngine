@@ -1,5 +1,8 @@
 @PACKAGE_INIT@
 
 include("${CMAKE_CURRENT_LIST_DIR}/SunnyEngineTargets.cmake")
+# TODO: add sdl as a dependency
 
+# Add any find_dependency() calls here if your project has dependencies
+# find_dependency(SomeDependency REQUIRED)
 check_required_components(SunnyEngine)

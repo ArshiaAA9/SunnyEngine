@@ -5,7 +5,7 @@
 #include "Vector2.h"
 
 namespace SE {
-struct Object;
+class Object;
 
 struct Transform {
 public:

@@ -4,7 +4,7 @@
 #include "Vector2.h"
 
 namespace SE {
-struct Object;
+class Object;
 
 struct CollisionPair {
     ObjectPtr objectA;
@@ -13,7 +13,7 @@ struct CollisionPair {
     Vector2 pointB; // deepest point of object B in object A
     float depth;
     Vector2 normal;
-    float averageCof;
+    float averageRestitution;
 
     CollisionPair(ObjectPtr obj1, Vector2 PointA, ObjectPtr obj2, Vector2 PointB, float depth, Vector2 normal)
         : objectA(obj1)
@@ -22,7 +22,7 @@ struct CollisionPair {
         , pointB(PointB)
         , depth(depth)
         , normal(normal) {
-        this->averageCof = (objectA->getRestitution() + objectB->getRestitution()) / 2;
+        this->averageRestitution = (objectA->getRestitution() + objectB->getRestitution()) / 2;
     }
 
     ~CollisionPair() = default;
