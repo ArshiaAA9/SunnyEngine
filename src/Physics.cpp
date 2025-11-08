@@ -6,14 +6,14 @@ namespace SE {
 
 // public:
 void PhysicsWorld::step(float dt) {
+    // updates the simulation
+    dynamicsUpdate(dt);
     // updates objects inside each cell at start of each frame
     cD.grid.updateCells();
     // check for collisions
     cD.checkCollisions();
     // solve the collisions
     m_solver.solveCollisionPairs();
-    // updates the simulation
-    dynamicsUpdate(dt);
 }
 
 // privates:

@@ -73,7 +73,7 @@ void Events::mouseButtonUpEvents() {
     SDL_FColor cColor = {255, 0, 0, 255};
     switch (m_sdlEvent.button.button) {
         case SDL_BUTTON_LEFT:
-            createRectOnMousePos(mx, my, 3, 50, 50, rColor);
+            createRectOnMousePos(mx, my, 2, 50, 50, rColor);
             break;
         case SDL_BUTTON_RIGHT:
             my = m_sdl.renderer.getWindowHeight() - my;

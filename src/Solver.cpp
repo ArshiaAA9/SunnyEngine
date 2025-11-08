@@ -23,24 +23,18 @@ void Solver::solve(CollisionPair* pair) {
         Vector2 j = calculateImpulse(pair, vrel);
         applyImpulse(pair, j);
     } else if (vrel == 0) {
-        float massA = pair->objectA->getMass();
-        float massB = pair->objectB->getMass();
-        float totalMass = massA + massB;
-        std::cout << " massA: " << massA << " massB: " << massB << " totalMass: " << totalMass
-                  << " normal: " << pair->normal << " depth: " << pair->depth << '\n';
+        float invMassA = pair->objectA->getInvertedMass();
+        float invMassB = pair->objectB->getMass();
+        float totalInvMass = invMassA + invMassB;
 
-        Vector2 correctionA = pair->normal * (pair->depth * (massA / totalMass));
-        Vector2 correctionB = pair->normal * (pair->depth * (massB / totalMass));
+        if (totalInvMass <= 0) return;
+        Vector2 correctionPerMass = pair->normal * (pair->depth / totalInvMass);
+        Vector2 correctionA = correctionPerMass * invMassA;
+        Vector2 correctionB = correctionPerMass * invMassB;
 
-        // Position correction
-        // std::cout << " correctionA: " << correctionA << " correctionB: " << correctionB << '\n';
-        if (!pair->objectA->isStatic() && !pair->objectB->isStatic()) {
-            // if none of them are static we do normal correction
-            pair->objectA->transform.position += correctionA;
-            pair->objectB->transform.position -= correctionB;
-            return;
-        }
-        // need a way to calculate the normal other
+        pair->objectA->transform.position += correctionA;
+        pair->objectB->transform.position -= correctionB;
+        return;
     }
 }
 
