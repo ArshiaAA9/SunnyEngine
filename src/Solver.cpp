@@ -4,7 +4,6 @@
 #include "Types.h"
 #include "Vector2.h"
 
-// TODO: IMPLEMENT ANGULAR VELOCIRTY AND ROTATIONALA SOLVER
 namespace SE {
 void Solver::solveCollisionPairs() {
     auto& clPairs = m_world.cD.getClPairs();
@@ -23,8 +22,9 @@ void Solver::solve(CollisionPair* pair) {
         Vector2 j = calculateImpulse(pair, vrel);
         applyImpulse(pair, j);
     } else if (vrel == 0) {
+        if (pair->depth <= 0) return; // no need to do anything if objects are not colliding
         float invMassA = pair->objectA->getInvertedMass();
-        float invMassB = pair->objectB->getMass();
+        float invMassB = pair->objectB->getInvertedMass();
         float totalInvMass = invMassA + invMassB;
 
         if (totalInvMass <= 0) return;

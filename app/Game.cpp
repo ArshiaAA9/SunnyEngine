@@ -29,7 +29,7 @@ int Game::start() {
     float rectWidth = 50;
 
     rect1 = createRect(250, 250, 1, 50, 50, rectColor, angle, 1.0f);
-    rect2 = createStaticRect(249, 199, 100, rectHeight, rectColor, angle);
+    rect2 = createStaticRect(250, 199, 100, rectHeight, rectColor, angle);
     // rect3 = createRect(350, 250, 2, rectWidth, rectHeight, rectColor, angle, 1.0f);
 
     createStaticRect(5, 243, 10, 479.9, staticObjectColor, angle);
