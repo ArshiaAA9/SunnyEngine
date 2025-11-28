@@ -24,14 +24,14 @@ void Transform::transform() {
     }
 }
 
-void Transform::increaseAngle(float amount) {
+void Transform::addAngle(float amount) {
     this->m_angle += amount;
     this->m_sinValue = std::sin(this->m_angle);
     this->m_cosValue = std::cos(this->m_angle);
     this->m_hasTransformed = false;
 }
 
-void Transform::changeAngle(float amount) {
+void Transform::setAngle(float amount) {
     this->m_angle = amount;
     this->m_sinValue = std::sin(this->m_angle);
     this->m_cosValue = std::cos(this->m_angle);

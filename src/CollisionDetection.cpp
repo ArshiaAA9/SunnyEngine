@@ -114,7 +114,6 @@ void CollisionDetection::clCircleCircle(ObjectPtr c1, ObjectPtr c2) {
     }
 }
 
-// FIX: DOESNT WORK WITH ROTATED OBJECTS CAUSE OF ROTATED WIDTH HEIGHT
 // Circle vs. Rectangle Collision Detection
 void CollisionDetection::clCircleRect(ObjectPtr c, ObjectPtr rect) {
     Vector2 cPos = c->transform.position;

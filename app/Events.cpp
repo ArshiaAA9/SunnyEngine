@@ -8,7 +8,6 @@
 #include <iostream>
 
 #include "Game.h"
-#include "Physics.h"
 #include "Renderer.h"
 
 bool Events::loop() {

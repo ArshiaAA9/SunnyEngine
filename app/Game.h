@@ -28,7 +28,7 @@ public:
     void moveObject(ObjectPtr object, Vector2 amount);
     void moveObjectTo(ObjectPtr object, Vector2 position);
     void stopObject(ObjectPtr object);
-    void spinObject(ObjectPtr object, float amount);
+    void spinObject(ObjectPtr object, float amout);
     void deleteAllObjects();
 
 private:

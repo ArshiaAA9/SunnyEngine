@@ -11,7 +11,7 @@
 using namespace SE;
 
 int Game::start() {
-    m_world.setGravity(Vector2(0, 0));
+    m_world.setGravity(Vector2(0, -9.8f));
     float dt = 1.0f / 60.0f;
     float delay = 1000.0f / 60.0f;
     ObjectPtr rect1;
@@ -29,7 +29,7 @@ int Game::start() {
     float rectWidth = 50;
 
     rect1 = createRect(250, 250, 1, 50, 50, rectColor, angle, 1.0f);
-    rect2 = createStaticRect(250, 199, 100, rectHeight, rectColor, angle);
+    // rect2 = createStaticRect(250, 199, 100, rectHeight, rectColor, angle);
     // rect3 = createRect(350, 250, 2, rectWidth, rectHeight, rectColor, angle, 1.0f);
 
     createStaticRect(5, 243, 10, 479.9, staticObjectColor, angle);
@@ -55,7 +55,7 @@ int Game::start() {
 void Game::rotateObject(ObjectPtr object, float amount) {
     // std::cout << "position: " << object->transform.position << " angle: " <<
     // object->transform.angle << '\n'; object->transform.printVertices();
-    object->transform.increaseAngle(amount);
+    object->transform.addAngle(amount);
     // std::cout << "angle: " << object->transform.angle << "\n";
     object->transform.transform();
     // object->transform.printVertices();
@@ -82,7 +82,7 @@ void Game::moveObjectTo(ObjectPtr object, Vector2 position) { object->transform.
 void Game::stopObject(ObjectPtr object) {
     object->setVelocity(Vector2(0, 0));
     object->setAngularVelocity(0);
-    object->transform.changeAngle(0);
+    object->transform.setAngle(0);
 }
 
 ObjectPtr Game::createRect(

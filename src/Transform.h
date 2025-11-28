@@ -17,15 +17,15 @@ public:
     Transform(float x, float y, Object& object)
         : position(x, y)
         , m_ownerObject(object) {
-        changeAngle(m_angle);
+        setAngle(m_angle);
     }
 
     void move(Vector2 amount);
     void moveTo(Vector2 position);
 
     void transform();
-    void increaseAngle(float amount);
-    void changeAngle(float amount);
+    void addAngle(float amount);
+    void setAngle(float amount);
     float getAngle() const;
 
     void printVertices() const;
