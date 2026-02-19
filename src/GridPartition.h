@@ -6,7 +6,6 @@
 
 namespace SE {
 class PhysicsWorld;
-struct Object;
 
 class GridPartition {
 public:
@@ -46,7 +45,7 @@ private:
     float cellWidth = 1.0f;
     float cellHeight = 1.0f;
 
-    // sucks but makes most sense first vector represent col 2nd row 3rd the cell with objects
+    // sucks but makes most sense first vector represent row 2nd col 3rd the cell with objects
     // inside of it
     std::vector<std::vector<std::vector<ObjectPtr>>> m_cellObjects;
 };

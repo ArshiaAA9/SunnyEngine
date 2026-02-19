@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 #include <vector>
 
 #include "GridPartition.h"
@@ -23,16 +22,14 @@ void CollisionDetection::checkCollisions() {
     int colCount = grid.getColCount();
 
     // Iterate through all cells in the grid
-    for (int col = 0; col < colCount; col++) {
-        for (int row = 0; row < rowCount; row++) {
+    for (int row = 0; row < rowCount; row++) {
+        for (int col = 0; col < colCount; col++) {
             // Get reference to objects in current cell
             auto& objectsInCell = grid.getObjectInCell(col, row);
-
-            // Skip empty cells to optimize processing
+            // Skip if empty
             if (objectsInCell.empty()) continue;
 
             // Check collisions between all unique pairs in current cell
-            // Uses i/j nested loops to avoid duplicate checks (A-B vs B-A)
             for (size_t i = 0; i < objectsInCell.size(); i++) {
                 for (size_t j = i + 1; j < objectsInCell.size(); j++) {
                     ObjectPtr obj1 = objectsInCell[i];
@@ -44,10 +41,10 @@ void CollisionDetection::checkCollisions() {
 
             // Check collisions with objects in neighboring cells
             // Iterates through 8 surrounding cells
-            for (int dcol = -1; dcol <= 1; dcol++) {
-                for (int drow = -1; drow <= 1; drow++) {
+            for (int drow = -1; drow <= 1; drow++) {
+                for (int dcol = -1; dcol <= 1; dcol++) {
                     // Skip current cell
-                    if (dcol == 0 && drow == 0) continue;
+                    if (drow == 0 && dcol <= 0) continue;
 
                     // Calculate neighbor cell coordinates
                     int neighborCol = col + dcol;
@@ -57,11 +54,11 @@ void CollisionDetection::checkCollisions() {
                     if (neighborCol >= 0 && neighborCol < colCount && neighborRow >= 0 && neighborRow < rowCount) {
 
                         // Get reference to neighbor cell objects
-                        auto& pNeighborObjectsInCell = grid.getObjectInCell(neighborCol, neighborRow);
+                        auto& neighborObjectsInCell = grid.getObjectInCell(neighborCol, neighborRow);
 
                         // Check all object pairs between current and neighbor cell
                         for (auto& obj1 : objectsInCell) {
-                            for (auto& obj2 : pNeighborObjectsInCell) {
+                            for (auto& obj2 : neighborObjectsInCell) {
                                 checkCollisionByType(obj1, obj2);
                             }
                         }
@@ -219,6 +216,7 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
     }
 
     float penDepth = minOverlap;
+    // BUG: sat is calculating r1 or r2 worng
     addClPair(r1, pointA, r2, pointB, penDepth, collisionNormal);
 }
 
@@ -236,8 +234,8 @@ Vector2 CollisionDetection::satProject(std::vector<Vector2>& vertices, Vector2 a
     return Vector2(min, max);
 }
 
-// FIX: DOESNT WORK WITH ROTATED OBJECTS CAUSE OF ROTATED WIDTH HEIGHT
 void CollisionDetection::aabb(ObjectPtr r1, ObjectPtr r2) {
+
     // std::cout << "aabb\n";
     Vector2 r1Pos = r1->transform.position;
     Vector2 r2Pos = r2->transform.position;

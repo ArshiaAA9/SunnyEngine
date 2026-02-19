@@ -1,5 +1,9 @@
 #include "Solver.h"
 
+#include <algorithm>
+#include <cstdio>
+#include <iostream>
+
 #include "Physics.h"
 #include "Types.h"
 #include "Vector2.h"
@@ -11,6 +15,7 @@ void Solver::solveCollisionPairs() {
         if (pair) {
             CollisionPair* pPair = pair.get();
             solve(pPair);
+            // std::cout << "solved a pair\n";
             m_world.cD.deleteClPair(pPair);
         }
     }
@@ -56,8 +61,7 @@ float Solver::calculateRelativeVelocity(CollisionPair* pair) {
 Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
     // j = (-(1+e) vAB1 . n) / ((n.n) (1/m1 + 1/m2) + (rAP.n)^2/IA + (rBP . n)^2/IB)
     // e is 1 because of rigid bodies
-    // for adding non rigid bodies modify the function to count in the e of the object
-    //
+
     float invertM1 = pair->objectA->getInvertedMass();
     float invertM2 = pair->objectB->getInvertedMass();
     float invertI1 = pair->objectA->getInvertedInertia();
@@ -74,6 +78,7 @@ Vector2 Solver::calculateImpulse(CollisionPair* pair, float vrel) {
     impulse /=
         invertM1 + invertM2 + invertI1 * r1CrossNormal * r1CrossNormal + invertI2 * r2CrossNormal * r2CrossNormal;
 
+    // std::cout << "impulse: " << impulse << '\n';
     return normal * impulse;
 }
 

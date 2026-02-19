@@ -13,7 +13,8 @@
 
 void Renderer::update(PhysicsWorld& world) {
     // clear the screen to white
-    int objectCount = 0;
+    // set the object count to -4 to count in for the static walls which we dont count here
+    int objectCount = -4;
     clearScreen();
 
     // TODO: change this to use shape specific functions
@@ -119,7 +120,6 @@ void Renderer::drawCircle(ObjectPtr object, SDL_FColor color) {
     int r = static_cast<int>(std::round(object->getDimensions().r));
     int cx = static_cast<int>(std::round(object->transform.position.x));
     int cy = m_windowHeight - static_cast<int>(std::round(object->transform.position.y));
-    const int diameter = static_cast<int>(2 * r);
     int x = r;
     int y = 0;
     int error = 1 - r;

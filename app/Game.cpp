@@ -11,7 +11,8 @@
 using namespace SE;
 
 int Game::start() {
-    m_world.setGravity(Vector2(0, -9.8f));
+    // m_world.setGravity(Vector2(0, -9.8f));
+    m_world.setGravity(Vector2(0, 0));
     float dt = 1.0f / 60.0f;
     float delay = 1000.0f / 60.0f;
     ObjectPtr rect1;
@@ -29,6 +30,7 @@ int Game::start() {
     float rectWidth = 50;
 
     rect1 = createRect(250, 250, 1, 50, 50, rectColor, angle, 1.0f);
+    createRect(380, 250, 1, 50, 50, rectColor, angle, 1.0f);
     // rect2 = createStaticRect(250, 199, 100, rectHeight, rectColor, angle);
     // rect3 = createRect(350, 250, 2, rectWidth, rectHeight, rectColor, angle, 1.0f);
 
