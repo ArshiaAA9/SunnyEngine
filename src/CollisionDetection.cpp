@@ -153,9 +153,10 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
     // first polygon
     for (size_t i = 0; i < verticesA.size(); i++) {
         Vector2 vertex1 = verticesA[i];
-        Vector2 vertex2 = verticesA[(i + 1) % verticesA.size()]; // use modulu operator to avoid out of bound
+        Vector2 vertex2 = verticesA[(i + 1) % verticesA.size()]; // use modulu operator to loop to the starting vertex
 
         Vector2 edge = vertex2 - vertex1;
+        // why tf is this here ???
         if (edge.squaredMagnitude() < 1e-8) continue;
         Vector2 axis = Vector2(edge.y, -edge.x);
         axis.normalize();
@@ -190,6 +191,7 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
             collisionNormal = axis;
         }
     }
+    // NOTE: not sure about the rest
     Vector2 dir = r1->transform.position - r2->transform.position;
     if (dir.dotProduct(collisionNormal) < 0) {
         collisionNormal.invert(); // Flip direction if needed
@@ -223,14 +225,13 @@ void CollisionDetection::sat(ObjectPtr r1, ObjectPtr r2) {
 Vector2 CollisionDetection::satProject(std::vector<Vector2>& vertices, Vector2 axis) {
     float min = INFINITY;
     float max = -INFINITY;
-
-    for (size_t i = 0; i < vertices.size(); i++) {
-        Vector2 vertex = vertices[i];
+    for (auto& vertex : vertices) {
         float projection = vertex.dotProduct(axis);
 
         min = std::min(min, projection);
         max = std::max(max, projection);
     }
+
     return Vector2(min, max);
 }
 
