@@ -38,7 +38,9 @@ Move the main object: **W, A, S, D**
 
 Stop the main object: **SPACE**
 
-Delete all objects except the main object: **R**
+Rotate the main object: **R**
+
+Quit the simulation: **Q**
 
 Spawn a rectangle object: **LMB**
 
