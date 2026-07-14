@@ -7,9 +7,7 @@ Currently only supports rigid bodies.
 Only tested on arch linux, other operating systems might require additional setup.
 
 ## Requirements 
-Requires SDl3,
-sdl3-ttf,
-cmake. 
+Requires SDl3, sdl3-ttf, cmake for the build process. 
 
 ## Installation
 
