@@ -11,8 +11,6 @@ Has been only tested on arch linux, other operating systems might require additi
 Requires SDl3, sdl3-ttf, cmake for the build process. 
 
 ## Installation
-
-Building and Installing
 clone the repo:
 ```bash
 git clone https://github.com/ArshiaAA9/SunnyEngine.git
