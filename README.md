@@ -1,10 +1,11 @@
 # SunnyEngine
 
 SunnyEngine is a simple personal hobby 2D physics engine project written in c++.
-
 Currently only supports rigid bodies.
 
-Only tested on arch linux, other operating systems might require additional setup.
+The simulation uses sdl3 for the graphical part of the program.
+
+Has been only tested on arch linux, other operating systems might require additional setup.
 
 ## Requirements 
 Requires SDl3, sdl3-ttf, cmake for the build process. 
